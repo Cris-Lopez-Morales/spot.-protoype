@@ -6,5 +6,5 @@ if ! command -v node >/dev/null 2>&1; then
 fi
 node scripts/start.mjs
 status=$?
-if [ "$status" -ne 0 ]; then read -r -p "Spot stopped. Press Return to close."; fi
+if [ "$status" -ne 0 ]; then read -r -p "Setup stopped. Press Return to close."; fi
 exit "$status"

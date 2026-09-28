@@ -1,0 +1,280 @@
+PASS region includes all 32 venue IDs without duplicate markers
+PASS all regional markers sum to 610 participating demo accounts
+PASS map no longer displays naked number-only markers
+PASS every marker is a labeled keyboard-accessible button
+PASS new fixture count is reflected in the UI
+PASS city view contains readable category icons
+PASS downtown still exposes fictional venues
+PASS desktop page has no horizontal overflow
+PASS no Ask button or assistant panel remains
+PASS no assistant runtime globals remain
+PASS Juniper Coffee: full title and category illustration
+PASS Common Ground: full title and category illustration
+PASS After Hours: full title and category illustration
+PASS Daybreak: full title and category illustration
+PASS The Willow: full title and category illustration
+PASS Sunday Café: full title and category illustration
+PASS The Side Door: full title and category illustration
+PASS Paper Moon Café: full title and category illustration
+PASS Fern & Filter: full title and category illustration
+PASS Little Lantern: full title and category illustration
+PASS Moss & Milk: full title and category illustration
+PASS Gather & Grind: full title and category illustration
+PASS Good Company Coffee: full title and category illustration
+PASS Hazel & Oak: full title and category illustration
+PASS Sunroom Café: full title and category illustration
+PASS Half Moon: full title and category illustration
+PASS Bluebird Brew: full title and category illustration
+PASS The Coffee Loft: full title and category illustration
+PASS Velvet Bean: full title and category illustration
+PASS Clover Coffee: full title and category illustration
+PASS Prairie Cup: full title and category illustration
+PASS Sundown Social: full title and category illustration
+PASS Milltown Coffee: full title and category illustration
+PASS Cinder & Rye: full title and category illustration
+PASS Kindred Coffee: full title and category illustration
+PASS The Morning Room: full title and category illustration
+PASS Morning Chapter: full title and category illustration
+PASS Westward Coffee: full title and category illustration
+PASS Foundry Coffee: full title and category illustration
+PASS Golden Hour Coffee: full title and category illustration
+PASS Last Chapter: full title and category illustration
+PASS Local Standard: full title and category illustration
+PASS details do not block search or map with a modal overlay
+PASS save works from the new overview
+PASS comparison retains the selected venues
+PASS area search works while a comparison is open
+PASS directions remain a preview for fictional venues
+PASS place sharing opens without chat UI
+PASS nightlife cover has a glass illustration in dark mode
+PASS readable cards do not overlap across tested mobile downtown zooms
+PASS 320px: area search still targets East Campus
+PASS 320px: no horizontal page overflow
+PASS 320px: markers retain 52px touch surfaces
+PASS 320px: counts fit inside their labels
+PASS 320px: campus buildings are drawn on the canvas
+PASS 320px: overview retains full title
+PASS 320px: compact category artwork is visible
+PASS 320px: overview title fits without horizontal truncation
+PASS 320px: close control has at least a 42px touch target
+PASS 320px: expanded details preserve sample history
+PASS 360px: area search still targets East Campus
+PASS 360px: no horizontal page overflow
+PASS 360px: markers retain 52px touch surfaces
+PASS 360px: counts fit inside their labels
+PASS 360px: campus buildings are drawn on the canvas
+PASS 360px: overview retains full title
+PASS 360px: compact category artwork is visible
+PASS 360px: overview title fits without horizontal truncation
+PASS 360px: close control has at least a 42px touch target
+PASS 360px: expanded details preserve sample history
+PASS 390px: area search still targets East Campus
+PASS 390px: no horizontal page overflow
+PASS 390px: markers retain 52px touch surfaces
+PASS 390px: counts fit inside their labels
+PASS 390px: campus buildings are drawn on the canvas
+PASS 390px: overview retains full title
+PASS 390px: compact category artwork is visible
+PASS 390px: overview title fits without horizontal truncation
+PASS 390px: close control has at least a 42px touch target
+PASS 390px: expanded details preserve sample history
+PASS 430px: area search still targets East Campus
+PASS 430px: no horizontal page overflow
+PASS 430px: markers retain 52px touch surfaces
+PASS 430px: counts fit inside their labels
+PASS 430px: campus buildings are drawn on the canvas
+PASS 430px: overview retains full title
+PASS 430px: compact category artwork is visible
+PASS 430px: overview title fits without horizontal truncation
+PASS 430px: close control has at least a 42px touch target
+PASS 430px: expanded details preserve sample history
+PASS dark mode still applies to the map
+PASS expired observations read No recent data
+PASS expiry clears all current venue contributions
+PASS friends screen still has the 60 accepted demo friends
+PASS privacy starts with both sharing modes off
+PASS count contribution can still be enabled without friend visibility
+PASS friend visibility still requires choosing an audience
+PASS turning off named sharing preserves count contribution
+PASS pause all still turns both sharing modes off
+PASS one finger pans without changing zoom
+PASS single-finger pan does not open a place
+PASS two-finger pinch outward zooms in
+PASS two-finger pinch inward zooms out
+PASS at least one regional group is reachable by touch
+PASS tapping a group jumps inward, not a pinch instruction
+PASS dragging from a label pans without opening it
+PASS dragging from a label never zooms
+PASS tapping a venue opens its actual detail card
+PASS search still works without closing place details
+PASS repeated same-scale pan reuses clusters
+PASS standalone makes no external requests
+PASS no uncaught UI script errors
+{
+  "passed": 112,
+  "failed": 0,
+  "checks": [
+    "region includes all 32 venue IDs without duplicate markers",
+    "all regional markers sum to 610 participating demo accounts",
+    "map no longer displays naked number-only markers",
+    "every marker is a labeled keyboard-accessible button",
+    "new fixture count is reflected in the UI",
+    "city view contains readable category icons",
+    "downtown still exposes fictional venues",
+    "desktop page has no horizontal overflow",
+    "no Ask button or assistant panel remains",
+    "no assistant runtime globals remain",
+    "Juniper Coffee: full title and category illustration",
+    "Common Ground: full title and category illustration",
+    "After Hours: full title and category illustration",
+    "Daybreak: full title and category illustration",
+    "The Willow: full title and category illustration",
+    "Sunday Caf\u00e9: full title and category illustration",
+    "The Side Door: full title and category illustration",
+    "Paper Moon Caf\u00e9: full title and category illustration",
+    "Fern & Filter: full title and category illustration",
+    "Little Lantern: full title and category illustration",
+    "Moss & Milk: full title and category illustration",
+    "Gather & Grind: full title and category illustration",
+    "Good Company Coffee: full title and category illustration",
+    "Hazel & Oak: full title and category illustration",
+    "Sunroom Caf\u00e9: full title and category illustration",
+    "Half Moon: full title and category illustration",
+    "Bluebird Brew: full title and category illustration",
+    "The Coffee Loft: full title and category illustration",
+    "Velvet Bean: full title and category illustration",
+    "Clover Coffee: full title and category illustration",
+    "Prairie Cup: full title and category illustration",
+    "Sundown Social: full title and category illustration",
+    "Milltown Coffee: full title and category illustration",
+    "Cinder & Rye: full title and category illustration",
+    "Kindred Coffee: full title and category illustration",
+    "The Morning Room: full title and category illustration",
+    "Morning Chapter: full title and category illustration",
+    "Westward Coffee: full title and category illustration",
+    "Foundry Coffee: full title and category illustration",
+    "Golden Hour Coffee: full title and category illustration",
+    "Last Chapter: full title and category illustration",
+    "Local Standard: full title and category illustration",
+    "details do not block search or map with a modal overlay",
+    "save works from the new overview",
+    "comparison retains the selected venues",
+    "area search works while a comparison is open",
+    "directions remain a preview for fictional venues",
+    "place sharing opens without chat UI",
+    "nightlife cover has a glass illustration in dark mode",
+    "readable cards do not overlap across tested mobile downtown zooms",
+    "320px: area search still targets East Campus",
+    "320px: no horizontal page overflow",
+    "320px: markers retain 52px touch surfaces",
+    "320px: counts fit inside their labels",
+    "320px: campus buildings are drawn on the canvas",
+    "320px: overview retains full title",
+    "320px: compact category artwork is visible",
+    "320px: overview title fits without horizontal truncation",
+    "320px: close control has at least a 42px touch target",
+    "320px: expanded details preserve sample history",
+    "360px: area search still targets East Campus",
+    "360px: no horizontal page overflow",
+    "360px: markers retain 52px touch surfaces",
+    "360px: counts fit inside their labels",
+    "360px: campus buildings are drawn on the canvas",
+    "360px: overview retains full title",
+    "360px: compact category artwork is visible",
+    "360px: overview title fits without horizontal truncation",
+    "360px: close control has at least a 42px touch target",
+    "360px: expanded details preserve sample history",
+    "390px: area search still targets East Campus",
+    "390px: no horizontal page overflow",
+    "390px: markers retain 52px touch surfaces",
+    "390px: counts fit inside their labels",
+    "390px: campus buildings are drawn on the canvas",
+    "390px: overview retains full title",
+    "390px: compact category artwork is visible",
+    "390px: overview title fits without horizontal truncation",
+    "390px: close control has at least a 42px touch target",
+    "390px: expanded details preserve sample history",
+    "430px: area search still targets East Campus",
+    "430px: no horizontal page overflow",
+    "430px: markers retain 52px touch surfaces",
+    "430px: counts fit inside their labels",
+    "430px: campus buildings are drawn on the canvas",
+    "430px: overview retains full title",
+    "430px: compact category artwork is visible",
+    "430px: overview title fits without horizontal truncation",
+    "430px: close control has at least a 42px touch target",
+    "430px: expanded details preserve sample history",
+    "dark mode still applies to the map",
+    "expired observations read No recent data",
+    "expiry clears all current venue contributions",
+    "friends screen still has the 60 accepted demo friends",
+    "privacy starts with both sharing modes off",
+    "count contribution can still be enabled without friend visibility",
+    "friend visibility still requires choosing an audience",
+    "turning off named sharing preserves count contribution",
+    "pause all still turns both sharing modes off",
+    "one finger pans without changing zoom",
+    "single-finger pan does not open a place",
+    "two-finger pinch outward zooms in",
+    "two-finger pinch inward zooms out",
+    "at least one regional group is reachable by touch",
+    "tapping a group jumps inward, not a pinch instruction",
+    "dragging from a label pans without opening it",
+    "dragging from a label never zooms",
+    "tapping a venue opens its actual detail card",
+    "search still works without closing place details",
+    "repeated same-scale pan reuses clusters",
+    "standalone makes no external requests",
+    "no uncaught UI script errors"
+  ],
+  "errors": [],
+  "requests": [],
+  "renderSample": {
+    "frames": 34,
+    "frameTimes": [
+      19.400000000023283,
+      0.29999999998835847,
+      6.600000000034925,
+      1.900000000023283,
+      2,
+      8.5,
+      2.400000000023283,
+      2.7000000000116415,
+      5,
+      1.400000000023283,
+      1.599999999976717,
+      0.29999999998835847,
+      6.699999999953434,
+      0.20000000001164153,
+      0.29999999998835847,
+      0.9000000000232831,
+      0.5999999999767169,
+      1,
+      0.5999999999767169,
+      0.5999999999767169,
+      0.30000000004656613,
+      0.5,
+      0.5,
+      0.3999999999650754,
+      0.5,
+      0.6000000000349246,
+      0.3999999999650754,
+      0.40000000002328306,
+      0.3999999999650754,
+      0.5,
+      0.6000000000349246,
+      0.29999999998835847,
+      0.7000000000116415,
+      0.3999999999650754
+    ],
+    "clusterBuilds": 8,
+    "pinNodes": 2,
+    "geometry": 1367,
+    "cartography": {
+      "buildings": 24,
+      "features": 96,
+      "zoom": 0.6867541873752883
+    }
+  },
+  "method": "Actual standalone HTML loaded by set_content, real DOM/canvas and Chromium touch events, no model/network/storage doubles. Browser navigation is administratively blocked; service-worker lifecycle and file-origin storage durability are not verified. Physical phones and mobile Safari were not tested."
+}

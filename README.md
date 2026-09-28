@@ -1,228 +1,111 @@
-# Spot + Ask Spot · v4.6 map update
+# Spot v4.7
 
-A complete combined project: the existing Lincoln-region Spot map with the
-previous local-AI chatbot embedded in an on-demand **Ask Spot** panel.
+A map-first, local venue-activity prototype with no chatbot or AI runtime.
 
-## New in v4.6
+## Run
 
-Readable, two-line map labels show a place name, category icon and **app users**,
-rather than an unexplained number. Groups identify how many spots they combine.
-The fictional fixture now uses **32 venues: 24 cafés and 8 bars/clubs** (20 in
-Lincoln, 12 in surrounding towns). Pins are at least 600 meters apart in the
-authored geography; decorative buildings have more breathing room too. This is
-a deliberately sparse design sample, not an inventory of real Lincoln businesses.
+The complete portable app is `preview/spot-v4.7.html`. Open it directly in a browser.
 
-The fixture retains 5,000 accounts and 60 friends; 610 accounts initially contribute
-to places. Friends, map cards and Ask Spot all use the same new inventory.
-The one-finger/pinch gesture module is unchanged.
+For the source version:
 
-For a double-click **map-only** review, open `preview/spot-v4.6-map-preview.html`.
-It has no model and its Ask button explains how to launch the full project.
-To use the actual integrated chatbot, follow the local-server steps below.
-An exact copy of the incoming project is at `rollback/spot-with-ai-v4.5.zip`.
-See `docs/MAP-UPDATE-v4.6.md` for details.
-
-## Quick start
-
-```sh
-npm run launch
+```bash
+node server.mjs
 ```
 
-Requires Node.js 22.16.0+. The Mac/Windows **Start Spot** launchers run the same
-command. The first run prepares pinned libraries. Then open the map at
-`http://localhost:4318`, click **Ask Spot**, choose a model, and approve its download.
-No API keys or accounts. No hosted AI service. Initial asset downloads require
-internet unless you prepare local mirrors. Model files are not included in the ZIP.
+Open `http://localhost:4318`. Requires Node.js 22.16.0 or newer. No dependencies
+need to be installed. The optional launchers open the browser for you.
 
-Manual equivalent:
+## Build and test
 
-```sh
-npm install --ignore-scripts
-npm run vendor
-npm start
+```bash
+node scripts/build-standalone.mjs
+node --test tests/*.test.mjs tests/spot/*.test.cjs
 ```
 
-The first successful installation creates `package-lock.json`; retain it and use
-`npm ci --ignore-scripts` for repeat installations. Direct dependencies are pinned,
-but the transitive tree is not lockfile-verified until installation completes.
+The build has no third-party tooling dependencies. `package-lock.json` contains
+only the root package because the package has no dependencies.
 
-## Integration architecture
+Browser development tests use Python 3 plus Playwright and a Chromium executable:
 
-```text
-http://localhost:4318/
-  Spot map + original Explore/Friends/Privacy UI
-    │
-    └─ Ask Spot button → lazy same-origin /assistant.html frame
-         ├─ theme synchronization + close/pause + draft preservation
-         ├─ validated public demo snapshot → local retrieval → cited excerpts
-         ├─ source-card button → allowlisted place/area → existing map navigation
-         ├─ chats / knowledge / approved memories → dedicated IndexedDB database
-         ├─ model Web Worker → WebLLM GPU or wllama CPU
-         └─ optional own-server proxy → loopback Ollama or llama.cpp
+```bash
+python -m pip install -r tests/requirements.txt
+python tests/browser_test.py
 ```
 
-The iframe isolates UI styles and lifecycle, **not** a security boundary against
-malicious same-origin JavaScript. Model output is not executable code. The bounded
-tool loop cannot query arbitrary parent-page state. Optional Python runs on the
-existing separate sandbox origin, with the limitations documented in SECURITY.md.
+Set `CHROMIUM_PATH` if Chromium is not installed at `/usr/bin/chromium`. This is
+only for development tests, not for running the app.
 
-### What changed
+## Components
 
-- Spot remains the root page; the local chatbot lives in a panel opened from the
-  top bar. There is no fourth main navigation tab or separate app to launch.
-- The panel inherits Spot's indigo/coral light mode and midnight/lavender dark mode.
-- The assistant starts with a Spot-specific persona and built-in prototype guide.
-- Read-only retrieval uses current **public demo** place data, without names or
-  locations of friends, private settings, saved lists, or device GPS.
-- Area queries use the existing nearby-venue lists. “East Campus” means the area,
-  not only venue names containing those words.
-- Cited source cards can open an allowlisted place or area when clicked.
-- Context is refreshed at the start of each answer. Missing activity remains null
-  and is described as unknown. Existing answer text is a historical snapshot;
-  it is not silently rewritten as the map changes.
-- Closing pauses active generation while keeping chats and drafts. Reopening
-  reuses the panel/runtime within the page rather than reloading it every time.
-- The original one-finger/pinch module and public privacy controls are retained.
-  v4.6 updates the fixtures, spacing, marker labels and background-building density.
-  Rollback copies are provided outside public/.
+- `public/spot/app.js`: existing map, places, friends, saved/comparison UI, privacy.
+- `public/spot/venue-cover.js`: pure category-header renderer, with local inline SVG.
+- `public/spot/venue-cover.css`: desktop and mobile header styles using the existing
+  light/dark brand tokens.
+- `public/spot/core.js`, `lincoln-data.js`, `map-core.js`, `map-renderer.js`,
+  `map-gestures.js`, `place-search.js`: unchanged from v4.6.
+- `public/spot/pwa.js` and `public/sw.js`: optional map-only offline shell for
+  localhost or HTTPS. No generic fallback to removed pages.
+- `server.mjs`: static files and `/health` only. No upstream proxy or write APIs.
+- `scripts/build-standalone.mjs`: inlines the source into the portable HTML file.
 
-### Existing chatbot features retained
+The 32-venue dataset remains 24 cafés and 8 bars/clubs. The original 600-meter
+minimum spacing, 5,000 accounts, 610 initial venue presences, and 60 friends remain
+as authored demo choices. Read `docs/PROTOTYPE-DATA.md` for the data limitations.
 
-Streaming; Stop; regenerate; edit/resend; copying; system prompt/personas and
-sampling settings; sliding context; bounded summaries; optional approved memory;
-local document/PDF text ingestion; BM25 plus optional embeddings/reranking;
-calculator/date/unit/local-search tools; explicitly approved Wikipedia/Python;
-multiple chats; JSON export/import; sanitized Markdown; optional on-device speech;
-workers; local model caches; PWA shell; local-only inference backend proxy.
+## UI changes
 
-These are implemented source paths, not a claim that every installed vendor
-runtime has been exercised here. See the validation section below.
+The old truncated-name decoration is removed. Place overview headers now use
+category artwork and the full venue name below. There is no real business photo
+or suggested live capacity embedded in these illustrations. On mobile the compact
+header leaves the map interactive, with search and other pins still accessible.
 
-## Layout
+The 48-pixel header is independent from the map controls. Single-finger drag and
+two-finger pinch code is byte-identical to the previous release.
 
-- `public/index.html`: Spot root, launcher, and assistant panel shell.
-- `public/spot/`: existing map source plus bridge/shell additions.
-- `public/assistant.html`: embedded chat interface.
-- `public/src/spot-context.js`: whitelist validation and local place retrieval.
-- `public/src/app.js`: chatbot integration and existing chat features.
-- `public/workers/`: model inference and knowledge processing.
-- `server.mjs`: local host, same-origin embed policy, inference proxy, sandbox host.
-- `scripts/start.mjs`: beginner launcher and local vendor preparation.
-- `tests/`: local logic, server, integration fixtures, and real-runtime smoke tools.
-- `preview/`: self-contained map-only HTML for reviewing this visual update.
-- `rollback/`: original integrated project ZIP and earlier HTML files; not served by the app.
+## Local serving options
 
-## Versions and runtime documentation
+The server defaults to `127.0.0.1:4318`. `PORT` selects another port. For testing a
+phone on your own trusted LAN, set `HOST=0.0.0.0` and `PUBLIC_ORIGIN` to the exact
+LAN origin you will open, for example `http://192.168.1.10:4318`. Do not expose this
+prototype on the public internet. The app itself does not need geolocation.
 
-This integration preserves the chatbot's existing exact runtime pins rather than
-changing AI engines: WebLLM 0.2.85, wllama/compat 3.6.1, Transformers.js 4.3.0,
-DOMPurify 3.4.16, marked 18.0.14, highlight.js 11.12.0, PDF.js 6.3.289,
-Pyodide 314.0.7, esbuild 0.27.2. `package.json` includes the dependency overrides.
+`TLS_CERT` and `TLS_KEY` can supply a certificate and key you own. A phone needs a
+trusted HTTPS origin for service-worker offline installation; ordinary map
+browsing is available without that optional feature.
 
-Version references checked September 28, 2026:
-- https://raw.githubusercontent.com/mlc-ai/web-llm/v0.2.85/package.json
-- https://webllm.mlc.ai/docs/user/basic_usage.html
-- https://raw.githubusercontent.com/ngxson/wllama/3.6.1/package.json
-- https://raw.githubusercontent.com/huggingface/transformers.js/4.3.0/package.json
+## Storage, offline use, and rollback
 
-The original engine architecture, exact vendor-preparation process, model options,
-license notes, and local model mirror instructions are retained in
-`docs/LOCAL-ENGINE-REFERENCE.md`. Its earlier standalone-app description is
-historical; the integrated layout above is authoritative.
+The portable file needs no network resources and skips service-worker registration.
+Its current-tab features still work if browser storage is denied. Durable file-origin
+localStorage varies by browser; it was not verified on physical devices here.
 
-## Own-machine Ollama (optional)
+The source version caches only its map shell and replaces obsolete Spot AI shell
+caches. It does not delete chat databases, third-party model caches, or unrelated
+application storage. The old AI code is not included in this ZIP, even as a hidden
+panel or bundled rollback. The prior ZIP remains a separate artifact, identified
+by `rollback-manifest.json`.
 
-The default uses your browser. To use your own local Ollama instead, install it
-separately, disable its cloud mode, and download a local model. No third-party
-inference service is needed.
-
-macOS/Linux, in a separate terminal:
-
-```sh
-OLLAMA_NO_CLOUD=1 ollama serve
-```
-
-Download weights and start Spot with a local backend:
-
-```sh
-ollama pull qwen2.5:1.5b
-LOCAL_BACKEND=ollama LOCAL_MODEL=qwen2.5:1.5b npm start
-```
-
-Windows PowerShell equivalents:
-
-```powershell
-$env:OLLAMA_NO_CLOUD="1"
-ollama serve
-```
-
-In another PowerShell window, in the project folder:
-
-```powershell
-ollama pull qwen2.5:1.5b
-$env:LOCAL_BACKEND="ollama"
-$env:LOCAL_MODEL="qwen2.5:1.5b"
-npm start
-```
-
-In **Ask Spot → Settings**, choose **Own server**, then approve connection.
-Stop an existing Spot server before starting it again with different environment
-variables. Loopback does not itself prove a model is local: the proxy also rejects
-Ollama metadata identifying a cloud-backed model. Model downloads and a running
-server remain necessary. For llama.cpp and HTTPS phone testing, see
-`docs/LOCAL-ENGINE-REFERENCE.md` and `docs/TROUBLESHOOTING.md`.
+Stop the prior server before starting this one. Use separate folders for releases.
+Map settings use the existing localStorage key; changing server ports or moving
+portable files can change the browser's storage scope.
 
 ## Validation
 
-```sh
-npm test                 # 68 logic/context/HTTP-server checks
-npm run test:map         # 193 map logic checks
-npm run test:integration # 31 no-network UI/bridge checks; Python Playwright needed
-npm run test:map-ui      # 44 map layout, label and touch checks
-npm run build:preview    # Rebuild standalone map-only preview
-```
+See `docs/TEST-REPORT.md` for the exact checks run and limitations. The browser
+suite uses the actual portable HTML with no model, network, or storage mocks.
+Service-worker behavior is unit-tested with controlled fixtures, not claimed as
+an end-to-end installed PWA test. No physical phone, Safari, macOS launcher or
+Windows launcher was available in this environment.
 
-Browser fixtures use Playwright 1.57.0 in this environment and Chromium 144.
-Run with `CHROMIUM_PATH` set to your Chromium executable. No browser security
-settings are disabled by the harness. It renders an opaque-origin srcdoc fixture
-because browser navigation is blocked here. Only the test harness uses wildcard
-postMessage targets to address that opaque origin; production validates and uses
-its exact same origin and source window.
+## Version assumptions and documentation
 
-**336 passed, 0 failed.** No real-model inference, installed-vendor execution,
-physical-phone run, durable IndexedDB recovery, or full PWA offline test is claimed.
-The original project reported blocked dependency/model downloads; those downloads
-were not retried for this map-only update. Browser navigation was blocked by
-administrator policy, so UI tests use the explicit offline fixture. A real local HTTP server
-was separately tested using Node fetch, including CSP/COOP/COEP, frame allowances,
-all cached shell paths, byte ranges, and the loopback proxy with a test backend.
+Runtime and build: built-in APIs from Node.js 22.16.0, plain JavaScript and CSS.
+No AI libraries or third-party runtime version assumptions remain.
 
-Real inference transport smoke after configuring your own backend:
+References used for the server and optional offline update logic:
+- Node 22.16.0 HTTP: https://nodejs.org/download/release/v22.16.0/docs/api/http.html
+- Service-worker activation: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/skipWaiting
+- Client control: https://developer.mozilla.org/en-US/docs/Web/API/Clients/claim
 
-```sh
-npm run test:live
-```
-
-This rejects scripted fixture backends and records actual timing/output. It does
-not substitute for answer-quality evaluation. Use `docs/EVALUATION.md` as well.
-
-## Limits and safety
-
-- All places, crowd data and friend records are demo fixtures. No actual location
-  collection, verified occupancy, real user authentication or real venue discovery.
-- A tiny local model may hallucinate names/counts or mishandle a question despite
-  grounding and citations. Inspect sources. This is not a guarantee of correctness.
-- Initial model downloads can be large; CPU generation and multiple agent passes
-  may be slow. Browser/OS memory limits can terminate a tab.
-- Closing a panel stops current generation, but cached model memory may remain
-  allocated until you unload it or close the page.
-- The local server is loopback by default. It is not an authenticated public or
-  multiuser service. Do not expose it directly to the internet.
-- Public context is intentionally available to the assistant without an extra
-  prompt. Private friend/permission data is not included. Optional document uploads
-  and user chat messages are separate and remain subject to selected backend rules.
-- Speech is opt-in and on-device only when available; browser/OS implementations
-  themselves may not be open source. Keep it off for a strictly auditable OSS stack.
-- Rollback preserves source files, not browser profiles. Standalone file:// and
-  localhost are different storage origins, so old saved places/chats do not
-  automatically migrate between them.
+This is not a production multiuser location service. All presence and friend data
+are simulations; client-side controls are not a substitute for backend authorization.

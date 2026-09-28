@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "Spot \u2014 Map & private assistant",
+  "name": "Spot — Find your spot",
   "short_name": "Spot",
-  "description": "Lincoln-region fictional venue map with an opt-in local AI assistant.",
+  "description": "Explore fictional cafés, bars and clubs around Lincoln. Recent demo activity, saved places, and optional friend visibility.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

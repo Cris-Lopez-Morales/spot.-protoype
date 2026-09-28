@@ -1,8 +1,5 @@
 node_modules/
-public/vendor/
-public/models/*
-!public/models/README.md
-!public/models/manifest.json
-artifacts/
+__pycache__/
+*.pyc
 .env
-*.part
+.DS_Store

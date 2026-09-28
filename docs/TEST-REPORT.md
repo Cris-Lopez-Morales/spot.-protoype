@@ -1,61 +1,77 @@
-# Spot + Ask Spot v4.6 validation
+# Spot v4.7 validation
 
-Date: 2026-09-28. Node.js 22.16.0. Chromium 144.0.7559.96.
+Executed in this environment on 2026-09-28.
 
-| Executed suite | Passed | Failed | Method |
+## Final results
+
+| Suite | Passed | Failed | Method |
 |---|---:|---:|---|
-| Map logic, fixture, clustering and gestures | 193 | 0 | Actual domain/geometry/gesture modules in Node |
-| Chat core, public context and HTTP server | 68 | 0 | Actual local logic + local HTTP server; proxy inference is a scripted fixture |
-| Embedded assistant UI and bridge | 31 | 0 | Actual interface bundled into offline parent/srcdoc harness; model/storage/network fixtures |
-| Updated map layout and mobile gestures | 44 | 0 | Actual map DOM/canvas; Chromium touch input and mobile-sized layouts in offline harness |
-| **Total** | **336** | **0** | Not real-model or physical-device validation |
+| Map logic, removal/provenance, category headers, service-worker unit tests and static HTTP server | 237 | 0 | Node.js 22.16.0 `node --test` |
+| Desktop/mobile interface and touch regression | 112 | 0 | Actual standalone HTML in Chromium via Playwright `set_content` |
+| **Total** | **349** | **0** | Counts are checks executed on the final version, not carried over from a prior report. |
 
-Map coverage includes explicit venue/group labels, 32 unique venues, 24 cafés plus
-8 bars/clubs, 610 attributed sample accounts, at least 600 m venue-pin spacing,
-expired-data labels, no double counts, 52 px touch targets, fitting text, comparison
-and privacy regressions, source-data consistency, and campus footprint rendering.
-Mobile checks cover widths 320, 360, 390 and 430 px, selected-card overlap at six
-scales, trusted CDP one-finger pan, two-finger pinch, drag vs tap, group zoom,
-individual details, nonblocking search, and cluster reuse during repeated pans.
+Every runtime/build JavaScript file also passed `node --check`.
 
-The original gesture engine is byte-identical. The original full integrated ZIP is
-preserved with a checksum. Fixture-specific prior assertions were updated to match
-the intentional new dataset, while unrelated regressions are retained. An iframe
-navigation assertion now waits for the asynchronous close message before checking
-visibility rather than racing that message.
+## What was checked
 
-Logs:
-- artifacts/ai-tests.txt
-- artifacts/map-tests.txt
-- artifacts/integration-browser.json
-- artifacts/map-v46-browser.json
+- Active project has no assistant iframe/panel/button, map bridge, model/runtime
+  libraries, knowledge/model workers, model download scripts, sandbox or inference proxy.
+- Package has zero runtime or build dependencies. The launcher does not install packages.
+- Removed chat, model, and sandbox routes return 404 from the actual Node server.
+  POST is rejected; there is no model generation path.
+- Server tests cover metadata/HEAD, content types, path traversal, Host validation,
+  and disabled microphone/geolocation permissions.
+- Source fingerprints confirm that the fixture, core data, map renderer, map gesture
+  engine, area-search engine, and theme palette/code are unchanged from v4.6.
+- All 32 venue cards show their full name and correct category header.
+- Category-header renderer ignores untrusted name/theme strings and only inserts
+  internally defined SVG/category text. It never uses a truncated venue name.
+- Mobile widths 320, 360, 390 and 430 pixels: visible compact header, title fit,
+  42-pixel close hit target, expanded history, and no horizontal page overflow.
+- Saved places, comparison, directions preview and place-share dialogs still work.
+- Separate public-count and selected-friend sharing controls still work; pausing
+  all sharing disables both. The demo still has 60 accepted friends.
+- Real Chromium touch dispatch checks single-finger panning, two-finger zoom in/out,
+  dragging from a label without accidental selection, and tapping a group to zoom in.
+- East Campus area search, campus buildings, readable marker counts, expired data,
+  and cached cluster reuse are retained.
+- Zero external requests and zero uncaught JavaScript errors were observed in the
+  tested standalone sessions.
+- The old v4.6 archive is preserved separately and its checksum was rechecked.
 
-The standalone map-only HTML also has a separate smoke report in
-artifacts/standalone-preview-smoke.json. It contains actual map code and an honest
-setup explanation instead of a mocked AI chatbot. This supplemental smoke check
-is not included in the 336-test regression total.
+## Boundaries of this testing
 
-## Test boundary
+The environment blocks browser navigation to the local HTTP server with
+`ERR_BLOCKED_BY_ADMINISTRATOR`. We did not disable or bypass that restriction.
+The browser tests therefore load the actual generated HTML using `set_content`.
+The map/UI code is unmodified for these tests and no application, localStorage,
+network, or model-response stubs are injected.
 
-Chromium navigation to the local server returned ERR_BLOCKED_BY_ADMINISTRATOR.
-The existing offline inline/srcdoc harness was used instead. Only the harness
-substitutes wildcard postMessage targets for an opaque test origin; production
-code validates the exact origin and source window. Production never imports the
-mocked model or storage implementation. The standalone preview uses no test doubles.
+The Node HTTP suite does make real requests to a local server. Service-worker
+install/activate/fetch behavior is unit-tested in a controlled worker harness;
+an actual installed PWA and upgrade from an already installed v4.6 service worker
+were **not** end-to-end verified.
 
-Native Node HTTP checks exercise the local server separately. Screenshots show
-actual interface/canvas output; no scripted answer is presented as real inference.
+File-origin persistence, browser restart recovery, physical iPhones/Android phones,
+mobile Safari, and native macOS/Windows launcher behavior remain unverified.
+No timing figures are presented as physical-device performance benchmarks.
 
-## Not verified in this map update
+Three obsolete historical packaging assertions about bundled v4.2/v4.3 rollback
+files were replaced by current v4.6 fingerprint/removal coverage. Those old archives
+are not bundled in this release. Earlier temporary failure logs were discarded
+rather than included as the final test result.
 
-- Dependency installation, vendor build, model downloads or live model generation.
-- Physical iPhones/Android phones, mobile Safari, actual mobile speed/battery.
-- Real-origin iframe navigation and persistent IndexedDB behavior across upgrades.
-- Real GPU/WASM engines, PDF parsing, embeddings/reranking, Pyodide, voice APIs.
-- Full PWA installation and offline-cache/crash recovery on a real browser origin.
+The prototype remains fictional and does not establish real crowd accuracy.
 
-No new AI runtime version was introduced. The map and public context were updated.
-Use the unchanged Start Spot launcher, explicitly load a model, ask about East
-Campus, inspect the cited count, and follow Show on map. Use tests/live-server.mjs
-with an actual local model backend for inference transport testing; answer quality
-still requires the human rubric in docs/EVALUATION.md.
+## Reproduce
+
+```bash
+node scripts/build-standalone.mjs
+node --test tests/*.test.mjs tests/spot/*.test.cjs
+python tests/browser_test.py
+```
+
+Python dependencies for the browser tests are pinned in `tests/requirements.txt`.
+Set `CHROMIUM_PATH` to a Chromium executable on your machine when necessary.
+Raw final results are in `artifacts/unit-tests.txt`, `artifacts/browser-tests.json`
+and `artifacts/browser-output.txt`.
