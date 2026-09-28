@@ -1,4 +1,8 @@
-__pycache__/
-*.pyc
 node_modules/
-.DS_Store
+public/vendor/
+public/models/*
+!public/models/README.md
+!public/models/manifest.json
+artifacts/
+.env
+*.part

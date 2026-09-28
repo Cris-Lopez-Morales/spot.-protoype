@@ -1,0 +1,7 @@
+const VERSION='spot-ai-4.5.0',SHELL=VERSION+'-shell',ASSETS=VERSION+'-assets';
+self.addEventListener('install',event=>event.waitUntil((async()=>{const response=await fetch('/shell-manifest.json',{cache:'no-store'});if(!response.ok)throw Error('Offline manifest unavailable.');const data=await response.json();const cache=await caches.open(SHELL);await cache.addAll(data.files);})()));
+self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if((key.startsWith('local-chat-')||key.startsWith('spot-ai-'))&&!key.startsWith(VERSION))await caches.delete(key);await clients.claim();})()));
+self.addEventListener('message',event=>{if(event.data?.type==='activate-update')self.skipWaiting();});
+self.addEventListener('fetch',event=>{const url=new URL(event.request.url);if(event.request.method!=='GET'||url.origin!==location.origin||url.pathname.startsWith('/api/')||url.pathname.startsWith('/models/')||event.request.headers.has('range'))return;
+ const vendor=url.pathname.startsWith('/vendor/');event.respondWith((async()=>{const cache=await caches.open(vendor?ASSETS:SHELL);const cached=await cache.match(event.request);if(vendor&&cached)return cached;try{const response=await fetch(event.request);if(response.ok&&!response.redirected)await cache.put(event.request,response.clone());return response;}catch{if(cached)return cached;if(event.request.mode==='navigate')return await cache.match(url.pathname==='/assistant.html'?'/assistant.html':'/index.html')||Response.error();return Response.error();}})());
+});

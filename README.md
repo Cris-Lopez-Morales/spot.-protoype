@@ -1,68 +1,204 @@
-# Spot · v4.3
+# Spot + Ask Spot · v4.5 integration
 
-An offline, self-contained Lincoln-region venue-activity prototype. This version adds real-area search and an independent indigo/coral visual identity. All venues, accounts, friends, presence and history are still fictional.
+A complete combined project: the existing Lincoln-region Spot map with the
+previous local-AI chatbot embedded in an on-demand **Ask Spot** panel.
 
-## Open
-
-Open `dist/spot-prototype.html` in a modern browser. No installation, API key, network connection or account is required. Alternatively, run `npm start` and open the local URL printed in the terminal. Node 20+ is required for the local server, build script and unit tests.
-
-## What changed
-
-- Real-area search: type **East Campus** to center the map on the campus area and see 17 nearby fictional establishments. Names, casing, common aliases (including `UNL East`) and Lincoln/NE suffixes are recognized.
-- The bundled index contains **40** neighborhoods, campuses, parks, lakes and nearby towns, including City Campus, Haymarket, Havelock, Holmes Lake, Waverly and Seward. Partial matches appear as suggestions; choose with touch/click or arrow keys and Enter. Ambiguous partial names do not automatically move the camera.
-- Nearby establishments are sorted by straight-line distance from the selected area's approximate center, not from the user's phone. The area radius is displayed. Results respect café/bar, saved and friends filters. Empty nearby sample coverage stays empty; we do not invent visitors or fabricate addresses.
-- A selected area has a distinct coral reference marker without an occupancy count. **All areas** leaves that area; Region/Lincoln/Downtown presets clear the geographic query. Text searches still find the fictional venues.
-- Search remains accessible with place details open. On mobile, resolving a real area returns from List to Map. An explicit suggestion/Enter selection releases input focus; auto-completion while typing does not forcibly interrupt the keyboard.
-- The entire interface now uses cool-white / indigo light mode and midnight-blue / lavender dark mode, with coral highlights. The single-canvas map has matching palettes. Existing appearance preferences continue to work.
-- A new **signal-ring** SVG replaces the previous location-pin branding in the app and favicon. The SVG is in `assets/spot-mark.svg`. This is a design proposal, not a trademark clearance.
-- The v4.2 decluttered map geometry, stable keyed markers, progressive labels, one-finger pan / two-finger pinch controls, nonblocking details, saved spots, comparison, separate sharing controls, and sample timeline are retained.
-
-## Search data and limitations
-
-This is a **bundled local place-name index, not live geocoding**. It does not resolve arbitrary street addresses, every establishment, the entire state or worldwide locations. Unknown searches never receive guessed coordinates. Some supported areas do not have any sample establishments inside their search radius.
-
-The existing map fixture provides approximate real-area centers and schematic street/park geometry. Campus names were checked against the University of Nebraska–Lincoln directory at https://maps.unl.edu/ and https://maps.unl.edu/NEU. The parks directory reference is https://www.lincoln.ne.gov/City/Departments/Parks-and-Recreation/Parks-Facilities/Parks-A-to-Z . These references establish names/context, not survey accuracy of the inherited map centers. No source map artwork was copied. Area centers are NOT entrances, precise building locations, boundary polygons, or routing destinations.
-
-`place-search.js` is a pure, separately testable gazetteer/search module. It normalizes aliases, ranks suggestions, computes distances and proposes camera targets. It makes **no network requests, geolocation calls or analytics submissions**. Searches are not written to storage. Real-area lookup does not create or update a user's presence.
-
-## Unchanged demo
-
-336 fictional venues; 5,000 demo accounts; 3,500 initially at establishments; 60 friends; 42 initially sharing a venue; 6 friend requests. Each venue has one aggregate public count. Counts are participating app accounts, not verified total occupancy, fullness, or available seats.
-
-No live accounts, server authorization, background detection, actual location collection or working navigation to fictional businesses are implemented. The privacy controls simulate the intended behavior only. Do not ship the client-authoritative demo state as a production authorization system.
-
-## Build and test
+## Quick start
 
 ```sh
-npm run build
-npm test
-npm run test:ui
-npm run test:touch
-npm run test:map-polish
-npm run test:search
-npm run test:performance
+npm run launch
 ```
 
-Node tests have no dependencies beyond Node. Browser tests require Python, Playwright, Pillow, and Chromium. The supplied scripts find `chromium` on PATH; the retained suites also support `CHROMIUM_PATH`. Tests use Chromium's `set_content` and mobile-emulated viewports; touch tests dispatch browser touch events with Chrome DevTools. Native share and clipboard integration branches in the older feature suite are explicitly mocked.
+Requires Node.js 22.16.0+. The Mac/Windows **Start Spot** launchers run the same
+command. The first run prepares pinned libraries. Then open the map at
+`http://localhost:4318`, click **Ask Spot**, choose a model, and approve its download.
+No API keys or accounts. No hosted AI service. Initial asset downloads require
+internet unless you prepare local mirrors. Model files are not included in the ZIP.
 
-Final results are in `artifacts/v4.3-release.json`. Expected results: 153 unit checks, 98 retained app-interface checks, 28 touch checks, 10 map-polish checks and 32 new search/brand checks. The Haymarket regression expectation now validates a geographic radius rather than the old exact-area text count, and the dark-palette expectation was updated to midnight blue. No tests were removed to hide failures.
+Manual equivalent:
 
-A separate direct `file://` launch check was blocked by this environment's Chromium administrator policy (`ERR_BLOCKED_BY_ADMINISTRATOR`). The automated suites load the standalone HTML with `set_content`; direct file opening is not certified by that test.
+```sh
+npm install --ignore-scripts
+npm run vendor
+npm start
+```
 
-Limits: no physical iPhone or Android testing, no mobile Safari certification, no OS virtual-keyboard certification, no production location integration, no live geocoder, and no guaranteed frame rate. Performance output measures JavaScript render work only, not full-device interaction latency.
+The first successful installation creates `package-lock.json`; retain it and use
+`npm ci --ignore-scripts` for repeat installations. Direct dependencies are pinned,
+but the transitive tree is not lockfile-verified until installation completes.
 
-## Reverting
+## Integration architecture
 
-`rollback/spot-lincoln-v4.2.html` is an exact copy of the supplied v4.2 file. It has the original v4.2 palette/icon and no geographic search. Open it to compare or revert. The previous exact v4.1 snapshot is also retained. SHA-256 checksums are in `rollback/manifest.json`.
+```text
+http://localhost:4318/
+  Spot map + original Explore/Friends/Privacy UI
+    │
+    └─ Ask Spot button → lazy same-origin /assistant.html frame
+         ├─ theme synchronization + close/pause + draft preservation
+         ├─ validated public demo snapshot → local retrieval → cited excerpts
+         ├─ source-card button → allowlisted place/area → existing map navigation
+         ├─ chats / knowledge / approved memories → dedicated IndexedDB database
+         ├─ model Web Worker → WebLLM GPU or wllama CPU
+         └─ optional own-server proxy → loopback Ollama or llama.cpp
+```
 
-## Source structure
+The iframe isolates UI styles and lifecycle, **not** a security boundary against
+malicious same-origin JavaScript. Model output is not executable code. The bounded
+tool loop cannot query arbitrary parent-page state. Optional Python runs on the
+existing separate sandbox origin, with the limitations documented in SECURITY.md.
 
-- `app.js`: interface, camera, search integration, interaction state.
-- `core.js` / `lincoln-data.js`: unchanged demo domain logic and fixture.
-- `place-search.js`: local real-area lookup, distance ordering and camera target.
-- `map-core.js`, `map-renderer.js`, `map-gestures.js`: grouping, original illustrative map and input handling.
-- `styles.css`, `brand.css`, `theme.js`: component styles, new palette and appearance preference.
-- `scripts/build.cjs`: inlines all styles/scripts into a single HTML file.
-- `tests/`: reproducible unit and interface regressions.
+### What changed
 
-There are no fonts, external tile dependencies, analytics SDKs or background network workers bundled into the app.
+- Spot remains the root page; the local chatbot lives in a panel opened from the
+  top bar. There is no fourth main navigation tab or separate app to launch.
+- The panel inherits Spot's indigo/coral light mode and midnight/lavender dark mode.
+- The assistant starts with a Spot-specific persona and built-in prototype guide.
+- Read-only retrieval uses current **public demo** place data, without names or
+  locations of friends, private settings, saved lists, or device GPS.
+- Area queries use the existing nearby-venue lists. “East Campus” means the area,
+  not only venue names containing those words.
+- Cited source cards can open an allowlisted place or area when clicked.
+- Context is refreshed at the start of each answer. Missing activity remains null
+  and is described as unknown. Existing answer text is a historical snapshot;
+  it is not silently rewritten as the map changes.
+- Closing pauses active generation while keeping chats and drafts. Reopening
+  reuses the panel/runtime within the page rather than reloading it every time.
+- Original map fixtures, cartography, clustering, pan/pinch module and public
+  privacy controls are retained. Rollback copies are provided outside public/.
+
+### Existing chatbot features retained
+
+Streaming; Stop; regenerate; edit/resend; copying; system prompt/personas and
+sampling settings; sliding context; bounded summaries; optional approved memory;
+local document/PDF text ingestion; BM25 plus optional embeddings/reranking;
+calculator/date/unit/local-search tools; explicitly approved Wikipedia/Python;
+multiple chats; JSON export/import; sanitized Markdown; optional on-device speech;
+workers; local model caches; PWA shell; local-only inference backend proxy.
+
+These are implemented source paths, not a claim that every installed vendor
+runtime has been exercised here. See the validation section below.
+
+## Layout
+
+- `public/index.html`: Spot root, launcher, and assistant panel shell.
+- `public/spot/`: existing map source plus bridge/shell additions.
+- `public/assistant.html`: embedded chat interface.
+- `public/src/spot-context.js`: whitelist validation and local place retrieval.
+- `public/src/app.js`: chatbot integration and existing chat features.
+- `public/workers/`: model inference and knowledge processing.
+- `server.mjs`: local host, same-origin embed policy, inference proxy, sandbox host.
+- `scripts/start.mjs`: beginner launcher and local vendor preparation.
+- `tests/`: local logic, server, integration fixtures, and real-runtime smoke tools.
+- `rollback/`: unchanged earlier Spot HTML files; not served by the app.
+
+## Versions and runtime documentation
+
+This integration preserves the chatbot's existing exact runtime pins rather than
+changing AI engines: WebLLM 0.2.85, wllama/compat 3.6.1, Transformers.js 4.3.0,
+DOMPurify 3.4.16, marked 18.0.14, highlight.js 11.12.0, PDF.js 6.3.289,
+Pyodide 314.0.7, esbuild 0.27.2. `package.json` includes the dependency overrides.
+
+Version references checked September 28, 2026:
+- https://raw.githubusercontent.com/mlc-ai/web-llm/v0.2.85/package.json
+- https://webllm.mlc.ai/docs/user/basic_usage.html
+- https://raw.githubusercontent.com/ngxson/wllama/3.6.1/package.json
+- https://raw.githubusercontent.com/huggingface/transformers.js/4.3.0/package.json
+
+The original engine architecture, exact vendor-preparation process, model options,
+license notes, and local model mirror instructions are retained in
+`docs/LOCAL-ENGINE-REFERENCE.md`. Its earlier standalone-app description is
+historical; the integrated layout above is authoritative.
+
+## Own-machine Ollama (optional)
+
+The default uses your browser. To use your own local Ollama instead, install it
+separately, disable its cloud mode, and download a local model. No third-party
+inference service is needed.
+
+macOS/Linux, in a separate terminal:
+
+```sh
+OLLAMA_NO_CLOUD=1 ollama serve
+```
+
+Download weights and start Spot with a local backend:
+
+```sh
+ollama pull qwen2.5:1.5b
+LOCAL_BACKEND=ollama LOCAL_MODEL=qwen2.5:1.5b npm start
+```
+
+Windows PowerShell equivalents:
+
+```powershell
+$env:OLLAMA_NO_CLOUD="1"
+ollama serve
+```
+
+In another PowerShell window, in the project folder:
+
+```powershell
+ollama pull qwen2.5:1.5b
+$env:LOCAL_BACKEND="ollama"
+$env:LOCAL_MODEL="qwen2.5:1.5b"
+npm start
+```
+
+In **Ask Spot → Settings**, choose **Own server**, then approve connection.
+Stop an existing Spot server before starting it again with different environment
+variables. Loopback does not itself prove a model is local: the proxy also rejects
+Ollama metadata identifying a cloud-backed model. Model downloads and a running
+server remain necessary. For llama.cpp and HTTPS phone testing, see
+`docs/LOCAL-ENGINE-REFERENCE.md` and `docs/TROUBLESHOOTING.md`.
+
+## Validation
+
+```sh
+npm test                 # 66 logic/context/HTTP-server checks
+npm run test:map         # 173 retained map logic checks
+npm run test:integration # 31 no-network UI/bridge checks; Python Playwright needed
+```
+
+Browser fixtures use Playwright 1.57.0 in this environment and Chromium 144.
+Run with `CHROMIUM_PATH` set to your Chromium executable. No browser security
+settings are disabled by the harness. It renders an opaque-origin srcdoc fixture
+because browser navigation is blocked here. Only the test harness uses wildcard
+postMessage targets to address that opaque origin; production validates and uses
+its exact same origin and source window.
+
+**270 passed, 0 failed.** No real-model inference, installed-vendor execution,
+physical-phone run, durable IndexedDB recovery, or full PWA offline test is claimed.
+Dependency/model downloads failed here because network name resolution is blocked;
+browser navigation is blocked by administrator policy. A real local HTTP server
+was separately tested using Node fetch, including CSP/COOP/COEP, frame allowances,
+all cached shell paths, byte ranges, and the loopback proxy with a test backend.
+
+Real inference transport smoke after configuring your own backend:
+
+```sh
+npm run test:live
+```
+
+This rejects scripted fixture backends and records actual timing/output. It does
+not substitute for answer-quality evaluation. Use `docs/EVALUATION.md` as well.
+
+## Limits and safety
+
+- All places, crowd data and friend records are demo fixtures. No actual location
+  collection, verified occupancy, real user authentication or real venue discovery.
+- A tiny local model may hallucinate names/counts or mishandle a question despite
+  grounding and citations. Inspect sources. This is not a guarantee of correctness.
+- Initial model downloads can be large; CPU generation and multiple agent passes
+  may be slow. Browser/OS memory limits can terminate a tab.
+- Closing a panel stops current generation, but cached model memory may remain
+  allocated until you unload it or close the page.
+- The local server is loopback by default. It is not an authenticated public or
+  multiuser service. Do not expose it directly to the internet.
+- Public context is intentionally available to the assistant without an extra
+  prompt. Private friend/permission data is not included. Optional document uploads
+  and user chat messages are separate and remain subject to selected backend rules.
+- Speech is opt-in and on-device only when available; browser/OS implementations
+  themselves may not be open source. Keep it off for a strictly auditable OSS stack.
+- Rollback preserves source files, not browser profiles. Standalone file:// and
+  localhost are different storage origins, so old saved places/chats do not
+  automatically migrate between them.

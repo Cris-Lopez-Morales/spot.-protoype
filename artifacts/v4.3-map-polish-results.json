@@ -1,7 +1,0 @@
-{
-  "tests": 10,
-  "passed": 10,
-  "failures": 0,
-  "errors": 0,
-  "method": "Headless Chromium, mobile emulation. v4.1 baseline loaded from byte-identical rollback snapshot. No physical-phone or Safari certification."
-}

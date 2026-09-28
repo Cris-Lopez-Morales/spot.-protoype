@@ -1,0 +1,11 @@
+let renderer=null,pending=null;
+export async function initializeRenderer(){if(renderer)return true;if(!pending)pending=import('/vendor/render.js').then(m=>{renderer=m;return true;}).catch(()=>{pending=null;return false;});return pending;}
+export function renderMarkdown(container,text){
+ if(!renderer){container.textContent=text;container.classList.add('plain-output');return;}
+ container.classList.remove('plain-output');const {DOMPurify,marked,hljs}=renderer;
+ const options={ALLOWED_TAGS:['p','br','strong','em','del','a','code','pre','blockquote','ul','ol','li','h1','h2','h3','h4','hr','table','thead','tbody','tr','th','td','span'],ALLOWED_ATTR:['href','title','class'],FORBID_TAGS:['img','svg','math','style','script','iframe','object','embed','form','input'],ALLOW_DATA_ATTR:false};
+ container.innerHTML=DOMPurify.sanitize(marked.parse(text,{async:false,gfm:true,breaks:false}),options);
+ container.querySelectorAll('a').forEach(a=>{try{const u=new URL(a.getAttribute('href'),location.href);if(!['https:','http:'].includes(u.protocol)){a.removeAttribute('href');return;}a.rel='noopener noreferrer';a.target='_blank';}catch{a.removeAttribute('href');}});
+ container.querySelectorAll('pre code').forEach(code=>{const language=[...code.classList].find(c=>c.startsWith('language-'))?.slice(9);try{if(language&&hljs.getLanguage(language))code.innerHTML=DOMPurify.sanitize(hljs.highlight(code.textContent,{language}).value,{ALLOWED_TAGS:['span'],ALLOWED_ATTR:['class']});}catch{}const button=document.createElement('button');button.className='code-copy';button.textContent='Copy code';button.type='button';button.setAttribute('aria-label','Copy code block');button.onclick=()=>copyText(code.textContent).then(()=>{button.textContent='Copied';setTimeout(()=>button.textContent='Copy code',1400);}).catch(()=>button.textContent='Copy unavailable');code.parentElement.append(button);});
+}
+export async function copyText(text){if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);return;}const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.append(area);area.select();const ok=document.execCommand('copy');area.remove();if(!ok)throw Error('Clipboard unavailable. Select the text and copy manually.');}

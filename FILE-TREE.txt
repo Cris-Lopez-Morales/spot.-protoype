@@ -1,0 +1,113 @@
+spot-with-ai/
+├── artifacts/
+│   ├── integration-browser-output.txt
+│   ├── integration-browser.json
+│   ├── map-tests.txt
+│   ├── node-tests.txt
+│   ├── preview-desktop.png
+│   ├── preview-mobile.png
+│   ├── spot-ai-desktop-light.png
+│   ├── spot-ai-mobile-dark.png
+│   └── spot-ai-mobile-settings.png
+├── docs/
+│   ├── EVALUATION.md
+│   ├── LOCAL-ENGINE-REFERENCE.md
+│   ├── SECURITY.md
+│   ├── TEST-REPORT.md
+│   └── TROUBLESHOOTING.md
+├── public/
+│   ├── icons/
+│   │   ├── icon-192.png
+│   │   ├── icon-512.png
+│   │   └── mark.svg
+│   ├── knowledge/
+│   │   └── spot-guide.md
+│   ├── models/
+│   │   ├── manifest.json
+│   │   └── README.md
+│   ├── sandbox/
+│   │   ├── frame.html
+│   │   ├── frame.js
+│   │   └── python.worker.js
+│   ├── spot/
+│   │   ├── assets/
+│   │   │   └── spot-mark.svg
+│   │   ├── app.js
+│   │   ├── assistant-context.js
+│   │   ├── assistant-shell.css
+│   │   ├── assistant-shell.js
+│   │   ├── brand.css
+│   │   ├── core.js
+│   │   ├── lincoln-data.js
+│   │   ├── map-core.js
+│   │   ├── map-gestures.js
+│   │   ├── map-renderer.js
+│   │   ├── package.json
+│   │   ├── place-search.js
+│   │   ├── styles.css
+│   │   ├── theme-boot.js
+│   │   └── theme.js
+│   ├── src/
+│   │   ├── agent.js
+│   │   ├── app.js
+│   │   ├── client.js
+│   │   ├── config.js
+│   │   ├── core.js
+│   │   ├── db.js
+│   │   ├── ingest.js
+│   │   ├── math.js
+│   │   ├── prompts.js
+│   │   ├── python.js
+│   │   ├── render.js
+│   │   ├── spot-context.js
+│   │   ├── stream.js
+│   │   ├── theme-boot.js
+│   │   ├── tools.js
+│   │   └── voice.js
+│   ├── workers/
+│   │   ├── knowledge.worker.js
+│   │   └── model.worker.js
+│   ├── app.css
+│   ├── assistant-embed.css
+│   ├── assistant.html
+│   ├── index.html
+│   ├── manifest.webmanifest
+│   └── sw.js
+├── rollback/
+│   ├── manifest.json
+│   ├── spot-lincoln-v4.2.html
+│   ├── spot-lincoln-v4.3.html
+│   └── spot-lincoln-v4.4.html
+├── scripts/
+│   ├── mirror-models.mjs
+│   ├── prepare-vendor.mjs
+│   └── start.mjs
+├── tests/
+│   ├── fixtures/
+│   │   └── fixture-seed-v43.json
+│   ├── spot/
+│   │   ├── core.test.cjs
+│   │   ├── features.test.cjs
+│   │   ├── gestures.test.cjs
+│   │   ├── map-polish.test.cjs
+│   │   ├── map.test.cjs
+│   │   ├── place-search.test.cjs
+│   │   └── v44.test.cjs
+│   ├── browser_test.py
+│   ├── capture_integration.py
+│   ├── core.test.mjs
+│   ├── integration_browser.py
+│   ├── integration_harness.py
+│   ├── live-server.mjs
+│   ├── offline_harness.py
+│   ├── server.test.mjs
+│   └── spot-context.test.mjs
+├── .gitignore
+├── FILE-TREE.txt
+├── LICENSE
+├── package.json
+├── README.md
+├── server.mjs
+├── Start Spot.cmd
+├── Start Spot.command
+└── START-HERE.md

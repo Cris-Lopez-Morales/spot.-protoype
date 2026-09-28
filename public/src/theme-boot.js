@@ -1,0 +1,1 @@
+(()=>{let mode='system';try{mode=localStorage.getItem('spot-assistant-theme')||mode;}catch{}const dark=mode==='dark'||mode==='system'&&matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.dataset.theme=dark?'dark':'light';})();

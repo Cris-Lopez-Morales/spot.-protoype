@@ -1,7 +1,0 @@
-{
-  "test": "100 mixed-zoom/pan JavaScript render calls; not whole-frame latency",
-  "medianMs": 4.65,
-  "p95Ms": 9.2,
-  "maxMs": 15.4,
-  "mapDOMNodes": 180
-}
