@@ -1,0 +1,13 @@
+{
+  "tests": 98,
+  "passed": 98,
+  "failures": 0,
+  "errors": 0,
+  "method": "Headless desktop Chromium with set_content; desktop and mobile-sized viewports, not physical phones. Clipboard and native-share API branches mocked. No external requests.",
+  "limitations": [
+    "No native iOS/Android background location implementation",
+    "No real accounts or backend authorization",
+    "No durable browser-origin storage integration certification",
+    "Direct file navigation blocked by the test environment; HTML content tested through set_content"
+  ]
+}

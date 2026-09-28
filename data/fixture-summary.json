@@ -1,0 +1,10 @@
+{
+  "totalUsers": 5000,
+  "participating": 3500,
+  "venues": 336,
+  "friends": 60,
+  "friendsPresent": 42,
+  "requests": 6,
+  "unmappedUsers": 1500,
+  "geography": "Approximate Lincoln and surrounding towns with original schematic offline map; not surveyed geometry or real building inventory"
+}

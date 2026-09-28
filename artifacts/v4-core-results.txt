@@ -1,0 +1,542 @@
+
+> spot-presence-prototype@0.4.0 test
+> node --test tests/*.test.cjs
+
+TAP version 13
+# Subtest: 5,000 distinct registered demo accounts, including viewer
+ok 1 - 5,000 distinct registered demo accounts, including viewer
+  ---
+  duration_ms: 1.840331
+  type: 'test'
+  ...
+# Subtest: 336 distinct fictional venue IDs and names
+ok 2 - 336 distinct fictional venue IDs and names
+  ---
+  duration_ms: 0.738978
+  type: 'test'
+  ...
+# Subtest: 100 distinct named directory profiles
+ok 3 - 100 distinct named directory profiles
+  ---
+  duration_ms: 0.260852
+  type: 'test'
+  ...
+# Subtest: 60 accepted friends, 42 visible, 6 incoming
+ok 4 - 60 accepted friends, 42 visible, 6 incoming
+  ---
+  duration_ms: 0.663465
+  type: 'test'
+  ...
+# Subtest: 3,500 mapped, 1,500 unmapped, total 5,000
+ok 5 - 3,500 mapped, 1,500 unmapped, total 5,000
+  ---
+  duration_ms: 1.067212
+  type: 'test'
+  ...
+# Subtest: display counts equal allocated accounts, not an arbitrary population label
+ok 6 - display counts equal allocated accounts, not an arbitrary population label
+  ---
+  duration_ms: 73.150569
+  type: 'test'
+  ...
+# Subtest: all user locations resolve to valid venues or null
+ok 7 - all user locations resolve to valid venues or null
+  ---
+  duration_ms: 2.190196
+  type: 'test'
+  ...
+# Subtest: friends are included in the population, not extra people
+ok 8 - friends are included in the population, not extra people
+  ---
+  duration_ms: 0.427742
+  type: 'test'
+  ...
+# Subtest: named friend participants cannot exceed a venue count
+ok 9 - named friend participants cannot exceed a venue count
+  ---
+  duration_ms: 0.530206
+  type: 'test'
+  ...
+# Subtest: 26 Lincoln-region groups are populated
+ok 10 - 26 Lincoln-region groups are populated
+  ---
+  duration_ms: 0.303445
+  type: 'test'
+  ...
+# Subtest: all venue coordinates lie inside configured Lincoln-area bounds
+ok 11 - all venue coordinates lie inside configured Lincoln-area bounds
+  ---
+  duration_ms: 0.208403
+  type: 'test'
+  ...
+# Subtest: coordinates use the same projection as the map
+ok 12 - coordinates use the same projection as the map
+  ---
+  duration_ms: 0.422775
+  type: 'test'
+  ...
+# Subtest: projection rejects nonfinite coordinates
+ok 13 - projection rejects nonfinite coordinates
+  ---
+  duration_ms: 0.375604
+  type: 'test'
+  ...
+# Subtest: demo initially does not share the viewer
+ok 14 - demo initially does not share the viewer
+  ---
+  duration_ms: 0.158608
+  type: 'test'
+  ...
+# Subtest: sharing adds one existing account, never a 5,001st account
+ok 15 - sharing adds one existing account, never a 5,001st account
+  ---
+  duration_ms: 0.624226
+  type: 'test'
+  ...
+# Subtest: repeated enable does not double count the viewer
+ok 16 - repeated enable does not double count the viewer
+  ---
+  duration_ms: 0.101242
+  type: 'test'
+  ...
+# Subtest: disabling removes own presence immediately
+ok 17 - disabling removes own presence immediately
+  ---
+  duration_ms: 0.084187
+  type: 'test'
+  ...
+# Subtest: no recent participants is unknown, not empty
+ok 18 - no recent participants is unknown, not empty
+  ---
+  duration_ms: 0.077116
+  type: 'test'
+  ...
+# Subtest: all sample presence and friend visibility expires
+ok 19 - all sample presence and friend visibility expires
+  ---
+  duration_ms: 1.469345
+  type: 'test'
+  ...
+# Subtest: a newly enabled own presence can outlive the sample snapshot
+ok 20 - a newly enabled own presence can outlive the sample snapshot
+  ---
+  duration_ms: 0.109094
+  type: 'test'
+  ...
+# Subtest: strict freshness boundary and future timestamps
+ok 21 - strict freshness boundary and future timestamps
+  ---
+  duration_ms: 0.06697
+  type: 'test'
+  ...
+# Subtest: friends-only filter returns only places with accepted visible friends
+ok 22 - friends-only filter returns only places with accepted visible friends
+  ---
+  duration_ms: 0.305127
+  type: 'test'
+  ...
+# Subtest: friends-only filter empties after expiration
+ok 23 - friends-only filter empties after expiration
+  ---
+  duration_ms: 0.161363
+  type: 'test'
+  ...
+# Subtest: category filters partition the venue directory
+ok 24 - category filters partition the venue directory
+  ---
+  duration_ms: 2.547822
+  type: 'test'
+  ...
+# Subtest: Lincoln city search returns full city
+ok 25 - Lincoln city search returns full city
+  ---
+  duration_ms: 0.531457
+  type: 'test'
+  ...
+# Subtest: neighborhood search supports Haymarket
+ok 26 - neighborhood search supports Haymarket
+  ---
+  duration_ms: 0.429063
+  type: 'test'
+  ...
+# Subtest: search ignores accents and case
+ok 27 - search ignores accents and case
+  ---
+  duration_ms: 0.065339
+  type: 'test'
+  ...
+# Subtest: unmatched search returns no venues
+ok 28 - unmatched search returns no venues
+  ---
+  duration_ms: 0.491498
+  type: 'test'
+  ...
+# Subtest: accepting an incoming request adds identity, not another venue participant
+ok 29 - accepting an incoming request adds identity, not another venue participant
+  ---
+  duration_ms: 0.501682
+  type: 'test'
+  ...
+# Subtest: removal hides identity without changing the count
+ok 30 - removal hides identity without changing the count
+  ---
+  duration_ms: 0.11307
+  type: 'test'
+  ...
+# Subtest: blocking and unblocking do not implicitly re-add friendship
+ok 31 - blocking and unblocking do not implicitly re-add friendship
+  ---
+  duration_ms: 0.098197
+  type: 'test'
+  ...
+# Subtest: sending a request leaves it pending
+ok 32 - sending a request leaves it pending
+  ---
+  duration_ms: 0.088132
+  type: 'test'
+  ...
+# Subtest: cancel and decline remove pending connections
+ok 33 - cancel and decline remove pending connections
+  ---
+  duration_ms: 0.096776
+  type: 'test'
+  ...
+# Subtest: invalid actions and people are rejected
+ok 34 - invalid actions and people are rejected
+  ---
+  duration_ms: 0.122163
+  type: 'test'
+  ...
+# Subtest: not-sharing friends do not reveal a venue
+ok 35 - not-sharing friends do not reveal a venue
+  ---
+  duration_ms: 0.07339
+  type: 'test'
+  ...
+# Subtest: persistence keeps the v4 preference contract without runtime state
+ok 36 - persistence keeps the v4 preference contract without runtime state
+  ---
+  duration_ms: 0.151307
+  type: 'test'
+  ...
+# Subtest: restoring preferences does not replace local fixtures or account count
+ok 37 - restoring preferences does not replace local fixtures or account count
+  ---
+  duration_ms: 0.247421
+  type: 'test'
+  ...
+# Subtest: old-version state is safely replaced by the larger default fixture
+ok 38 - old-version state is safely replaced by the larger default fixture
+  ---
+  duration_ms: 0.102113
+  type: 'test'
+  ...
+# Subtest: unrecognized saved relation values cannot grant access
+ok 39 - unrecognized saved relation values cannot grant access
+  ---
+  duration_ms: 0.156545
+  type: 'test'
+  ...
+# Subtest: time labels never imply fresh data for missing timestamps
+ok 40 - time labels never imply fresh data for missing timestamps
+  ---
+  duration_ms: 0.203976
+  type: 'test'
+  ...
+# Subtest: new tools default to empty saved, empty comparison and no named sharing
+ok 41 - new tools default to empty saved, empty comparison and no named sharing
+  ---
+  duration_ms: 1.359019
+  type: 'test'
+  ...
+# Subtest: bookmark toggles without duplicating a venue
+ok 42 - bookmark toggles without duplicating a venue
+  ---
+  duration_ms: 0.283416
+  type: 'test'
+  ...
+# Subtest: invalid bookmark target cannot enter saved state
+ok 43 - invalid bookmark target cannot enter saved state
+  ---
+  duration_ms: 0.107912
+  type: 'test'
+  ...
+# Subtest: saved filter shows only bookmarks and intersects category
+ok 44 - saved filter shows only bookmarks and intersects category
+  ---
+  duration_ms: 0.362263
+  type: 'test'
+  ...
+# Subtest: saved filter supports no bookmarks without populating fake favorites
+ok 45 - saved filter supports no bookmarks without populating fake favorites
+  ---
+  duration_ms: 0.139429
+  type: 'test'
+  ...
+# Subtest: saved places remain saved after live presence expires
+ok 46 - saved places remain saved after live presence expires
+  ---
+  duration_ms: 0.269344
+  type: 'test'
+  ...
+# Subtest: comparison has a hard limit of three without replacing an existing selection
+ok 47 - comparison has a hard limit of three without replacing an existing selection
+  ---
+  duration_ms: 0.197746
+  type: 'test'
+  ...
+# Subtest: removing a comparison frees capacity and preserves selection order
+ok 48 - removing a comparison frees capacity and preserves selection order
+  ---
+  duration_ms: 0.196735
+  type: 'test'
+  ...
+# Subtest: invalid comparison target is rejected
+ok 49 - invalid comparison target is rejected
+  ---
+  duration_ms: 0.252068
+  type: 'test'
+  ...
+# Subtest: anonymous contribution never grants named sharing
+ok 50 - anonymous contribution never grants named sharing
+  ---
+  duration_ms: 0.415884
+  type: 'test'
+  ...
+# Subtest: named sharing needs an explicit accepted audience
+ok 51 - named sharing needs an explicit accepted audience
+  ---
+  duration_ms: 0.192188
+  type: 'test'
+  ...
+# Subtest: an audience can be selected without enabling either sharing mode
+ok 52 - an audience can be selected without enabling either sharing mode
+  ---
+  duration_ms: 0.154962
+  type: 'test'
+  ...
+# Subtest: named-only sharing does not change the public venue count
+ok 53 - named-only sharing does not change the public venue count
+  ---
+  duration_ms: 0.109955
+  type: 'test'
+  ...
+# Subtest: turning off friend sharing preserves count contribution
+ok 54 - turning off friend sharing preserves count contribution
+  ---
+  duration_ms: 0.133099
+  type: 'test'
+  ...
+# Subtest: turning off count contribution preserves authorized named sharing
+ok 55 - turning off count contribution preserves authorized named sharing
+  ---
+  duration_ms: 0.104707
+  type: 'test'
+  ...
+# Subtest: pause all revokes both forms of presence without losing bookmarks
+ok 56 - pause all revokes both forms of presence without losing bookmarks
+  ---
+  duration_ms: 0.115444
+  type: 'test'
+  ...
+# Subtest: incoming, nonexistent and duplicate recipients are removed from an audience
+ok 57 - incoming, nonexistent and duplicate recipients are removed from an audience
+  ---
+  duration_ms: 0.075853
+  type: 'test'
+  ...
+# Subtest: accepting a friend never adds them to the outgoing sharing audience
+ok 58 - accepting a friend never adds them to the outgoing sharing audience
+  ---
+  duration_ms: 0.198808
+  type: 'test'
+  ...
+# Subtest: removing a recipient immediately revokes their visibility
+ok 59 - removing a recipient immediately revokes their visibility
+  ---
+  duration_ms: 0.113901
+  type: 'test'
+  ...
+# Subtest: blocking the last selected recipient turns named sharing off
+ok 60 - blocking the last selected recipient turns named sharing off
+  ---
+  duration_ms: 0.085769
+  type: 'test'
+  ...
+# Subtest: unblocking and refriending never resurrect a revoked sharing permission
+ok 61 - unblocking and refriending never resurrect a revoked sharing permission
+  ---
+  duration_ms: 0.079629
+  type: 'test'
+  ...
+# Subtest: empty audience switches named visibility off
+ok 62 - empty audience switches named visibility off
+  ---
+  duration_ms: 0.081882
+  type: 'test'
+  ...
+# Subtest: own named and anonymous presence both expire
+ok 63 - own named and anonymous presence both expire
+  ---
+  duration_ms: 0.082554
+  type: 'test'
+  ...
+# Subtest: round-trip persistence keeps bookmarks, authorized audience and independent switches
+ok 64 - round-trip persistence keeps bookmarks, authorized audience and independent switches
+  ---
+  duration_ms: 0.250255
+  type: 'test'
+  ...
+# Subtest: persistent preferences contain no observations, history, coordinates or share payload
+ok 65 - persistent preferences contain no observations, history, coordinates or share payload
+  ---
+  duration_ms: 0.174381
+  type: 'test'
+  ...
+# Subtest: v2 migration keeps anonymous participation and does not invent friend permission
+ok 66 - v2 migration keeps anonymous participation and does not invent friend permission
+  ---
+  duration_ms: 0.13982
+  type: 'test'
+  ...
+# Subtest: malformed persisted bookmarks and recipients cannot create access
+ok 67 - malformed persisted bookmarks and recipients cannot create access
+  ---
+  duration_ms: 0.115623
+  type: 'test'
+  ...
+# Subtest: invalid saved container types are ignored
+ok 68 - invalid saved container types are ignored
+  ---
+  duration_ms: 0.082984
+  type: 'test'
+  ...
+# Subtest: sample history has seven fixed five-minute steps ending at an actual sample timestamp
+ok 69 - sample history has seven fixed five-minute steps ending at an actual sample timestamp
+  ---
+  duration_ms: 0.182264
+  type: 'test'
+  ...
+# Subtest: history never rolls forward or appends a false zero when presence expires
+ok 70 - history never rolls forward or appends a false zero when presence expires
+  ---
+  duration_ms: 0.207782
+  type: 'test'
+  ...
+# Subtest: history is independent of contribution toggles and friend permissions
+ok 71 - history is independent of contribution toggles and friend permissions
+  ---
+  duration_ms: 0.137256
+  type: 'test'
+  ...
+# Subtest: places with no sample activity have no invented timeline
+ok 72 - places with no sample activity have no invented timeline
+  ---
+  duration_ms: 0.074421
+  type: 'test'
+  ...
+# Subtest: all history samples are nonnegative finite counts, without a full or capacity field
+ok 73 - all history samples are nonnegative finite counts, without a full or capacity field
+  ---
+  duration_ms: 0.942324
+  type: 'test'
+  ...
+# Subtest: place hashes parse only valid known venue identifiers
+ok 74 - place hashes parse only valid known venue identifiers
+  ---
+  duration_ms: 0.203115
+  type: 'test'
+  ...
+# Subtest: public link strips all query and prior state from a deployed HTTPS URL
+ok 75 - public link strips all query and prior state from a deployed HTTPS URL
+  ---
+  duration_ms: 0.268713
+  type: 'test'
+  ...
+# Subtest: public link is not generated for local files, localhost, private IP or credentials
+ok 76 - public link is not generated for local files, localhost, private IP or credentials
+  ---
+  duration_ms: 0.230486
+  type: 'test'
+  ...
+# Subtest: share content in local mode never includes a file path or friend identity
+ok 77 - share content in local mode never includes a file path or friend identity
+  ---
+  duration_ms: 0.217236
+  type: 'test'
+  ...
+# Subtest: invalid place produces no share payload
+ok 78 - invalid place produces no share payload
+  ---
+  duration_ms: 0.087992
+  type: 'test'
+  ...
+# Subtest: clustering conserves every venue exactly once at each scale
+ok 79 - clustering conserves every venue exactly once at each scale
+  ---
+  duration_ms: 7.279592
+  type: 'test'
+  ...
+# Subtest: selected establishment stays independently selectable
+ok 80 - selected establishment stays independently selectable
+  ---
+  duration_ms: 1.36625
+  type: 'test'
+  ...
+# Subtest: cluster coordinates are member centroids
+ok 81 - cluster coordinates are member centroids
+  ---
+  duration_ms: 0.922954
+  type: 'test'
+  ...
+# Subtest: zooming increases geographic separation
+ok 82 - zooming increases geographic separation
+  ---
+  duration_ms: 1.875443
+  type: 'test'
+  ...
+# Subtest: cluster assignment is deterministic
+ok 83 - cluster assignment is deterministic
+  ---
+  duration_ms: 2.120171
+  type: 'test'
+  ...
+# Subtest: clustering handles an empty search result
+ok 84 - clustering handles an empty search result
+  ---
+  duration_ms: 0.124036
+  type: 'test'
+  ...
+# Subtest: cursor-anchored zoom preserves the pointed-at world coordinate
+ok 85 - cursor-anchored zoom preserves the pointed-at world coordinate
+  ---
+  duration_ms: 0.260651
+  type: 'test'
+  ...
+# Subtest: zoom respects configured boundaries
+ok 86 - zoom respects configured boundaries
+  ---
+  duration_ms: 0.279359
+  type: 'test'
+  ...
+# Subtest: regional geographic extent is wider than the previous city extent
+ok 87 - regional geographic extent is wider than the previous city extent
+  ---
+  duration_ms: 0.323335
+  type: 'test'
+  ...
+# Subtest: all twelve surrounding towns have searchable fictional places
+ok 88 - all twelve surrounding towns have searchable fictional places
+  ---
+  duration_ms: 7.510659
+  type: 'test'
+  ...
+1..88
+# tests 88
+# suites 0
+# pass 88
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 233.113041
