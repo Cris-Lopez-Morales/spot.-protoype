@@ -4,6 +4,8 @@
 (function () {
   'use strict';
   const C = window.SpotCore;
+  const PS = window.SpotPlaceSearch;
+  let searchArea=null, searchSuggestions=[], searchIndex=-1, searchIsOpen=false, searchFitTimer=null;
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
   const escape = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
@@ -79,6 +81,8 @@
 
   function navigate(screen, focus = true) {
     if (!['explore', 'friends', 'privacy'].includes(screen)) return;
+    clearTimeout(searchFitTimer);searchIsOpen=false;
+    gestureBinding?.destroy();gestureBinding=null;
     state.screen = screen; detailId = null; closeModal(false); closeDetail(false);
     if (location.hash !== '#' + screen) { try { history.replaceState(null, '', '#' + screen); } catch (_) {} }
     render(); if (focus) $('#main').focus({ preventScroll: true }); window.scrollTo(0, 0);
@@ -101,13 +105,13 @@
     const a = C.activity(v, state, snapshot, now());
     const friendsText = a.friends.length ? friendNames(a.friends) : (a.hasData ? `${C.timeLabel(a.latest, now())} · sample activity` : 'Activity unknown');
     return `<div class="place-row"><button class="place-card ${state.selected === v.id ? 'selected' : ''}" data-venue="${v.id}" data-card="${v.id}" aria-label="${escape(v.name)}, ${a.hasData ? a.count + ' participating app users in demo' : 'no recent app activity'}. View details.">
-      ${monogram(v)}<span class="place-card-info"><h3>${escape(v.name)}</h3><span class="place-meta">${v.category === 'cafe' ? 'Café' : 'Bar'}<span>·</span>${escape(v.street)}</span><span class="card-bottom ${!a.hasData ? 'no-data' : ''}">${a.friends.length ? icon('friends', 11) : (a.hasData ? '<span class="quiet-dot"></span>' : icon('clock', 10))}${friendsText}</span></span><span class="count-pill ${a.hasData ? '' : 'unknown'}">${a.hasData ? a.count : '—'}</span></button><div class="entry-tools">${saveButton(v.id,true)}${compareButton(v.id,true)}</div></div>`;
+      ${monogram(v)}<span class="place-card-info"><h3>${escape(v.name)}</h3><span class="place-meta">${v.category === 'cafe' ? 'Café' : 'Bar'}<span>·</span>${escape(v.street)}${searchArea?`<span>·</span>${PS.distanceLabel(PS.distance(v,searchArea))}`:''}</span><span class="card-bottom ${!a.hasData ? 'no-data' : ''}">${a.friends.length ? icon('friends', 11) : (a.hasData ? '<span class="quiet-dot"></span>' : icon('clock', 10))}${friendsText}</span></span><span class="count-pill ${a.hasData ? '' : 'unknown'}">${a.hasData ? a.count : '—'}</span></button><div class="entry-tools">${saveButton(v.id,true)}${compareButton(v.id,true)}</div></div>`;
   }
   function renderExplore() {
     $('#main').innerHTML = `<div class="explore-layout ${state.mobileView === 'list' ? 'list-mode' : ''}">
       <section class="places-panel" aria-label="Explore places">
-        <div class="panel-intro"><div class="eyebrow">${icon('pin', 11)} LINCOLN & BEYOND</div><h1>A little further.<br>Your next spot.</h1><p>Lincoln and the places around it.<br>Find your people. Discover your next spot.</p><div class="city-stats"><span><strong>5,000</strong> demo users</span><span><strong id="presentCount">3,500</strong> at places</span></div></div>
-        <div class="search-wrap">${icon('search', 17)}<label class="sr-only" for="venueSearch">Search places or streets</label><input id="venueSearch" class="search-input" type="search" autocomplete="off" maxlength="100" placeholder="Search Lincoln, Waverly, cafés…" value="${escape(state.query)}"><button class="clear-search" data-action="clear-search" aria-label="Clear search" ${state.query ? '' : 'hidden'}>${icon('close', 14)}</button></div>
+        <div class="panel-intro"><div class="eyebrow">${icon('pin', 11)} LINCOLN & BEYOND</div><h1>Know the area.<br>Find your spot.</h1><p>A neighborhood, a campus, somewhere new.<br>Find the spots around it.</p><div class="city-stats"><span><strong>5,000</strong> demo users</span><span><strong id="presentCount">3,500</strong> at places</span></div></div>
+        <div class="location-search"><div class="search-wrap">${icon('search', 17)}<label class="sr-only" for="venueSearch">Search areas, landmarks, or demo places</label><input id="venueSearch" class="search-input" type="search" autocomplete="off" maxlength="100" role="combobox" aria-autocomplete="list" aria-controls="locationSuggestions" aria-expanded="false" enterkeyhint="search" placeholder="Try East Campus, Haymarket…" value="${escape(state.query)}"><button class="clear-search" data-action="clear-search" aria-label="Clear search" ${state.query ? '' : 'hidden'}>${icon('close', 14)}</button></div><div id="locationSuggestions" class="location-suggestions" role="listbox" aria-label="Jump to an area or landmark" hidden></div></div><div id="searchAreaContext" class="search-area-context" hidden></div><div id="searchAnnouncement" class="sr-only" role="status" aria-live="polite"></div>
         <div class="filters" aria-label="Place categories">${filterMarkup()}</div>
         <button class="friends-filter ${state.friendsOnly ? 'active' : ''}" data-action="friends-filter" aria-pressed="${state.friendsOnly}">${friendFilterMarkup()}</button>
         <div class="compare-tray" id="compareTray" role="region" aria-label="Selected places to compare" hidden></div><div class="list-heading"><span id="placeCount"></span><span class="heading-caption">Fictional venues</span><button class="mobile-view-switch" data-action="view-map">${icon('map', 13)} Map view</button></div>
@@ -115,25 +119,89 @@
         <div class="panel-footnote">${icon('info', 13)}<span>Fictional venues and people. Counts are app users, not total occupancy. No GPS is collected.</span></div>
       </section>
       <section class="map-panel" aria-label="Lincoln region map with fictional establishments">
-        <div class="map-viewport" id="mapViewport" tabindex="0" aria-label="Venue map. Drag to pan, use arrow keys to move, or select a place from the list."><canvas id="mapCanvas" class="map-canvas" aria-hidden="true"></canvas><div class="map-pins" id="mapPins"></div></div>
+        <div class="map-viewport" id="mapViewport" tabindex="0" aria-label="Venue map. Drag to pan, use arrow keys to move, or select a place from the list."><canvas id="mapCanvas" class="map-canvas" aria-hidden="true"></canvas><div class="map-pins" id="mapPins"></div><div id="searchAnchor" class="search-anchor" hidden aria-hidden="true"></div></div>
         <div class="map-location">${icon('pin', 15)} Lincoln & nearby <span>Regional demo</span></div>
         <div class="map-top-tools"><div class="map-view-tabs" aria-label="Map extent"><button data-action="region" aria-pressed="true">Region</button><button data-action="city" aria-pressed="false">Lincoln</button><button data-action="downtown" aria-pressed="false">Downtown</button></div><button class="icon-button" data-action="about" aria-label="How to read the map">${icon('info', 17)}</button><button class="mobile-view-switch" data-action="view-list">${icon('list', 14)} List</button></div>
         <div class="map-controls"><div class="zoom-group"><button class="icon-button" data-action="zoom-in" aria-label="Zoom in">${icon('plus', 17)}</button><button class="icon-button" data-action="zoom-out" aria-label="Zoom out">${icon('minus', 17)}</button></div><button class="icon-button" data-action="recenter" aria-label="Show Lincoln and surrounding places">${icon('locate', 17)}</button></div>
-        <div class="map-legend"><span class="legend-icon">${icon('friends', 16)}</span><div><strong>A place, not a person.</strong><p>Venue counts · Zoom in to separate grouped places.</p></div></div>
-        <div class="map-scale" id="mapScale" aria-label="Approximate map scale"></div><div class="map-watermark"><span id="mapSource">Illustrative regional map · Fictional places</span></div>
+        <div class="map-legend"><span class="legend-icon">${icon('friends', 16)}</span><div><strong>Activity at a glance.</strong><p>App-user counts · Grid = groups · Dot = friends.</p></div></div>
+        <div class="map-scale" id="mapScale" aria-label="Approximate map scale"></div><div class="map-watermark"><span id="mapSource">Illustrative map · Fictional spots</span></div>
         <div class="mobile-preview" id="mobilePreview"></div><div id="mapEmpty"></div><div id="ownPresence"></div>
       </section>
     </div>`;
     setupMap(); refreshExplore();
-    $('#venueSearch').addEventListener('input', e => { if(detailId||compareOpen)closeDetail(false); state.query = e.target.value; refreshExplore(); fitSearchResults(); });
-    $('#venueSearch').addEventListener('keydown', e => { if (e.key === 'Escape' && state.query) { state.query = ''; e.target.value = ''; refreshExplore(); } });
+    bindPlaceSearch();
   }
+  function visiblePlaces(){
+    if(searchArea)return PS.nearby(C.filteredVenues({...state,query:''},snapshot,now()),searchArea);
+    return C.filteredVenues(state,snapshot,now());
+  }
+  function searchContext(){
+    const host=$('#searchAreaContext');if(!host)return;
+    host.hidden=!searchArea;
+    if(searchArea)host.innerHTML=`<span class="area-context-icon">${icon('compass',15)}</span><span><strong>Near ${escape(searchArea.name)}</strong><small>${escape(PS.radiusLabel(searchArea))} · nearest first</small></span><button data-action="clear-area" aria-label="Leave this area and show all places" title="Show all areas">All areas ${icon('close',12)}</button>`;
+  }
+  function dismissSuggestions(){
+    searchIsOpen=false;searchIndex=-1;
+    const input=$('#venueSearch');if(input){input.setAttribute('aria-expanded','false');input.removeAttribute('aria-activedescendant');}
+    const menu=$('#locationSuggestions');if(menu)menu.hidden=true;
+  }
+  function renderSuggestions(){
+    const host=$('#locationSuggestions'),input=$('#venueSearch');if(!host||!input)return;
+    searchSuggestions=PS.matches(state.query);searchIndex=-1;
+    if(!searchSuggestions.length){dismissSuggestions();return;}
+    searchIsOpen=true;host.hidden=false;input.setAttribute('aria-expanded','true');input.removeAttribute('aria-activedescendant');
+    host.innerHTML=`<div class="suggestions-heading" role="presentation">${state.query?'Jump to a real area':'Explore a real area'}</div>`+searchSuggestions.map((l,i)=>`<button id="geo-option-${i}" role="option" aria-selected="false" tabindex="-1" data-location="${l.id}"><span class="suggestion-symbol">${icon(l.kind==='campus'?'compass':'pin',17)}</span><span><strong>${escape(l.name)}</strong><small>${escape(l.subtitle)} · ${escape(l.kind)}</small></span>${icon('arrow',14)}</button>`).join('')+'<div class="suggestions-footnote" role="presentation">Real areas · nearby spots are fictional</div>';
+  }
+  function jumpToArea(area,explicit=false){
+    if(!area)return;clearTimeout(searchFitTimer);
+    if(detailId||compareOpen)closeDetail(false);
+    searchArea=area;
+    if(explicit){state.query=area.name;$('#venueSearch').value=area.name;}
+    if(isMobile()){state.mobileView='map';$('.explore-layout').classList.remove('list-mode');dimensions=null;}
+    dismissSuggestions();refreshExplore();
+    const d=mapDimensions();if(d){Object.assign(camera,PS.cameraFor(area,d));camera.initialized=true;clampCamera();drawMap();}
+    $('#searchAnnouncement').textContent=`Map centered on ${area.name}. ${visiblePlaces().length} fictional places nearby. Counts are sample app users.`;
+    if(explicit&&isMobile())$('#venueSearch').blur();
+  }
+  function clearArea(){
+    clearTimeout(searchFitTimer);searchArea=null;state.query='';
+    if($('#venueSearch'))$('#venueSearch').value='';dismissSuggestions();refreshExplore();
+  }
+  function bindPlaceSearch(){
+    const input=$('#venueSearch');searchContext();
+    input.addEventListener('input',e=>{
+      clearTimeout(searchFitTimer);if(detailId||compareOpen)closeDetail(false);
+      state.query=e.target.value;const found=PS.exact(state.query);
+      if(found){jumpToArea(found);return;}
+      searchArea=null;refreshExplore();
+      if(state.query.length>=2)renderSuggestions();else if(!state.query)renderSuggestions();else dismissSuggestions();
+      // Only move after text settles. Panning never reruns the search camera fit.
+      const value=state.query;searchFitTimer=setTimeout(()=>{if(state.screen==='explore'&&state.query===value&&!searchArea&&value.trim()&&!PS.matches(value).length)fitSearchResults();},220);
+    });
+    input.addEventListener('focus',()=>{if(!searchArea)renderSuggestions();});
+    input.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){e.preventDefault();if(searchIsOpen)dismissSuggestions();else if(state.query){clearArea();}return;}
+      if(['ArrowDown','ArrowUp'].includes(e.key)){
+        if(!searchIsOpen)renderSuggestions();if(!searchSuggestions.length)return;e.preventDefault();
+        searchIndex=(searchIndex+(e.key==='ArrowDown'?1:searchSuggestions.length-1)+searchSuggestions.length)%searchSuggestions.length;
+        $$('#locationSuggestions [role="option"]').forEach((b,i)=>b.setAttribute('aria-selected',String(i===searchIndex)));
+        input.setAttribute('aria-activedescendant',`geo-option-${searchIndex}`);$(`#geo-option-${searchIndex}`).scrollIntoView({block:'nearest'});return;
+      }
+      if(e.key==='Enter'){
+        e.preventDefault();const chosen=searchIsOpen&&searchIndex>=0?searchSuggestions[searchIndex]:PS.exact(state.query)||(searchIsOpen?searchSuggestions[0]:null);
+        if(chosen)jumpToArea(chosen,true);else{clearTimeout(searchFitTimer);dismissSuggestions();if(isMobile()){state.mobileView='map';$('.explore-layout').classList.remove('list-mode');dimensions=null;input.blur();}fitSearchResults();}
+      }
+      if(e.key==='Tab')dismissSuggestions();
+    });
+  }
+
   function refreshExplore() {
     if (state.screen !== 'explore' || !$('#placesList')) return;
-    const places = C.filteredVenues(state, snapshot, now());
+    const places = visiblePlaces();
+    searchContext();
     if (!places.some(v => v.id === state.selected)) state.selected = places[0]?.id || null;
-    $('#placesList').innerHTML = places.length ? places.map(cardMarkup).join('') : `<div class="empty-state">${icon(state.savedOnly?'bookmark':'search', 29)}<h3>${state.savedOnly&&!state.savedVenues.length?'Your usuals start here.':'No spots found'}</h3><p>${state.savedOnly&&!state.savedVenues.length?'Save a place with the bookmark, then find it here in a tap.':'Try another name, street, or filter.'}</p><button class="secondary-button" data-action="clear-filters">${state.savedOnly?'Explore all places':'Clear filters'}</button></div>`;
-    $('#placeCount').textContent = `${places.length} ${places.length === 1 ? 'place' : 'places'} in the region`;
+    $('#placesList').innerHTML = places.length ? places.map(cardMarkup).join('') : `<div class="empty-state">${icon(state.savedOnly?'bookmark':'search', 29)}<h3>${state.savedOnly&&!state.savedVenues.length?'Your usuals start here.':'No spots found'}</h3><p>${state.savedOnly&&!state.savedVenues.length?'Save a place with the bookmark, then find it here in a tap.':(searchArea?'No matching demo places in this area. Try changing a filter or choose All areas.':'Try a Lincoln-area landmark, neighborhood, town, or demo venue. This offline prototype does not search every address.')}</p><button class="secondary-button" data-action="clear-filters">${state.savedOnly?'Explore all places':'Clear filters'}</button></div>`;
+    $('#placeCount').textContent = `${places.length} ${places.length === 1 ? 'place' : 'places'} ${searchArea?'near '+searchArea.name:'in the region'}`;
     $('.clear-search').hidden = !state.query;
     $('.filters').innerHTML = filterMarkup();
     const friendFilter = $('.friends-filter'); friendFilter.innerHTML = friendFilterMarkup(); friendFilter.classList.toggle('active', state.friendsOnly); friendFilter.setAttribute('aria-pressed', String(state.friendsOnly));
@@ -144,7 +212,7 @@
     const preview = $('#mobilePreview'); preview.classList.toggle('empty-preview', !selected);
     if (selected) {
       const a = C.activity(selected, state, snapshot, now());
-      preview.innerHTML = `<div class="preview-eyebrow"><span>${places.length} ${places.length === 1 ? 'place' : 'places'} around Lincoln</span><button data-action="view-list">See all ${icon('arrow', 12)}</button></div><button class="preview-card" data-venue="${selected.id}" aria-label="View ${escape(selected.name)} details"><span class="preview-top">${monogram(selected)}<span class="place-card-info"><h3>${escape(selected.name)}</h3><span class="place-meta">${selected.category === 'cafe' ? 'Café' : 'Bar'} · ${escape(selected.street)}</span></span><span class="count-pill ${a.hasData ? '' : 'unknown'}">${a.hasData ? a.count : '—'}</span></span><span class="preview-bottom"><span class="${a.friends.length ? 'friends-label' : ''}">${a.friends.length ? icon('friends', 12) : icon('clock', 11)}${a.friends.length ? friendNames(a.friends) : (a.hasData ? C.timeLabel(a.latest, now()) : 'Activity unknown')}</span><span>App users · demo ${icon('chevron', 12)}</span></span></button>`;
+      preview.innerHTML = `<div class="preview-eyebrow"><span>${places.length} ${places.length === 1 ? 'place' : 'places'} ${searchArea?'near '+escape(searchArea.name):'around Lincoln'}</span><button data-action="view-list">See all ${icon('arrow', 12)}</button></div><button class="preview-card" data-venue="${selected.id}" aria-label="View ${escape(selected.name)} details"><span class="preview-top">${monogram(selected)}<span class="place-card-info"><h3>${escape(selected.name)}</h3><span class="place-meta">${selected.category === 'cafe' ? 'Café' : 'Bar'} · ${escape(selected.street)}</span></span><span class="count-pill ${a.hasData ? '' : 'unknown'}">${a.hasData ? a.count : '—'}</span></span><span class="preview-bottom"><span class="${a.friends.length ? 'friends-label' : ''}">${a.friends.length ? icon('friends', 12) : icon('clock', 11)}${a.friends.length ? friendNames(a.friends) : (a.hasData ? C.timeLabel(a.latest, now()) : 'Activity unknown')}</span><span>App users · demo ${icon('chevron', 12)}</span></span></button>`;
     } else preview.innerHTML = '';
     const own = C.activity(C.venueById('juniper'), state, snapshot, now()).own;
     $('#ownPresence').innerHTML = own ? `<div class="friend-presence-label">${icon('shield', 12)} You’re included at Juniper · demo</div>` : '';
@@ -154,12 +222,17 @@
   /* A single rAF frame, cached clusters, keyed pins, and a culled canvas basemap. */
   const MC=window.SpotMapCore;
   const camera={x:C.MAP.center[0],y:C.MAP.center[1],zoom:.12,initialized:false};
-  let currentGroups=new Map(),mapResizeObserver,drag=null,pointers=new Map(),pinch=null,suppressClickUntil=0;
+  let currentGroups=new Map(),mapResizeObserver,gestureBinding=null;
   let frameRequest=0,dimensions=null,mapPlaces=[],mapActivity=new Map(),mapRevision=0,groupKey='',groups=[];
   let pinNodes=new Map(),frameTimes=[],clusterBuilds=0;
+  const labelWidths=new Map(),labelMeasure=document.createElement('canvas').getContext('2d');
+  function placeNameWidth(name){
+    if(!labelWidths.has(name)){labelMeasure.font="600 10px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";labelWidths.set(name,Math.min(172,Math.ceil(labelMeasure.measureText(name).width)+12));}
+    return labelWidths.get(name);
+  }
   function scheduleMap(){if(!frameRequest)frameRequest=requestAnimationFrame(()=>{frameRequest=0;drawMapNow();});}
   function updateMapData(places){
-    mapPlaces=places||C.filteredVenues(state,snapshot,now());
+    mapPlaces=places||visiblePlaces();
     mapActivity=new Map(mapPlaces.map(v=>[v.id,C.activity(v,state,snapshot,now())]));mapRevision++;scheduleMap();
   }
   function mapDimensions(){
@@ -169,40 +242,26 @@
   }
   function clampCamera(){camera.x=Math.max(0,Math.min(C.MAP.width,camera.x));camera.y=Math.max(0,Math.min(C.MAP.height,camera.y));camera.zoom=Math.max(.025,Math.min(8,camera.zoom));}
   function setupMap(){
-    mapResizeObserver?.disconnect();if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;
+    gestureBinding?.destroy();mapResizeObserver?.disconnect();if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;
     const viewport=$('#mapViewport');if(!viewport)return;
-    dimensions=null;pinNodes=new Map();groupKey='';pointers.clear();drag=null;pinch=null;
+    dimensions=null;pinNodes=new Map();groupKey='';
     SpotCartography.attach($('#mapCanvas'));
     if(!camera.initialized)fitMap();
     mapResizeObserver=new ResizeObserver(()=>{dimensions=null;drawMap();});mapResizeObserver.observe(viewport);
-    viewport.addEventListener('pointerdown',e=>{
-      if(e.button!==0)return;
-      pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-      if(pointers.size===2){const pp=[...pointers.values()],d=mapDimensions();pinch={distance:Math.hypot(pp[0].x-pp[1].x,pp[0].y-pp[1].y),camera:{...camera},mid:{x:(pp[0].x+pp[1].x)/2-d.left,y:(pp[0].y+pp[1].y)/2-d.top}};drag=null;}
-      else drag={id:e.pointerId,x:e.clientX,y:e.clientY,cx:camera.x,cy:camera.y,moved:false};
-      if(!e.target.closest('button'))viewport.setPointerCapture(e.pointerId);
+    gestureBinding=SpotMapGestures.bind(viewport,{
+      getCamera:()=>camera,
+      getDimensions:()=>mapDimensions(),
+      setCamera:next=>{clearTimeout(searchFitTimer);dismissSuggestions();Object.assign(camera,next);camera.scope='custom';clampCamera();drawMap();},
+      onTap:(target,type)=>{
+        // Touch zoom belongs to a real pinch (or explicit zoom/preset buttons),
+        // not taps on the crowded map. Desktop cluster drill-down is retained.
+        if(type==='touch'&&target.dataset.cluster){toast('Pinch out with two fingers to see these places.');return;}
+        if(type!=='touch')target.focus({preventScroll:true});
+        target.click();
+      },
+      onWheel:e=>{clearTimeout(searchFitTimer);dismissSuggestions();const d=mapDimensions(),unit=e.deltaMode===1?16:e.deltaMode===2?d.height:1;const dy=Math.max(-150,Math.min(150,e.deltaY*unit));zoomMap(Math.exp(-dy*.003),{x:e.clientX-d.left,y:e.clientY-d.top});},
+      onDoubleClick:e=>{const d=mapDimensions();zoomMap(1.8,{x:e.clientX-d.left,y:e.clientY-d.top});}
     });
-    viewport.addEventListener('pointermove',e=>{
-      if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-      if(pinch&&pointers.size===2){
-        const pp=[...pointers.values()],d=mapDimensions(),distance=Math.hypot(pp[0].x-pp[1].x,pp[0].y-pp[1].y),mid={x:(pp[0].x+pp[1].x)/2-d.left,y:(pp[0].y+pp[1].y)/2-d.top};
-        Object.assign(camera,MC.anchoredZoom(pinch.camera,distance/Math.max(1,pinch.distance),pinch.mid,d,.025,8));
-        camera.x-=(mid.x-pinch.mid.x)/camera.zoom;camera.y-=(mid.y-pinch.mid.y)/camera.zoom;clampCamera();suppressClickUntil=Date.now()+220;drawMap();return;
-      }
-      if(!drag||drag.id!==e.pointerId)return;
-      const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
-      if(Math.abs(dx)+Math.abs(dy)>5){drag.moved=true;viewport.classList.add('dragging');viewport.setPointerCapture(e.pointerId);}
-      if(drag.moved){camera.x=drag.cx-dx/camera.zoom;camera.y=drag.cy-dy/camera.zoom;clampCamera();drawMap();}
-    });
-    const end=e=>{
-      pointers.delete(e.pointerId);if(drag?.moved||pinch)suppressClickUntil=Date.now()+220;
-      drag=null;pinch=null;viewport.classList.remove('dragging');if(viewport.hasPointerCapture(e.pointerId))viewport.releasePointerCapture(e.pointerId);
-      // A remaining finger starts a fresh pan, rather than jumping to the old origin.
-      if(pointers.size===1){const [id,p]=[...pointers][0];drag={id,x:p.x,y:p.y,cx:camera.x,cy:camera.y,moved:false};}
-    };
-    viewport.addEventListener('pointerup',end);viewport.addEventListener('pointercancel',end);
-    viewport.addEventListener('wheel',e=>{e.preventDefault();const d=mapDimensions(),unit=e.deltaMode===1?16:e.deltaMode===2?d.height:1;const dy=Math.max(-150,Math.min(150,e.deltaY*unit));zoomMap(Math.exp(-dy*.003),{x:e.clientX-d.left,y:e.clientY-d.top});},{passive:false});
-    viewport.addEventListener('dblclick',e=>{if(!e.target.closest('button')){const d=mapDimensions();zoomMap(1.8,{x:e.clientX-d.left,y:e.clientY-d.top});}});
     viewport.addEventListener('keydown',e=>{
       if(e.target!==viewport)return;const delta={ArrowLeft:[-70,0],ArrowRight:[70,0],ArrowUp:[0,-70],ArrowDown:[0,70]}[e.key];
       if(delta){e.preventDefault();camera.x+=delta[0]/camera.zoom;camera.y+=delta[1]/camera.zoom;clampCamera();drawMap();}
@@ -220,27 +279,59 @@
   function focusMap(id,zoom){const v=C.venueById(id);if(!v)return;camera.x=v.x;camera.y=v.y;if(zoom)camera.zoom=zoom;camera.scope='custom';drawMap();}
   function drawMap(){scheduleMap();}
   function markerContent(g){
-    const aa=g.ids.map(id=>mapActivity.get(id)).filter(Boolean),count=aa.reduce((n,a)=>n+a.count,0),friends=aa.flatMap(a=>a.friends);
-    if(g.ids.length>1)return{cls:`cluster-pin ${friends.length?'has-friends':''}`,count,label:`${g.ids.length} places, ${count.toLocaleString()} participating app users. Zoom in to separate venues.`,html:`<span class="cluster-count">${count?count.toLocaleString():'—'}</span><span class="cluster-places">${g.ids.length} places</span>${friends.length?`<span class="cluster-friends">${icon('friends',9)}</span>`:''}`};
+    const aa=g.ids.map(id=>mapActivity.get(id)).filter(Boolean),count=aa.reduce((n,a)=>n+a.count,0),friends=aa.flatMap(a=>a.friends),saved=g.ids.some(id=>state.savedVenues.includes(id));
+    const selected=g.ids.length===1&&state.selected===g.ids[0];
+    const text=count?count.toLocaleString():'—';
+    const dot=friends.length?'<span class="marker-presence" aria-hidden="true"></span>':saved?`<span class="marker-saved" aria-hidden="true">${icon('bookmark',9)}</span>`:'';
+    if(g.ids.length>1){
+      const width=Math.max(50,29+text.length*7+(dot?8:0));
+      return{cls:`cluster-pin ${friends.length?'has-friends':''} ${saved?'is-saved':''}`,count,width,
+        label:`${g.ids.length} places, ${count.toLocaleString()} participating app users. ${friends.length?friends.length+' friends at these places. ':''}Zoom in to separate venues.`,
+        html:`<span class="cluster-body"><svg class="cluster-glyph" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><rect x="1" y="1" width="4" height="4" rx="1.2"/><rect x="7" y="1" width="4" height="4" rx="1.2"/><rect x="1" y="7" width="4" height="4" rx="1.2"/><rect x="7" y="7" width="4" height="4" rx="1.2"/></svg><span class="cluster-count">${text}</span>${dot}</span>`};
+    }
     const v=C.venueById(g.ids[0]),a=aa[0]||{count:0,hasData:false,friends:[]};
-    return{cls:`venue-pin ${state.selected===v.id?'selected':''} ${a.hasData?'':'unknown'}`,count:a.count,label:`${v.name}, ${a.hasData?a.count+' app users in demo':'no recent app activity'}`,html:`<span class="pin-bubble">${icon(v.category==='cafe'?'coffee':'glass',14)}<span>${a.hasData?a.count:'—'}</span>${a.friends.length?`<span class="pin-friends-count">${icon('friends',9)}${a.friends.length}</span>`:''}</span><span class="pin-label">${escape(v.name)}</span>`};
+    const shown=a.hasData?a.count.toLocaleString():'—',width=Math.max(selected?58:46,29+shown.length*7+(dot?8:0));
+    return{cls:`venue-pin ${selected?'selected':''} ${a.hasData?'':'unknown'} ${friends.length?'has-friends':''} ${saved?'is-saved':''}`,count:a.count,width,
+      label:`${v.name}, ${a.hasData?a.count+' app users in demo':'no recent app activity'}${a.friends.length?', '+a.friends.length+' friends sharing here':''}${saved?', saved place':''}`,
+      html:`<span class="pin-bubble">${icon(v.category==='cafe'?'coffee':'glass',12)}<span>${shown}</span>${dot}</span><span class="pin-label">${escape(v.name)}</span>`};
   }
   function drawMapNow(){
     const start=performance.now(),d=mapDimensions(),layer=$('#mapPins');if(!d||!layer||state.screen!=='explore')return;
-    SpotCartography.draw(camera,d);
-    const key=[mapRevision,MC.zoomLevel(camera.zoom),camera.zoom>=.6?state.selected:null,isMobile()].join(':');
-    if(groupKey!==key){groups=MC.cluster(mapPlaces,camera.zoom,camera.zoom>=.6?state.selected:null,isMobile()?62:68);groupKey=key;clusterBuilds++;}
-    currentGroups=new Map();const needed=new Set();
-    for(const g of groups){const p=MC.project(g,camera,d);if(p.x< -70||p.y< -65||p.x>d.width+70||p.y>d.height+80)continue;
+    const mobile=isMobile(),spacing=MC.markerSpacing(camera.zoom,mobile);
+    const areaObstacles=[];const anchor=$('#searchAnchor');if(anchor){anchor.hidden=!searchArea;if(searchArea){const ap=MC.project(searchArea,camera,d);anchor.style.transform=`translate3d(${Math.round(ap.x)}px,${Math.round(ap.y)}px,0)`;if(anchor.dataset.area!==searchArea.id){anchor.innerHTML=`<span class="anchor-ring"></span><span class="anchor-caption">${escape(searchArea.name)}</span>`;anchor.dataset.area=searchArea.id;}areaObstacles.push({x:ap.x-8,y:ap.y-8,w:16,h:16},{x:ap.x-84,y:ap.y-40,w:168,h:24});}}
+    const key=[mapRevision,MC.zoomLevel(camera.zoom),camera.zoom>=.6?state.selected:null,mobile,spacing].join(':');
+    if(groupKey!==key){groups=MC.cluster(mapPlaces,camera.zoom,camera.zoom>=.6?state.selected:null,spacing);groupKey=key;clusterBuilds++;}
+    currentGroups=new Map();const needed=new Set(),pinBoxes=[],labelCandidates=[];
+    for(const g of groups){const p=MC.project(g,camera,d);if(p.x< -85||p.y< -65||p.x>d.width+85||p.y>d.height+80)continue;
       needed.add(g.key);if(g.ids.length>1)currentGroups.set(g.key,{x:g.x,y:g.y,venues:g.ids});
       let node=pinNodes.get(g.key);
       if(!node){node=document.createElement('button');node.type='button';node.style.left='0';node.style.top='0';pinNodes.set(g.key,node);layer.appendChild(node);}
       const version=key+':'+g.ids.join(',');
-      if(node.dataset.version!==version){const m=markerContent(g);node.className=m.cls;node.innerHTML=m.html;node.setAttribute('aria-label',m.label);node.dataset.count=m.count;node.dataset.members=g.ids.join(',');node.dataset.version=version;
+      if(node.dataset.version!==version){const m=markerContent(g);node.className=m.cls;node.innerHTML=m.html;node.setAttribute('aria-label',m.label);node.title=m.label;node.dataset.count=m.count;node.dataset.members=g.ids.join(',');node.dataset.version=version;node.dataset.width=m.width;node.style.setProperty('--marker-width',m.width+'px');
         if(g.ids.length>1){node.dataset.cluster=g.key;delete node.dataset.pin;}else{node.dataset.pin=g.ids[0];delete node.dataset.cluster;}}
       node.style.transform=`translate3d(${Math.round(p.x)}px,${Math.round(p.y)}px,0) translate(-50%,-50%)`;
+      const w=Number(node.dataset.width),selected=g.ids.length===1&&g.ids[0]===state.selected;
+      pinBoxes.push({x:p.x-w/2-2,y:p.y-17,w:w+4,h:selected?38:34});
+      node.classList.remove('label-visible');
+      if(g.ids.length===1){
+        const v=C.venueById(g.ids[0]),isSaved=state.savedVenues.includes(v.id),hasFriends=mapActivity.get(v.id)?.friends.length;
+        if(selected||camera.zoom>=.75&&(isSaved||hasFriends)||camera.zoom>=2){
+          const width=placeNameWidth(v.name);
+          labelCandidates.push({key:g.key,x:p.x,y:p.y,pinWidth:w,width,offset:selected?26:23,priority:selected?0:isSaved?1:hasFriends?2:3});
+        }
+      }
     }
     for(const [key,node]of pinNodes){if(!needed.has(key)){node.remove();pinNodes.delete(key);}}
+    // Labels have their own collision pass. Names emerge with zoom instead of
+    // stacking over other pins and road names. Nothing is removed from search.
+    const chrome=[{x:0,y:0,w:d.width,h:60}];
+    if(mobile)chrome.push({x:0,y:d.height-182,w:d.width,h:182});
+    else chrome.push({x:0,y:d.height-155,w:330,h:155});
+    const layout=MC.labelLayout(labelCandidates,{x:10,y:62,w:Math.max(0,d.width-20),h:Math.max(0,d.height-(mobile?254:96))},[...pinBoxes,...chrome,...areaObstacles]);
+    for(const l of layout){const node=pinNodes.get(l.key),candidate=labelCandidates.find(c=>c.key===l.key);if(!node||!candidate)continue;
+      node.classList.add('label-visible');node.style.setProperty('--label-x',(l.x-candidate.x+candidate.pinWidth/2)+'px');node.style.setProperty('--label-y',(l.y-candidate.y+22)+'px');node.style.setProperty('--label-width',l.w+'px');
+    }
+    SpotCartography.draw(camera,d,[...pinBoxes,...layout,...chrome,...areaObstacles]);
     const scale=$('#mapScale');if(scale){const metersPerWorldPixel=Math.cos(40.8*Math.PI/180)*40075016.686/(256*2**C.MAP.baseZoom),raw=80/camera.zoom*metersPerWorldPixel,pow=10**Math.floor(Math.log10(raw)),rounded=[1,2,5,10].find(n=>n*pow>=raw)*pow;scale.style.width=(rounded/metersPerWorldPixel*camera.zoom)+'px';scale.textContent=rounded>=1000?(rounded/1000)+' km':rounded+' m';}
     $$('[data-action="region"], [data-action="city"], [data-action="downtown"]').forEach(b=>{const active=b.dataset.action===camera.scope;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
     frameTimes.push(performance.now()-start);if(frameTimes.length>240)frameTimes.shift();
@@ -248,14 +339,15 @@
   function zoomMap(factor,point){const d=mapDimensions();if(!d)return;Object.assign(camera,MC.anchoredZoom(camera,factor,point||{x:d.centerX,y:d.centerY},d,.025,8));camera.scope='custom';clampCamera();drawMap();}
   function fitSearchResults(){
     if(!state.query.trim()&&!state.savedOnly)return;
-    const vs=C.filteredVenues(state,snapshot,now()),d=mapDimensions();if(!vs.length||!d)return;
+    if(searchArea)return;
+    const vs=visiblePlaces(),d=mapDimensions();if(!vs.length||!d)return;
     const xs=vs.map(v=>v.x),ys=vs.map(v=>v.y),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
     camera.x=(x0+x1)/2;camera.y=(y0+y1)/2;camera.zoom=Math.min(2,Math.max(.025,Math.min((d.width-110)/(x1-x0+150),(d.height-(isMobile()?230:150))/(y1-y0+150))));camera.scope='custom';drawMap();
   }
   function selectVenue(id,open=false,fromPin=false){
     const v=C.venueById(id);if(!v)return;
     if(!fromPin && !mapPlaces.some(place=>place.id===id)){
-      state.query='';state.category='all';state.savedOnly=false;state.friendsOnly=false;
+      searchArea=null;state.query='';state.category='all';state.savedOnly=false;state.friendsOnly=false;
       if($('#venueSearch'))$('#venueSearch').value='';refreshExplore();
     }
     state.selected=id;
@@ -339,7 +431,7 @@
   function renderModal() {
     let content = extraModalContent(modalType);
     if (content) { /* New local-only feature dialogs are built above. */ }
-    else if (modalType === 'about') content = `<div class="modal-symbol">${icon('map', 25)}</div><div class="eyebrow">SPOT · LINCOLN EDITION</div><h2>A little local insight.</h2><p>See recent app activity at a place without asking anyone to check in. Friends add a familiar face; everyone else is part of a count.</p><div class="modal-callout"><strong>Lincoln, with 5,000 demo accounts.</strong><br>336 made-up places · 60 friends · 42 sharing at the start. 3,500 accounts start at venues; 1,500 are not mapped. This is not a complete building inventory. Pins are approximate placeholders, not real businesses.</div><div class="modal-facts"><div class="modal-fact">${icon('pin', 15)}<span>Each pin represents one establishment, not an individual person.</span></div><div class="modal-fact">${icon('friends', 15)}<span>A count is participating app users—not total visitors, a “full” status, or available seats.</span></div><div class="modal-fact">${icon('clock', 15)}<span>Stale activity disappears. A dash means unknown, not empty. All activity is simulated.</span></div></div><p class="map-explanation">The map covers Lincoln and nearby towns with an original illustrative layout. It is not a street survey, building inventory, or navigation map. Map artwork, demo venues and theme palettes are bundled, so the prototype works without internet access.</p><button class="primary-button" data-action="close-modal" style="width:100%">Explore the demo ${icon('arrow', 15)}</button><details class="prototype-tools"><summary>Prototype testing tools</summary><p>Advance the demo clock to see activity expire, or restore the fictional scenario. These are testing controls, not app features.</p><div class="button-row"><button class="secondary-button" data-action="advance-time">${icon('clock', 12)} Advance 15 min</button><button class="secondary-button" data-action="confirm-reset">${icon('reset', 12)} Reset demo</button></div></details>`;
+    else if (modalType === 'about') content = `<div class="modal-symbol">${icon('map', 25)}</div><div class="eyebrow">SPOT · LINCOLN EDITION</div><h2>A little local insight.</h2><p>See recent app activity at a place without asking anyone to check in. Friends add a familiar face; everyone else is part of a count.</p><div class="modal-callout"><strong>Lincoln, with 5,000 demo accounts.</strong><br>336 made-up places · 60 friends · 42 sharing at the start. 3,500 accounts start at venues; 1,500 are not mapped. This is not a complete building inventory. Pins are approximate placeholders, not real businesses.</div><div class="modal-facts"><div class="modal-fact">${icon('pin', 15)}<span>Each pin represents one establishment, not an individual person.</span></div><div class="modal-fact">${icon('friends', 15)}<span>A count is participating app users—not total visitors, a “full” status, or available seats.</span></div><div class="modal-fact">${icon('clock', 15)}<span>Stale activity disappears. A dash means unknown, not empty. All activity is simulated.</span></div></div><p class="map-explanation">The map covers Lincoln and nearby towns with an original illustrative layout. It is not a street survey, building inventory, or navigation map. The search recognizes 40 built-in Lincoln-area neighborhoods, campuses, parks, lakes and towns. These are approximate area centers, not street addresses. Nearby distances are straight-line estimates from the area center, not your device. It does not search every address or the whole state. Some areas have no demo venues nearby. All map artwork, the search index and sample activity are bundled for offline use.</p><button class="primary-button" data-action="close-modal" style="width:100%">Explore the demo ${icon('arrow', 15)}</button><details class="prototype-tools"><summary>Prototype testing tools</summary><p>Advance the demo clock to see activity expire, or restore the fictional scenario. These are testing controls, not app features.</p><div class="button-row"><button class="secondary-button" data-action="advance-time">${icon('clock', 12)} Advance 15 min</button><button class="secondary-button" data-action="confirm-reset">${icon('reset', 12)} Reset demo</button></div></details>`;
     else if (modalType === 'share') content = `<div class="modal-symbol">${icon('shield', 25)}</div><h2>Contribute to the count?</h2><p>In this demo, switching on adds one fictional visitor—you—to Juniper Coffee.</p><div class="modal-facts"><div class="modal-fact">${icon('map', 15)}<span>People outside your friends see only the combined venue count.</span></div><div class="modal-fact">${icon('friends', 15)}<span>Your name stays hidden from friends unless you separately choose them and enable friend sharing.</span></div><div class="modal-fact">${icon('eyeOff', 15)}<span>You can switch it off at any time. Your sample presence is removed immediately.</span></div></div><div class="modal-callout"><strong>Simulation only.</strong> This does not request GPS permission, run in the background, or share anything with another person.</div><div class="button-row"><button class="secondary-button" data-action="close-modal">Not now</button><button class="primary-button" data-action="enable-sharing">Enable count contribution</button></div>`;
     else if (modalType === 'add-friend') content = `<div class="modal-symbol">${icon('userPlus', 25)}</div><h2>Find your people.</h2><p>Search the sample directory by name or handle.</p><div class="search-wrap">${icon('search', 17)}<label class="sr-only" for="friendSearch">Search demo people</label><input id="friendSearch" class="search-input" autocomplete="off" maxlength="80" placeholder="Try Jordan or @casey.r"></div><div id="directoryList" class="directory-list"></div><p class="modal-note">Demo only. Requests stay in this browser and do not contact anyone.</p>`;
     else if (modalType === 'manage') {
@@ -378,7 +470,7 @@
     const messages = { accept: 'Demo friend added. Their shared place is now visible.', decline: 'Demo request declined.', request: 'Demo request saved. Nothing was sent to a real person.', cancel: 'Demo request canceled.', remove: 'Friend removed. Their named presence is hidden.', block: 'Demo friend blocked. Their named presence is hidden.', unblock: 'Unblocked. You are not automatically friends again.' };
     toast(messages[action] || 'Demo updated.');
   }
-  function resetDemo() {
+  function resetDemo() {searchArea=null;clearTimeout(searchFitTimer);dismissSuggestions();
     try { localStorage.removeItem(storageKey); } catch (_) { storageAvailable = false; }
     closeModal(false); closeDetail(false);friendsTab='all';friendsQuery=''; state = C.initialState();compareOpen=false;document.body.classList.remove('has-compare','has-comparison'); snapshot = C.makeSnapshot(); timeOffset = 0; camera.initialized = false;
     navigate('explore'); toast('Fresh start. Sharing is off and demo data is restored.');
@@ -506,12 +598,14 @@
     const target = e.target.closest('button, a, [data-action]'); if (!target) return;
     // The backdrop itself, not clicks bubbling from content inside a modal.
     if (target.dataset.action === 'modal-backdrop') { if (e.target === target) closeModal(); return; }
+    if (target.dataset.location){e.preventDefault();jumpToArea(PS.byId(target.dataset.location),true);return;}
+    if(!target.closest('.location-search'))dismissSuggestions();
     if (handleFeatureAction(target)) return;
     if (target.dataset.screen) { e.preventDefault(); navigate(target.dataset.screen); return; }
     if (target.dataset.category) { if(detailId||compareOpen)closeDetail(false); state.category = target.dataset.category; refreshExplore(); return; }
     if (target.dataset.venue) { selectVenue(target.dataset.venue, true); return; }
-    if (target.dataset.cluster) { if(Date.now()<suppressClickUntil)return;const group=currentGroups.get(target.dataset.cluster);if(group){camera.x=group.x;camera.y=group.y;zoomMap(1.9);}return; }
-    if (target.dataset.pin) { if (Date.now() < suppressClickUntil) return; selectVenue(target.dataset.pin, true, true); return; }
+    if (target.dataset.cluster) { const group=currentGroups.get(target.dataset.cluster);if(group){camera.x=group.x;camera.y=group.y;zoomMap(1.9);}return; }
+    if (target.dataset.pin) { selectVenue(target.dataset.pin, true, true); return; }
     if (target.dataset.friendVenue) { showVenueFromFriend(target.dataset.friendVenue); return; }
     if (target.dataset.friendsTab) {friendsTab=target.dataset.friendsTab;refreshFriendCards();return;}
     if (target.dataset.manageFriend) { showModal('manage', target.dataset.manageFriend); return; }
@@ -521,15 +615,16 @@
     else if (action === 'close-modal') closeModal();
     else if(action==='close-detail')closeDetail();
     else if(action==='expand-detail'){const card=$('.detail-card');const expanded=card.classList.toggle('expanded');target.setAttribute('aria-expanded',String(expanded));target.innerHTML=(expanded?'Less detail':'More details')+icon('chevron',12);}
-    else if (action === 'clear-search') { state.query = ''; $('#venueSearch').value = ''; refreshExplore(); $('#venueSearch').focus(); }
-    else if (action === 'clear-filters') { state.query = ''; state.category = 'all'; state.friendsOnly = false; state.savedOnly = false; $('#venueSearch').value = ''; refreshExplore(); fitMap(); }
+    else if (action === 'clear-search') { clearArea(); $('#venueSearch').focus();renderSuggestions(); }
+    else if(action==='clear-area'){clearArea();fitMap('city');}
+    else if (action === 'clear-filters') { clearTimeout(searchFitTimer);searchArea=null;dismissSuggestions();state.query = ''; state.category = 'all'; state.friendsOnly = false; state.savedOnly = false; $('#venueSearch').value = ''; refreshExplore(); fitMap(); }
     else if (action === 'friends-filter') { state.friendsOnly = !state.friendsOnly; refreshExplore(); }
     else if (action === 'view-list' || action === 'view-map') { state.mobileView = action === 'view-list' ? 'list' : 'map'; $('.explore-layout').classList.toggle('list-mode', state.mobileView === 'list'); dimensions=null;if(state.mobileView==='list'&&detailId)closeDetail(false);requestAnimationFrame(()=>drawMap()); }
     else if (action === 'zoom-in') zoomMap(1.2);
     else if (action === 'zoom-out') zoomMap(1 / 1.2);
-    else if(action==='recenter'||action==='region'){fitMap('region');}
-    else if(action==='city'){fitMap('city');}
-    else if (action === 'downtown') {camera.x=C.MAP.downtown[0];camera.y=C.MAP.downtown[1];camera.zoom=isMobile()?1.4:1.5;camera.scope='downtown';drawMap();}
+    else if(action==='recenter'||action==='region'){clearArea();fitMap('region');}
+    else if(action==='city'){clearArea();fitMap('city');}
+    else if (action === 'downtown') {clearArea();camera.x=C.MAP.downtown[0];camera.y=C.MAP.downtown[1];camera.zoom=isMobile()?1.4:1.5;camera.scope='downtown';drawMap();}
     else if (action === 'show-on-map') {
       const id = target.dataset.id; closeDetail(false); state.mobileView = 'map'; $('.explore-layout')?.classList.remove('list-mode');
       state.selected = id; refreshExplore(); focusMap(id); restoreFocus($(`[data-pin="${id}"]`), $('#main'));
@@ -566,7 +661,7 @@
     if (e.shiftKey && (document.activeElement === first || document.activeElement === dialog)) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
-  window.addEventListener('hashchange', () => { const id=C.parsePlaceHash(location.hash);if(id){if(state.screen!=='explore')navigate('explore',false);state.savedOnly=false;state.friendsOnly=false;state.query='';state.category='all';if($('#venueSearch'))$('#venueSearch').value='';refreshExplore();selectVenue(id,true);return;}const next=location.hash.slice(1);if(['explore','friends','privacy'].includes(next)&&(next!==state.screen||detailId||compareOpen))navigate(next); });
+  window.addEventListener('hashchange', () => {clearTimeout(searchFitTimer);searchArea=null;dismissSuggestions(); const id=C.parsePlaceHash(location.hash);if(id){if(state.screen!=='explore')navigate('explore',false);state.savedOnly=false;state.friendsOnly=false;state.query='';state.category='all';if($('#venueSearch'))$('#venueSearch').value='';refreshExplore();selectVenue(id,true);return;}const next=location.hash.slice(1);if(['explore','friends','privacy'].includes(next)&&(next!==state.screen||detailId||compareOpen))navigate(next); });
   let previousMobile = isMobile();
   window.addEventListener('resize', () => { if (previousMobile !== isMobile()) { previousMobile = isMobile(); dimensions=null; if(state.screen==='explore')drawMap(); } });
   // Freshness uses wall-clock time rather than timer ticks, so returning from a
@@ -589,7 +684,8 @@
   window.addEventListener('pageshow', e => { if (e.persisted) { clearInterval(refreshInterval); refreshInterval = setInterval(refreshTimeSensitiveViews, 15000); refreshTimeSensitiveViews(); } });
   // In-page testing hooks contain fictional state only. Never ship a comparable
   // client-authoritative friend/location API as real access control.
-  window.SpotDemo = Object.freeze({ getState: () => JSON.parse(JSON.stringify(state)), getOwnVisibility:()=>C.ownVisibility(state,snapshot,now()),getHistory:id=>C.sampleHistory(id,snapshot,now()),getSharePayload:id=>C.sharePayload(id,location.href),getCompareOpen:()=>compareOpen, getActivity: id => { const v = C.venueById(id); return v ? C.activity(v, state, snapshot, now()) : null; }, getCamera: () => ({ ...camera }), getStats: () => C.populationStats(state,snapshot,now()), getMapMode:()=> 'offline-canvas-regional', getRenderStats:()=>({frames:frameTimes.length,frameTimes:[...frameTimes],clusterBuilds,pinNodes:pinNodes.size,geometry:SpotCartography.featureCount}), flushMap:()=>{if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;drawMapNow();}, setCamera:(update)=>{for(const k of ['x','y','zoom'])if(Number.isFinite(update[k]))camera[k]=update[k];clampCamera();drawMap();}, advanceTime: ms => { if (!Number.isFinite(ms) || ms < 0) throw new TypeError('Use a positive demo time offset.'); timeOffset += ms; refreshTimeSensitiveViews(); }, reset: resetDemo });
+  window.SpotDemo = Object.freeze({ getState: () => JSON.parse(JSON.stringify(state)), getOwnVisibility:()=>C.ownVisibility(state,snapshot,now()),getHistory:id=>C.sampleHistory(id,snapshot,now()),getSharePayload:id=>C.sharePayload(id,location.href),getCompareOpen:()=>compareOpen, getActivity: id => { const v = C.venueById(id); return v ? C.activity(v, state, snapshot, now()) : null; }, getSearchArea:()=>searchArea?{...searchArea}:null,getNearbyIds:()=>visiblePlaces().map(v=>v.id),getCamera: () => ({ ...camera }), getGestureState:()=>gestureBinding?.info()||{count:0,mode:'idle'}, getStats: () => C.populationStats(state,snapshot,now()), getMapMode:()=> 'offline-canvas-regional', getMapStyle:()=> 'quiet-v4.2', getRenderStats:()=>({frames:frameTimes.length,frameTimes:[...frameTimes],clusterBuilds,pinNodes:pinNodes.size,geometry:SpotCartography.featureCount}), flushMap:()=>{if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;drawMapNow();}, setCamera:(update)=>{for(const k of ['x','y','zoom'])if(Number.isFinite(update[k]))camera[k]=update[k];clampCamera();drawMap();}, advanceTime: ms => { if (!Number.isFinite(ms) || ms < 0) throw new TypeError('Use a positive demo time offset.'); timeOffset += ms; refreshTimeSensitiveViews(); }, reset: resetDemo });
+  document.addEventListener('pointerdown',e=>{if(!e.target.closest('.location-search'))dismissSuggestions();});
   window.addEventListener('spot-theme-change',()=>{SpotCartography.invalidate();drawMap();});
   render();
   if(initialPlace)selectVenue(initialPlace,true);

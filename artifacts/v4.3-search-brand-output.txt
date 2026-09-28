@@ -1,0 +1,37 @@
+test_01_exact_east_campus_autojumps_and_shows_nearby (__main__.SearchBrandUI.test_01_exact_east_campus_autojumps_and_shows_nearby) ... ok
+test_02_anchor_matches_real_area_not_nearest_venue (__main__.SearchBrandUI.test_02_anchor_matches_real_area_not_nearest_venue) ... ok
+test_03_qualifiers_and_aliases (__main__.SearchBrandUI.test_03_qualifiers_and_aliases) ... ok
+test_04_partial_search_has_options_without_jumping (__main__.SearchBrandUI.test_04_partial_search_has_options_without_jumping) ... ok
+test_05_keyboard_arrow_enter_selects_area (__main__.SearchBrandUI.test_05_keyboard_arrow_enter_selects_area) ... ok
+test_06_touch_selects_second_area (__main__.SearchBrandUI.test_06_touch_selects_second_area) ... ok
+test_07_mobile_list_search_returns_to_map (__main__.SearchBrandUI.test_07_mobile_list_search_returns_to_map) ... ok
+test_08_filters_keep_selected_geography_and_camera (__main__.SearchBrandUI.test_08_filters_keep_selected_geography_and_camera) ... ok
+test_09_saved_filter_does_not_invent_nearby_results (__main__.SearchBrandUI.test_09_saved_filter_does_not_invent_nearby_results) ... ok
+test_10_nearby_list_and_markers_use_identical_scope (__main__.SearchBrandUI.test_10_nearby_list_and_markers_use_identical_scope) ... ok
+test_11_clear_area_restores_global_results (__main__.SearchBrandUI.test_11_clear_area_restores_global_results) ... ok
+test_12_region_preset_clears_area_scope (__main__.SearchBrandUI.test_12_region_preset_clears_area_scope) ... ok
+test_13_ordinary_venue_search_still_works (__main__.SearchBrandUI.test_13_ordinary_venue_search_still_works) ... ok
+test_14_unknown_address_is_not_fabricated (__main__.SearchBrandUI.test_14_unknown_address_is_not_fabricated) ... ok
+test_15_escape_dismisses_suggestions_before_clearing_query (__main__.SearchBrandUI.test_15_escape_dismisses_suggestions_before_clearing_query) ... ok
+test_16_escape_on_resolved_area_clears_it (__main__.SearchBrandUI.test_16_escape_on_resolved_area_clears_it) ... ok
+test_17_search_never_injects_user_html (__main__.SearchBrandUI.test_17_search_never_injects_user_html) ... ok
+test_18_map_can_pan_after_area_jump_without_later_snapback (__main__.SearchBrandUI.test_18_map_can_pan_after_area_jump_without_later_snapback) ... ok
+test_19_expiration_does_not_recenter_or_invent_zero_trends (__main__.SearchBrandUI.test_19_expiration_does_not_recenter_or_invent_zero_trends) ... ok
+test_20_selecting_another_venue_never_requires_close (__main__.SearchBrandUI.test_20_selecting_another_venue_never_requires_close) ... ok
+test_21_explicit_enter_blurs_mobile_keyboard_target (__main__.SearchBrandUI.test_21_explicit_enter_blurs_mobile_keyboard_target) ... ok
+test_22_locations_are_not_saved_as_user_location (__main__.SearchBrandUI.test_22_locations_are_not_saved_as_user_location) ... ok
+test_23_dark_palette_is_midnight_not_forest (__main__.SearchBrandUI.test_23_dark_palette_is_midnight_not_forest) ... ok
+test_24_light_palette_is_cool_white_with_indigo (__main__.SearchBrandUI.test_24_light_palette_is_cool_white_with_indigo) ... ok
+test_25_header_icon_and_favicon_share_new_mark (__main__.SearchBrandUI.test_25_header_icon_and_favicon_share_new_mark) ... ok
+test_26_both_themes_preserve_search_and_demo_population (__main__.SearchBrandUI.test_26_both_themes_preserve_search_and_demo_population) ... ok
+test_27_search_and_palettes_do_not_overflow_small_screens (__main__.SearchBrandUI.test_27_search_and_palettes_do_not_overflow_small_screens) ... ok
+test_28_favorite_towns_and_parks_are_searchable (__main__.SearchBrandUI.test_28_favorite_towns_and_parks_are_searchable) ... ok
+test_29_leaving_explore_cancels_pending_search_camera (__main__.SearchBrandUI.test_29_leaving_explore_cancels_pending_search_camera) ... ok
+test_30_entry_and_exit_do_not_change_privacy_permissions (__main__.SearchBrandUI.test_30_entry_and_exit_do_not_change_privacy_permissions) ... ok
+test_31_sparse_area_shows_no_sample_places_not_empty_occupancy (__main__.SearchBrandUI.test_31_sparse_area_shows_no_sample_places_not_empty_occupancy) ... ok
+test_32_panning_reuses_area_anchor_dom (__main__.SearchBrandUI.test_32_panning_reuses_area_anchor_dom) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 15.686s
+
+OK

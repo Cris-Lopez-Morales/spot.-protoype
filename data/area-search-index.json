@@ -1,0 +1,648 @@
+{
+  "scope": "Offline Lincoln-region only",
+  "coordinateQuality": "Approximate inherited map-fixture centers; not addresses or survey data",
+  "locations": [
+    {
+      "id": "lincoln",
+      "name": "Lincoln",
+      "x": 5126.37,
+      "y": 3994.72,
+      "lng": -96.6900001335144,
+      "lat": 40.811000148194715,
+      "kind": "city",
+      "radiusMeters": 14000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Lincoln"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "haymarket",
+      "name": "Haymarket",
+      "x": 4878.21,
+      "y": 3930.07,
+      "lng": -96.71129987716675,
+      "lat": 40.81519984983591,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Haymarket",
+        "historic haymarket",
+        "hay market",
+        "haymarket district"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "downtown",
+      "name": "Downtown",
+      "x": 5009.86,
+      "y": 4010.12,
+      "lng": -96.70000026702881,
+      "lat": 40.80999971602462,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Downtown",
+        "downtown lincoln",
+        "city center",
+        "city centre"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "near-south",
+      "name": "Near South",
+      "x": 4974.91,
+      "y": 4317.93,
+      "lng": -96.70300004959105,
+      "lat": 40.790000251925534,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Near South",
+        "near south neighborhood"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "belmont",
+      "name": "Belmont",
+      "x": 4974.91,
+      "y": 3270.97,
+      "lng": -96.70300004959105,
+      "lat": 40.85800019834992,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Belmont"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "university-place",
+      "name": "University Place",
+      "x": 5569.1,
+      "y": 3563.61,
+      "lng": -96.65200031280517,
+      "lat": 40.839000280430064,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "University Place",
+        "uni place",
+        "wesleyan",
+        "nebraska wesleyan",
+        "nwu"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "havelock",
+      "name": "Havelock",
+      "x": 5848.72,
+      "y": 3270.97,
+      "lng": -96.62800033569336,
+      "lat": 40.85800019834992,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Havelock",
+        "havelock neighborhood"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "bethany",
+      "name": "Bethany",
+      "x": 5883.68,
+      "y": 3871.57,
+      "lng": -96.62499969482421,
+      "lat": 40.81899981478728,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Bethany"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "college-view",
+      "name": "College View",
+      "x": 5592.41,
+      "y": 4594.89,
+      "lng": -96.64999959945678,
+      "lat": 40.772000067491405,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "College View",
+        "union college",
+        "union adventist university"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "south-lincoln",
+      "name": "South Lincoln",
+      "x": 5266.18,
+      "y": 5163.96,
+      "lng": -96.67800014495849,
+      "lat": 40.734999762725266,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "South Lincoln",
+        "south lincoln"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "east-lincoln",
+      "name": "East Lincoln",
+      "x": 6140,
+      "y": 4317.93,
+      "lng": -96.6029995727539,
+      "lat": 40.790000251925534,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "East Lincoln",
+        "east lincoln"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "west-lincoln",
+      "name": "West Lincoln",
+      "x": 4194.3,
+      "y": 3625.21,
+      "lng": -96.77000034332275,
+      "lat": 40.83500015039827,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "West Lincoln"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "country-club",
+      "name": "Country Club",
+      "x": 5126.37,
+      "y": 4564.12,
+      "lng": -96.6900001335144,
+      "lat": 40.77400011220616,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Country Club"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "capitol-beach",
+      "name": "Capitol Beach",
+      "x": 4462.27,
+      "y": 3840.78,
+      "lng": -96.74700029373169,
+      "lat": 40.82099974309603,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Capitol Beach",
+        "capital beach",
+        "capitol beach lake"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "antelope-valley",
+      "name": "Antelope Valley",
+      "x": 5219.58,
+      "y": 3794.59,
+      "lng": -96.68199985504151,
+      "lat": 40.823999847246675,
+      "kind": "neighborhood",
+      "radiusMeters": 2000,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Antelope Valley"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "waverly",
+      "name": "Waverly",
+      "x": 7002.16,
+      "y": 2361.71,
+      "lng": -96.52899978637694,
+      "lat": 40.91699996581863,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Waverly"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "seward",
+      "name": "Seward",
+      "x": 372.83,
+      "y": 2515.88,
+      "lng": -97.09799974441529,
+      "lat": 40.90699993655535,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Seward"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "hickman",
+      "name": "Hickman",
+      "x": 5825.42,
+      "y": 6915.31,
+      "lng": -96.63000019073486,
+      "lat": 40.620999746935475,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Hickman"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "roca",
+      "name": "Roca",
+      "x": 5452.6,
+      "y": 6377.93,
+      "lng": -96.66199958801269,
+      "lat": 40.6559999668661,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Roca"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "bennet",
+      "name": "Bennet",
+      "x": 7270.13,
+      "y": 6009.28,
+      "lng": -96.50599973678588,
+      "lat": 40.67999998148472,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Bennet"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "eagle",
+      "name": "Eagle",
+      "x": 8132.29,
+      "y": 3886.96,
+      "lng": -96.43199995040894,
+      "lat": 40.818000152799684,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Eagle"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "denton",
+      "name": "Denton",
+      "x": 3332.14,
+      "y": 5133.2,
+      "lng": -96.84400012969971,
+      "lat": 40.73700027045882,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Denton"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "malcolm",
+      "name": "Malcolm",
+      "x": 3075.82,
+      "y": 2500.46,
+      "lng": -96.86600025177002,
+      "lat": 40.90800020214647,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Malcolm"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "raymond",
+      "name": "Raymond",
+      "x": 4042.84,
+      "y": 1760.23,
+      "lng": -96.78300025939942,
+      "lat": 40.95599969298675,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Raymond"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "walton",
+      "name": "Walton",
+      "x": 6571.08,
+      "y": 4379.49,
+      "lng": -96.56599967956544,
+      "lat": 40.78599976600274,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Walton"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "crete",
+      "name": "Crete",
+      "x": 1968.99,
+      "y": 6823.2,
+      "lng": -96.96100023269653,
+      "lat": 40.62700028753435,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Crete"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "milford",
+      "name": "Milford",
+      "x": 920.42,
+      "y": 4610.28,
+      "lng": -97.0509997177124,
+      "lat": 40.77099969754775,
+      "kind": "town",
+      "radiusMeters": 4200,
+      "subtitle": "Lincoln region, Nebraska",
+      "aliases": [
+        "Milford"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "branched-oak-lake",
+      "name": "Branched Oak Lake",
+      "x": 3087.47,
+      "y": 1420.77,
+      "lng": -96.86500032424927,
+      "lat": 40.97799998136406,
+      "kind": "lake",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Branched Oak Lake",
+        "branched oak",
+        "branched oak state recreation area"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "pawnee-lake",
+      "name": "Pawnee Lake",
+      "x": 2947.66,
+      "y": 3270.97,
+      "lng": -96.87700031280517,
+      "lat": 40.85800019834992,
+      "kind": "lake",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Pawnee Lake",
+        "pawnee",
+        "pawnee state recreation area"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "wagon-train-lake",
+      "name": "Wagon Train Lake",
+      "x": 6361.36,
+      "y": 6669.68,
+      "lng": -96.58400009155274,
+      "lat": 40.63700020764036,
+      "kind": "lake",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Wagon Train Lake",
+        "wagon train"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "stagecoach-lake",
+      "name": "Stagecoach Lake",
+      "x": 5266.18,
+      "y": 7145.52,
+      "lng": -96.67800014495849,
+      "lat": 40.606000272595224,
+      "kind": "lake",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Stagecoach Lake",
+        "stagecoach"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "conestoga-lake",
+      "name": "Conestoga Lake",
+      "x": 3262.24,
+      "y": 4625.66,
+      "lng": -96.84999969482422,
+      "lat": 40.76999996257051,
+      "kind": "lake",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Conestoga Lake",
+        "conestoga"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "pioneers-park",
+      "name": "Pioneers Park",
+      "x": 4229.26,
+      "y": 4625.66,
+      "lng": -96.7669997024536,
+      "lat": 40.76999996257051,
+      "kind": "park",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Pioneers Park",
+        "pioneer park",
+        "pioneers park nature center"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "holmes-lake",
+      "name": "Holmes Lake",
+      "x": 5872.03,
+      "y": 4502.58,
+      "lng": -96.62599962234496,
+      "lat": 40.77800002101489,
+      "kind": "lake",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Holmes Lake",
+        "holmes lake park",
+        "holmes park"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "antelope-park",
+      "name": "Antelope Park",
+      "x": 5231.23,
+      "y": 4394.87,
+      "lng": -96.68099992752074,
+      "lat": 40.785000256746706,
+      "kind": "park",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Antelope Park",
+        "antelope"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "wilderness-park",
+      "name": "Wilderness Park",
+      "x": 4800.15,
+      "y": 5071.7,
+      "lng": -96.71799982070922,
+      "lat": 40.74099980483483,
+      "kind": "park",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Wilderness Park",
+        "wilderness"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "mahoney-park",
+      "name": "Mahoney Park",
+      "x": 6140,
+      "y": 3640.61,
+      "lng": -96.6029995727539,
+      "lat": 40.834000080175656,
+      "kind": "park",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Mahoney Park",
+        "lincoln mahoney park"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "oak-lake",
+      "name": "Oak Lake",
+      "x": 4776.85,
+      "y": 3686.81,
+      "lng": -96.71999967575073,
+      "lat": 40.83099977899392,
+      "kind": "lake",
+      "radiusMeters": 2400,
+      "subtitle": "Lincoln, Nebraska",
+      "aliases": [
+        "Oak Lake"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "unl-city-campus",
+      "name": "City Campus",
+      "x": 5009.86,
+      "y": 3840.78,
+      "lng": -96.70000026702881,
+      "lat": 40.82099974309603,
+      "kind": "campus",
+      "radiusMeters": 1600,
+      "subtitle": "University of Nebraska–Lincoln",
+      "aliases": [
+        "UNL City Campus",
+        "city campus",
+        "unl",
+        "university of nebraska lincoln",
+        "nebraska city campus",
+        "unl downtown"
+      ],
+      "approximate": true
+    },
+    {
+      "id": "unl-east-campus",
+      "name": "East Campus",
+      "x": 5417.64,
+      "y": 3625.21,
+      "lng": -96.66500022888184,
+      "lat": 40.83500015039827,
+      "kind": "campus",
+      "radiusMeters": 1600,
+      "subtitle": "University of Nebraska–Lincoln",
+      "aliases": [
+        "UNL East Campus",
+        "east campus",
+        "unl east",
+        "eastcampus",
+        "nebraska east campus",
+        "university of nebraska east campus"
+      ],
+      "approximate": true
+    }
+  ]
+}

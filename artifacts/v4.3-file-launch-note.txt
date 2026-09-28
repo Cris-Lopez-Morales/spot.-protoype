@@ -1,0 +1,1 @@
+Additional standalone file:// smoke check: blocked before page load by managed browser policy (net::ERR_BLOCKED_BY_ADMINISTRATOR). No application code executed in this check. The 321 completed unit/interface/touch checks use the documented harness.

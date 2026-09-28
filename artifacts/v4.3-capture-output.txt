@@ -1,0 +1,4 @@
+False light {'area': 'East Campus', 'nearby': 17, 'camera': {'x': 5417.64, 'y': 3625.21, 'zoom': 2, 'initialized': True, 'scope': 'area'}, 'overflow': False} []
+False dark {'area': 'East Campus', 'nearby': 17, 'camera': {'x': 5417.64, 'y': 3625.21, 'zoom': 2, 'initialized': True, 'scope': 'area'}, 'overflow': False} []
+True light {'area': 'East Campus', 'nearby': 17, 'camera': {'x': 5417.64, 'y': 3625.21, 'zoom': 1.1204936741386282, 'initialized': True, 'scope': 'area'}, 'overflow': False} []
+True dark {'area': 'East Campus', 'nearby': 17, 'camera': {'x': 5417.64, 'y': 3625.21, 'zoom': 1.1204936741386282, 'initialized': True, 'scope': 'area'}, 'overflow': False} []

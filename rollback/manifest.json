@@ -1,0 +1,18 @@
+{
+  "version": "v4.3",
+  "purpose": "Exact pre-change rollback copies; no files overwritten.",
+  "snapshots": [
+    {
+      "version": "4.1",
+      "file": "spot-lincoln-v4.1.html",
+      "sha256": "a585f0caad4ab5fcb2822ff28719b48e7d1ef0f47f977a1fbcf5fbfa4312ff5a",
+      "bytes": 517275
+    },
+    {
+      "version": "4.2",
+      "file": "spot-lincoln-v4.2.html",
+      "sha256": "60ba198e9317379e560c395e7aa5f4c3841a7f59935a94e02aaf1482ba47982f",
+      "bytes": 532646
+    }
+  ]
+}

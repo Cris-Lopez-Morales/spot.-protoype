@@ -1,0 +1,11 @@
+{
+  "tests": 28,
+  "passed": 28,
+  "failures": 0,
+  "errors": 0,
+  "method": "Headless Chromium, CDP touch input dispatch with is_mobile and has_touch, DPR 2. Interruption and compatibility cases inject events explicitly.",
+  "limitations": [
+    "No physical iPhone or Android testing",
+    "No Safari mobile engine certification"
+  ]
+}

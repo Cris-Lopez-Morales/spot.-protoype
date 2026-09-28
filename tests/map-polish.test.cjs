@@ -1,0 +1,17 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const M=require('../map-core.js'),C=require('../core.js');
+const B={x:0,y:0,w:500,h:400};
+const item=(key,x,y,priority=3)=>({key,x,y,priority,width:90,pinWidth:50,offset:24});
+test('overview spacing is larger than neighborhood spacing',()=>{for(const mobile of [true,false])assert.ok(M.markerSpacing(.08,mobile)>M.markerSpacing(4,mobile));});
+test('new grouping conserves all 336 distinct spots throughout both layouts',()=>{for(const mobile of [true,false])for(const z of [.025,.06,.15,.3,.7,1.4,2.6,4,8]){const ids=M.cluster(C.VENUES,z,z>=.6?'juniper':null,M.markerSpacing(z,mobile)).flatMap(g=>g.ids);assert.equal(ids.length,336);assert.equal(new Set(ids).size,336);}});
+test('public counts remain 3500 regardless of the new grouping',()=>{const s=C.initialState(),snap=C.makeSnapshot(),now=Date.now();for(const z of [.06,.3,1.4,4]){let sum=0;for(const g of M.cluster(C.VENUES,z,null,M.markerSpacing(z,true)))for(const id of g.ids)sum+=C.activity(C.venueById(id),s,snap,now).count;assert.equal(sum,3500);}});
+test('stronger overview grouping draws fewer groups than the old spacing',()=>{assert.ok(M.cluster(C.VENUES,.08,null,M.markerSpacing(.08,true)).length<M.cluster(C.VENUES,.08,null,62).length);});
+test('centroid merging preserves the actual average location',()=>{for(const g of M.cluster(C.VENUES,.3,null,90)){const ps=g.ids.map(C.venueById);assert.ok(Math.abs(g.x-ps.reduce((n,p)=>n+p.x,0)/ps.length)<1e-7);assert.ok(Math.abs(g.y-ps.reduce((n,p)=>n+p.y,0)/ps.length)<1e-7);}});
+test('selected spot remains a separate marker with all other spots conserved',()=>{const groups=M.cluster(C.VENUES,1.4,'juniper',78);assert.deepEqual(groups.find(g=>g.ids.includes('juniper')).ids,['juniper']);assert.equal(groups.flatMap(g=>g.ids).filter(x=>x==='juniper').length,1);});
+test('label placement is deterministic',()=>{const items=[item('a',100,100,0),item('b',200,200)];assert.deepEqual(M.labelLayout(items,B),M.labelLayout(items,B));});
+test('selected labels win contested space before ordinary labels',()=>{const found=M.labelLayout([item('ordinary',100,100,3),item('selected',100,100,0)],B);assert.equal(found[0].key,'selected');});
+test('accepted name labels stay inside the map',()=>{for(const l of M.labelLayout([item('a',5,2),item('b',490,390),item('c',200,200)],B)){assert.ok(l.x>=0&&l.y>=0&&l.x+l.w<=500&&l.y+l.h<=400);}});
+test('placed name labels avoid every protected pin rectangle',()=>{const obs=[{x:140,y:130,w:100,h:50}],found=M.labelLayout([item('a',190,105,0),item('b',190,200)],B,obs);assert.ok(found.length);for(const l of found)assert.ok(!M.intersects(l,obs[0],5));});
+test('placed name labels cannot intersect each other',()=>{const items=Array.from({length:15},(_,i)=>item(String(i),80+i*15,140));const ls=M.labelLayout(items,B);assert.ok(ls.length<items.length);for(let i=0;i<ls.length;i++)for(let j=i+1;j<ls.length;j++)assert.ok(!M.intersects(ls[i],ls[j],5));});
+test('tight spaces hide labels rather than paint over controls',()=>{assert.deepEqual(M.labelLayout([item('a',100,100,0)],B,[{...B}]),[]);});

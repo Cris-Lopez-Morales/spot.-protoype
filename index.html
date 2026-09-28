@@ -3,28 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#fbfaf7">
+  <meta name="theme-color" content="#f7f8fc">
   <meta name="description" content="Spot — a local, interactive prototype for exploring venue activity. Lincoln-region map with fictional venues, 5,000 demo accounts and 60 friends.">
   <title>spot — Your usuals, and somewhere new.</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='19' fill='%23254e41'/%3E%3Cpath d='M44 28c0 10-12 21-12 21S20 38 20 28a12 12 0 1 1 24 0Z' fill='%23e7efda'/%3E%3Ccircle cx='32' cy='28' r='4' fill='%23254e41'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2220%22%20fill%3D%22%236250E8%22%2F%3E%3Cpath%20d%3D%22M43.5%2015.8A20%2020%200%200%200%2015.8%2043.5M20.5%2048.2A20%2020%200%200%200%2048.2%2020.5%22%20stroke%3D%22%23F8F7FF%22%20stroke-width%3D%226.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%227%22%20fill%3D%22%23FF947D%22%2F%3E%3C%2Fsvg%3E">
   <meta name="color-scheme" content="light dark">
-  <script>(()=>{let mode='system';try{const s=localStorage.getItem('spot.appearance.v1');if(['light','dark','system'].includes(s))mode=s;}catch{}const dark=mode==='dark'||mode==='system'&&matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.dataset.theme=dark?'dark':'light';document.documentElement.dataset.appearance=mode;document.querySelector('meta[name="theme-color"]').content=dark?'#141d18':'#fbfaf7';})();</script>
+  <script>(()=>{let mode='system';try{const s=localStorage.getItem('spot.appearance.v1');if(['light','dark','system'].includes(s))mode=s;}catch{}const dark=mode==='dark'||mode==='system'&&matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.dataset.theme=dark?'dark':'light';document.documentElement.dataset.appearance=mode;document.querySelector('meta[name="theme-color"]').content=dark?'#101220':'#f7f8fc';})();</script>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="brand.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="app-shell">
     <aside class="desktop-nav" aria-label="Main navigation">
-      <a href="#explore" class="brand-mark" aria-label="Spot home" data-screen="explore"><span class="logo-glyph"></span></a>
+      <a href="#explore" class="brand-mark" aria-label="Spot home" data-screen="explore"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="20" fill="#6250E8"/><path d="M43.5 15.8A20 20 0 0 0 15.8 43.5M20.5 48.2A20 20 0 0 0 48.2 20.5" stroke="#F8F7FF" stroke-width="6.5" stroke-linecap="round"/><circle cx="32" cy="32" r="7" fill="#FF947D"/></svg></a>
       <nav id="desktopNavigation"></nav>
       <button class="rail-bottom" data-action="about" aria-label="About this prototype" title="About this prototype"></button>
       <div class="rail-avatar" aria-label="Your demo profile">Y</div>
     </aside>
     <div class="workspace">
       <header class="topbar">
-        <a class="wordmark" href="#explore" data-screen="explore">spot<span class="wordmark-dot">.</span></a>
+        <a class="wordmark" href="#explore" data-screen="explore"><span class="header-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="20" fill="#6250E8"/><path d="M43.5 15.8A20 20 0 0 0 15.8 43.5M20.5 48.2A20 20 0 0 0 48.2 20.5" stroke="#F8F7FF" stroke-width="6.5" stroke-linecap="round"/><circle cx="32" cy="32" r="7" fill="#FF947D"/></svg></span><span>spot<span class="wordmark-dot">.</span></span></a>
         <span class="topbar-divider"></span>
-        <span class="topbar-tagline">A little closer. A little further.</span>
+        <span class="topbar-tagline">Find the place. Feel the pulse.</span>
         <div class="topbar-actions">
           <button class="demo-badge" data-action="about"><span class="demo-dot"></span> 5,000 <span>demo users</span></button>
           <div id="appearanceControl" class="appearance"></div>
@@ -41,7 +42,9 @@
   <noscript><div class="noscript">This interactive prototype needs JavaScript. No location data is collected.</div></noscript>
   <script src="lincoln-data.js"></script>
   <script src="core.js"></script>
+  <script src="place-search.js"></script>
   <script src="map-core.js"></script>
+  <script src="map-gestures.js"></script>
   <script src="map-renderer.js"></script>
   <script src="theme.js"></script>
   <script src="app.js"></script>

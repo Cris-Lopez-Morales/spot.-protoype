@@ -1,0 +1,5 @@
+
+> spot-presence-prototype@0.4.3 build
+> node scripts/build.cjs
+
+Built dist/spot-prototype.html (self-contained; offline regional map included; no network or GPS).

@@ -98,6 +98,6 @@ test_45_open_comparison_target_clears_filters_that_hide_it (features_ui_test.Fea
 test_46_share_payload_mock_success_excludes_unauthorized_data (features_ui_test.FeatureUI.test_46_share_payload_mock_success_excludes_unauthorized_data) ... ok
 
 ----------------------------------------------------------------------
-Ran 98 tests in 78.530s
+Ran 98 tests in 89.730s
 
 OK

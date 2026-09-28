@@ -45,7 +45,7 @@ class LincolnUI(unittest.TestCase):
   self.page.locator('[data-category="cafe"]').click();cafes=self.page.locator('.place-card').count()
   self.assertEqual(bars+cafes,336)
  def test_06_area_search(self):
-  self.page.locator('#venueSearch').fill('Haymarket');self.assertEqual(self.page.locator('.place-card').count(),28)
+  self.page.locator('#venueSearch').fill('Haymarket');self.assertEqual(self.page.locator('.place-card').count(),62);self.assertEqual(self.page.evaluate('SpotDemo.getSearchArea().name'),'Haymarket')
   self.page.locator('[data-action="clear-search"]').click();self.assertEqual(self.page.locator('.place-card').count(),336)
  def test_07_empty_search_and_recovery(self):
   self.page.locator('#venueSearch').fill('not-a-real-place-abc');self.assertTrue(self.page.get_by_text('No spots found',exact=True).is_visible())
@@ -132,7 +132,7 @@ class LincolnUI(unittest.TestCase):
  def test_31_dark_theme_applies_to_map_and_surfaces(self):
   before=self.page.locator('#mapCanvas').evaluate('(c)=>c.toDataURL()');self.theme('dark')
   self.assertEqual(self.page.evaluate('document.documentElement.dataset.theme'),'dark')
-  self.assertEqual(self.page.locator('.places-panel').evaluate('(e)=>getComputedStyle(e).backgroundColor'),'rgb(20, 29, 24)')
+  self.assertEqual(self.page.locator('.places-panel').evaluate('(e)=>getComputedStyle(e).backgroundColor'),'rgb(16, 18, 32)')
   self.assertNotEqual(before,self.page.locator('#mapCanvas').evaluate('(c)=>c.toDataURL()'))
  def test_32_theme_retains_query_selection_and_camera(self):
   self.page.locator('#venueSearch').fill('Waverly');self.page.locator('.place-card').first.click()
