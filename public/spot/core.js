@@ -80,7 +80,7 @@
   function filteredVenues(state, snapshot, now) {
     const q = normalize(state.query);
     return VENUES.filter(v => (state.category === 'all' || v.category === state.category)
-      && (!q || normalize(`${v.name} ${v.street} ${v.area} ${v.address} Nebraska ${v.category === 'cafe' ? 'café cafe coffee' : 'club nightclub dance'}`).includes(q))
+      && (!q || normalize(`${v.name} ${v.street} ${v.area} ${v.address} Nebraska ${v.category === 'cafe' ? 'café cafe coffee' : 'bar bars club clubs nightclub nightlife dance'}`).includes(q))
       && (!state.friendsOnly || friendsAt(v.id, state, snapshot, now).length > 0)
       && (!state.savedOnly || state.savedVenues.includes(v.id)));
   }

@@ -2,5 +2,10 @@
   "original": "spot-lincoln-v4.4.html",
   "sha256": "8a8ffda5be9bf7c6fa9e81196b287f8ec5a6882f86a9189c35197cbbbed38030",
   "verification": "Byte-identical to the original Spot v4.4 attachment; no AI added to this rollback file.",
-  "earlier_versions": "v4.2 and v4.3 retained for original regression tests."
+  "earlier_versions": "v4.2 and v4.3 retained for original regression tests.",
+  "previous_integrated_project": {
+    "file": "spot-with-ai-v4.5.zip",
+    "sha256": "1200c16219aa0f0df0bde097dcfc86638e3dcb377ff789e60ee865933d57adeb",
+    "verification": "Byte-identical copy of the incoming /mnt/data/spot-with-ai.zip; original integrated project before v4.6 changes."
+  }
 }

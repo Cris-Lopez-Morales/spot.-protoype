@@ -93,3 +93,33 @@
 /* Keep mobile preview text crisp and readable in either appearance. */
 :root .preview-eyebrow{text-shadow:none}
 :root .preview-eyebrow button,:root .preview-bottom .friends-label{color:var(--muted)}
+
+/* v4.6 • A place first, a count second. One 52px touch target, one label.
+   Neutral colors indicate category/selection, never unsupported fullness. */
+:root .map-pins .activity-marker{width:var(--marker-width);height:52px;min-height:52px;min-width:144px;padding:0;border:0;overflow:visible;pointer-events:auto;touch-action:none;isolation:isolate;background:transparent;border-radius:14px;box-shadow:none;color:var(--ink);font-family:inherit;text-align:left;z-index:4;}
+:root .map-pins .activity-marker.selected{z-index:12;}
+:root .map-pins .activity-marker-card{display:flex;align-items:center;gap:8px;position:relative;width:100%;height:52px;box-sizing:border-box;padding:7px 10px;border:1px solid var(--border-strong);border-radius:14px;background:var(--surface);box-shadow:0 2px 6px rgba(20,28,56,.09);color:var(--ink);transform:none;transition:background .12s,border-color .12s;}
+:root .map-pins .activity-marker-card::after{content:'';position:absolute;left:50%;bottom:-4px;width:6px;height:6px;margin-left:-3px;transform:rotate(45deg);background:var(--surface);border-right:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);z-index:-1;}
+:root .map-pins .activity-marker-symbol{width:26px;height:28px;flex:0 0 26px;display:grid;place-items:center;border-radius:9px;background:var(--accent-soft);color:var(--accent);}
+:root .map-pins .activity-marker-symbol.club{background:var(--coral-soft);color:var(--coral);}
+:root .map-pins .activity-marker-symbol.area-symbol{background:var(--surface-2);color:var(--muted);}
+:root .map-pins .activity-marker-copy{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0;}
+:root .map-pins .activity-marker-title{font-size:12px;line-height:15px;letter-spacing:-.2px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+:root .map-pins .activity-marker-count{font-size:11px;line-height:12px;letter-spacing:0;font-weight:500;color:var(--muted);white-space:nowrap;display:flex;gap:4px;align-items:center;font-variant-numeric:tabular-nums;}
+:root .map-pins .activity-marker-count>svg{flex:none;opacity:.9;}
+:root .map-pins .activity-marker-jump{font-size:14px;line-height:1;position:absolute;top:7px;right:8px;color:var(--muted);}
+:root .map-pins .cluster-pin .activity-marker-title{padding-right:5px;font-size:11.5px;}
+:root .map-pins .activity-marker .marker-presence,:root .map-pins .activity-marker .marker-saved{position:absolute;top:-4px;right:7px;margin:0;transform:none;}
+:root .map-pins .activity-marker .marker-presence{width:8px;height:8px;min-width:8px;border:2px solid var(--surface);background:var(--accent);box-shadow:0 0 0 1px var(--accent-soft);border-radius:50%;}
+:root .map-pins .activity-marker .marker-saved{width:14px;height:14px;display:grid;place-items:center;color:var(--accent);background:var(--surface);border-radius:4px;}
+:root .map-pins .activity-marker.selected .activity-marker-card{border-color:var(--signal);box-shadow:0 0 0 2px color-mix(in srgb,var(--signal) 24%,transparent),0 3px 8px rgba(20,28,56,.1);background:var(--surface);color:var(--ink);}
+:root .map-pins .activity-marker.selected .activity-marker-card::after{border-color:var(--signal);}
+:root .map-pins .activity-marker.unknown .activity-marker-card{border-style:dashed;}
+:root .map-pins .activity-marker.unknown .activity-marker-symbol{background:var(--surface-2);color:var(--muted);}
+:root[data-theme="dark"] .map-pins .activity-marker-card{box-shadow:0 2px 7px rgba(0,0,0,.16);}
+@media(hover:hover){:root .map-pins .activity-marker:hover .activity-marker-card{background:var(--hover);border-color:var(--accent);} :root .map-pins .activity-marker:hover .activity-marker-card::after{background:var(--hover);border-color:var(--accent);}}
+:root .map-pins .activity-marker:focus-visible{outline:3px solid var(--accent);outline-offset:4px;}
+@media(prefers-reduced-motion:reduce){:root .map-pins .activity-marker-card{transition:none;}}
+
+/* Keep the control rail out of the lower-left venue labels in portrait. */
+@media(max-width:760px) and (min-height:650px){:root .map-panel .map-controls{top:82px;bottom:auto;}}

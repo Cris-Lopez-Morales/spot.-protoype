@@ -1,7 +1,26 @@
-# Spot + Ask Spot · v4.5 integration
+# Spot + Ask Spot · v4.6 map update
 
 A complete combined project: the existing Lincoln-region Spot map with the
 previous local-AI chatbot embedded in an on-demand **Ask Spot** panel.
+
+## New in v4.6
+
+Readable, two-line map labels show a place name, category icon and **app users**,
+rather than an unexplained number. Groups identify how many spots they combine.
+The fictional fixture now uses **32 venues: 24 cafés and 8 bars/clubs** (20 in
+Lincoln, 12 in surrounding towns). Pins are at least 600 meters apart in the
+authored geography; decorative buildings have more breathing room too. This is
+a deliberately sparse design sample, not an inventory of real Lincoln businesses.
+
+The fixture retains 5,000 accounts and 60 friends; 610 accounts initially contribute
+to places. Friends, map cards and Ask Spot all use the same new inventory.
+The one-finger/pinch gesture module is unchanged.
+
+For a double-click **map-only** review, open `preview/spot-v4.6-map-preview.html`.
+It has no model and its Ask button explains how to launch the full project.
+To use the actual integrated chatbot, follow the local-server steps below.
+An exact copy of the incoming project is at `rollback/spot-with-ai-v4.5.zip`.
+See `docs/MAP-UPDATE-v4.6.md` for details.
 
 ## Quick start
 
@@ -63,8 +82,9 @@ existing separate sandbox origin, with the limitations documented in SECURITY.md
   it is not silently rewritten as the map changes.
 - Closing pauses active generation while keeping chats and drafts. Reopening
   reuses the panel/runtime within the page rather than reloading it every time.
-- Original map fixtures, cartography, clustering, pan/pinch module and public
-  privacy controls are retained. Rollback copies are provided outside public/.
+- The original one-finger/pinch module and public privacy controls are retained.
+  v4.6 updates the fixtures, spacing, marker labels and background-building density.
+  Rollback copies are provided outside public/.
 
 ### Existing chatbot features retained
 
@@ -89,7 +109,8 @@ runtime has been exercised here. See the validation section below.
 - `server.mjs`: local host, same-origin embed policy, inference proxy, sandbox host.
 - `scripts/start.mjs`: beginner launcher and local vendor preparation.
 - `tests/`: local logic, server, integration fixtures, and real-runtime smoke tools.
-- `rollback/`: unchanged earlier Spot HTML files; not served by the app.
+- `preview/`: self-contained map-only HTML for reviewing this visual update.
+- `rollback/`: original integrated project ZIP and earlier HTML files; not served by the app.
 
 ## Versions and runtime documentation
 
@@ -154,9 +175,11 @@ server remain necessary. For llama.cpp and HTTPS phone testing, see
 ## Validation
 
 ```sh
-npm test                 # 66 logic/context/HTTP-server checks
-npm run test:map         # 173 retained map logic checks
+npm test                 # 68 logic/context/HTTP-server checks
+npm run test:map         # 193 map logic checks
 npm run test:integration # 31 no-network UI/bridge checks; Python Playwright needed
+npm run test:map-ui      # 44 map layout, label and touch checks
+npm run build:preview    # Rebuild standalone map-only preview
 ```
 
 Browser fixtures use Playwright 1.57.0 in this environment and Chromium 144.
@@ -166,10 +189,11 @@ because browser navigation is blocked here. Only the test harness uses wildcard
 postMessage targets to address that opaque origin; production validates and uses
 its exact same origin and source window.
 
-**270 passed, 0 failed.** No real-model inference, installed-vendor execution,
+**336 passed, 0 failed.** No real-model inference, installed-vendor execution,
 physical-phone run, durable IndexedDB recovery, or full PWA offline test is claimed.
-Dependency/model downloads failed here because network name resolution is blocked;
-browser navigation is blocked by administrator policy. A real local HTTP server
+The original project reported blocked dependency/model downloads; those downloads
+were not retried for this map-only update. Browser navigation was blocked by
+administrator policy, so UI tests use the explicit offline fixture. A real local HTTP server
 was separately tested using Node fetch, including CSP/COOP/COEP, frame allowances,
 all cached shell paths, byte ranges, and the loopback proxy with a test backend.
 

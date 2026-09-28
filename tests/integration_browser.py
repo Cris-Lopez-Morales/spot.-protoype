@@ -45,7 +45,7 @@ async def main():
   await check('Test reply renders; model is explicitly a fixture',await fr.locator('.message.assistant').count()==1 and 'TEST FIXTURE' in await fr.locator('#privacy-note').inner_text())
   await check('Retrieved map sources include East Campus','East Campus' in await fr.locator('.message.assistant .sources').inner_text())
   await check('Map links appear in factual source cards',await fr.locator('.spot-source-action').count()>=1)
-  await fr.locator('.source-item').first.locator('summary').click();await fr.locator('.spot-source-action').first.click()
+  await fr.locator('.source-item').first.locator('summary').click();await fr.locator('.spot-source-action').first.click();await page.locator('#spotAssistantPanel').wait_for(state='hidden',timeout=5000)
   await check('Source action returns to the map',not await page.locator('#spotAssistantPanel').is_visible())
   await check('Area source focuses East Campus',await page.evaluate("SpotDemo.getSearchArea()?.name==='East Campus'"))
   await page.click('#askSpot');await fr.locator('#toggle-sidebar').click();await fr.locator('#new-chat').click()

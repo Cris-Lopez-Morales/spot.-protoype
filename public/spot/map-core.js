@@ -5,7 +5,20 @@
  function markerSpacing(zoom, mobile=false){
   // Screen-space spacing is deliberately generous in the overview. It only
   // changes with zoom, never on pan, so groups and marker DOM stay stable.
-  return zoom<.2?(mobile?94:100):zoom<.65?(mobile?84:90):zoom<2?(mobile?78:82):68;
+  return zoom<.2?(mobile?196:204):zoom<.65?(mobile?184:192):zoom<2?180:176;
+ }
+ // Readable, honest map labels. Every count refers only to fresh, detected
+ // app participation in the fixture, never everyone inside or available seats.
+ function describeMarker(venues,activities){
+  const grouped=venues.length>1;
+  const usable=activities.filter(a=>a&&a.hasData&&Number.isFinite(a.count)&&a.count>0);
+  const count=usable.reduce((n,a)=>n+Math.floor(a.count),0),known=usable.length>0;
+  const heading=grouped?`${venues.length} nearby spots`:(venues[0]?.name||'Unknown spot').split(' · ')[0].replace(/ (Coffee|Café)$/,'');
+  const countText=known?`${count.toLocaleString('en-US')} app ${count===1?'user':'users'}`:'No recent data';
+  const location=grouped?[...new Set(venues.map(v=>v.area))].join(', '):(venues[0]?.name||'Unknown spot');
+  const coverage=grouped&&usable.length<venues.length?` Recent data at ${usable.length} of ${venues.length} spots; others are unknown.`:'';
+  const label=`${location}. ${grouped?venues.length+' places. ':''}${countText} in the demo.${coverage} Not total occupancy. ${grouped?'Tap to explore this area.':'Tap for place details.'}`;
+  return {heading,countText,count,known,grouped,label,reportingVenues:usable.length};
  }
  function intersects(a,b,gap=0){return a.x<b.x+b.w+gap&&a.x+a.w+gap>b.x&&a.y<b.y+b.h+gap&&a.y+a.h+gap>b.y;}
  function labelLayout(items,bounds,obstacles=[],gap=5){
@@ -45,7 +58,7 @@
     if(g.selected){next.push(g);continue;}
     const ix=Math.floor(g.x/cell),iy=Math.floor(g.y/cell);let match=null;
     for(let x=ix-1;x<=ix+1&&!match;x++)for(let y=iy-1;y<=iy+1&&!match;y++)for(const other of cells.get(x+':'+y)||[]){
-     if(Math.abs(other.x-g.x)*scale<pixels*.84&&Math.abs(other.y-g.y)*scale<46){match=other;break;}
+     if(Math.abs(other.x-g.x)*scale<pixels&&Math.abs(other.y-g.y)*scale<62){match=other;break;}
     }
     if(match){const n=match.ids.length,k=g.ids.length;match.x=(match.x*n+g.x*k)/(n+k);match.y=(match.y*n+g.y*k)/(n+k);match.ids.push(...g.ids);match.key='g:'+match.ids[0];changed=true;}
     else{next.push(g);const key=ix+':'+iy;if(!cells.has(key))cells.set(key,[]);cells.get(key).push(g);}
@@ -65,10 +78,10 @@
   const valid=places.filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y));
   if(!valid.length)return{...camera};
   const xs=valid.map(p=>p.x),ys=valid.map(p=>p.y),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
-  const availableW=Math.max(90,d.width-108),availableH=Math.max(90,Math.min(d.centerY-66,d.height-190-d.centerY)*2);
+  const availableW=Math.max(90,d.width-200),availableH=Math.max(90,Math.min(d.centerY-84,d.height-215-d.centerY)*2);
   const fitted=Math.min(availableW/Math.max(24,x1-x0),availableH/Math.max(24,y1-y0));
   const zoom=Math.max(min,Math.min(max,Math.max(camera.zoom*1.45,fitted)));
   return{...camera,x:(x0+x1)/2,y:(y0+y1)/2,zoom};
  }
- return{drillDownCamera,zoomLevel,cluster,project,anchoredZoom,markerSpacing,intersects,labelLayout};
+ return{describeMarker,drillDownCamera,zoomLevel,cluster,project,anchoredZoom,markerSpacing,intersects,labelLayout};
 });

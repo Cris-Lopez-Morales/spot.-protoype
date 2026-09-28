@@ -1,6 +1,6 @@
-/* v4.4 — continuous, original, illustrative cartography. NOT surveyed GIS, real
- * building footprints, or routing data. The existing demo coordinates remain
- * unchanged. All geometry is compiled once and rendered offline on one canvas.
+/* v4.6 — continuous, original, illustrative cartography. NOT surveyed GIS, real
+ * building footprints, or routing data. Fictional venues use a deliberately sparse
+ * authored layout, not a business census. All geometry is compiled once and rendered offline on one canvas.
  * Street/land-use detail is progressive; labels never compete with place pins.
  */
 (function(root){'use strict';
@@ -64,7 +64,7 @@
   if(x1-x0>60)for(let c=0;c<cols;c++)for(let r=0;r<rows;r++){
    const cellW=(x1-x0)/cols,cellH=(y1-y0)/rows;
    const bx=x0+c*cellW+10,by=y0+r*cellH+10,w=Math.min(cellW-22,15+rand()*16),h=Math.min(cellH-24,14+rand()*26);
-   if(w>4&&h>4&&rand()>.35&&!inGreen(bx,by,10))add([[bx,by],[bx+w,by],[bx+w,by+h*.62],[bx+w*.58,by+h*.62],[bx+w*.58,by+h],[bx,by+h]],'building',.76);
+   if(w>4&&h>4&&rand()>.62&&!inGreen(bx,by,10))add([[bx,by],[bx+w,by],[bx+w,by+h*.62],[bx+w*.58,by+h*.62],[bx+w*.58,by+h],[bx,by+h]],'building',.76);
   }
  }
  // The downtown street texture is a compact local grid; buildings relate to
@@ -75,8 +75,8 @@
  for(const x of downtownX){if(x<4990)add([[x,dy0+35],[x,dy1]],'lane',1.0);else add([[x,dy0],[x,dy1]],'lane',1.0);}
  for(const y of downtownY){add([[dx0,y],[dx1,y]],'lane',1.0);}
  for(let i=0;i<downtownX.length-1;i++)for(let j=0;j<downtownY.length-1;j++){
-  const x=downtownX[i]+4,y=downtownY[j]+4,w=downtownX[i+1]-x-4,h=downtownY[j+1]-y-4;
-  if(inGreen(x,y,4)||rand()<.24)continue;
+  const x=downtownX[i]+7,y=downtownY[j]+7,w=downtownX[i+1]-x-7,h=downtownY[j+1]-y-7;
+  if(inGreen(x,y,4)||w<5||h<5||rand()<.6)continue;
   if(rand()>.55)add([[x,y],[x+w,y],[x+w,y+h*.6],[x+w*.55,y+h*.6],[x+w*.55,y+h],[x,y+h]],'building',.68);
   else add([[x,y],[x+w,y],[x+w,y+h],[x,y+h]],'building',.68);
  }
@@ -89,9 +89,9 @@
    add([[a.x+i*30,a.y-r*.8],[a.x+i*30,a.y+r*.8]],'local',.45);
   }
   for(let col=-2;col<2;col++)for(let row=-2;row<2;row++){
-   if(rand()<.2)continue;
+   if(rand()<.48)continue;
    const x=a.x+col*30+6,y=a.y+row*29+6,w=12+rand()*7,h=10+rand()*8;
-   add([[x,y],[x+w,y],[x+w,y+h],[x,y+h]],'building',.64);
+   add([[x,y],[x+w,y],[x+w,y+h],[x,y+h]],'building',.44);
   }
  }
  for(const p of M.parks){
@@ -115,7 +115,7 @@
    if(col===0&&row===0)continue;
    const x=p.x+col*p.width*.24-8,y=p.y+row*p.height*.23-7;
    const w=13+rand()*9,h=10+rand()*8;
-   add([[x,y],[x+w,y],[x+w,y+h],[x,y+h]],'building',.56);
+   add([[x,y],[x+w,y],[x+w,y+h],[x,y+h]],'building',.30);
   }
  }
  // Keep a small neighborhood context around ALL fictional venue locations,
@@ -123,10 +123,10 @@
  for(const v of root.SpotCore.VENUES){
   if(!inGreen(v.x,v.y,0)){
    const w=v.category==='club'?24:15,h=v.category==='club'?17:11;
-   add([[v.x-w/2,v.y-h/2],[v.x+w/2,v.y-h/2],[v.x+w/2,v.y+h/2],[v.x-w/2,v.y+h/2]],'building',.5);
+   add([[v.x-w/2,v.y-h/2],[v.x+w/2,v.y-h/2],[v.x+w/2,v.y+h/2],[v.x-w/2,v.y+h/2]],'building',.34);
   }
-  for(let i=0;i<8;i++){
-   const a=i*Math.PI/4,x=v.x+Math.cos(a)*(34+rand()*34),y=v.y+Math.sin(a)*(32+rand()*30);
+  for(let i=0;i<3;i++){
+   const a=i*Math.PI*2/3+.4,x=v.x+Math.cos(a)*(55+rand()*40),y=v.y+Math.sin(a)*(55+rand()*40);
    if(inGreen(x,y,4)||features.some(f=>f.type==='building'&&x>f.b[0]-8&&x<f.b[2]+8&&y>f.b[1]-8&&y<f.b[3]+8))continue;
    const w=8+rand()*11,h=9+rand()*13;
    add([[x,y],[x+w,y],[x+w,y+h],[x,y+h]],'building',.72);
@@ -207,5 +207,5 @@
    ctx.lineWidth=3;ctx.strokeStyle=palette.halo;ctx.strokeText(text,0,0);ctx.fillStyle=['road','park','water','highway'].includes(l.kind)?palette.sub:palette.text;ctx.fillText(text,0,0);ctx.restore();
   }
  }
- root.SpotCartography={attach,draw,invalidate(){lastDraw=null;},featureCount:features.length,getLabels:()=>lastLabels.map(b=>({...b})),getStats:()=>({...lastStats}),style:'continuous-v4.4'};
+ root.SpotCartography={attach,draw,invalidate(){lastDraw=null;},featureCount:features.length,getLabels:()=>lastLabels.map(b=>({...b})),getStats:()=>({...lastStats}),style:'spaced-activity-v4.6'};
 })(window);

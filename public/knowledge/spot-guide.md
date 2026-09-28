@@ -5,7 +5,7 @@ Spot helps people inspect recent participating-user activity at cafés and clubs
 
 The map shows a public aggregate venue pin, not individual stranger locations. Named friends are visible only when sharing is authorized. Anonymous activity contribution and named friend sharing are separate controls. There is no "Open to company" status.
 
-The v4.4 sample fixture contains 60 fictional venues: 50 cafés and 10 clubs. It uses 5,000 sample accounts, 900 sample users at venues, and 60 sample friends. These are invented demonstration counts, not verified business counts, occupancy, or live location information.
+The v4.6 sample fixture contains 32 fictional venues: 24 cafés and 8 bars / clubs. Twenty are in Lincoln and twelve are in surrounding towns. It uses 5,000 sample accounts, 610 sample users at venues, and 60 sample friends. Venue pins show a readable name and an explicit app-user label. Area pins say how many spots they contain and open on tap. The sparse sample has at least 600 meters between venue coordinates; this is an authored demo design, not a claim about real business spacing. These are invented demonstration counts, not verified business counts, occupancy, or live location information.
 
 One finger pans on mobile. Two fingers pinch to zoom. Tapping a grouped venue pin jumps into the represented area. Place details should not block further navigation. Saved spots and comparisons of two or three places help users inspect alternatives. There are independent light and dark palettes.
 

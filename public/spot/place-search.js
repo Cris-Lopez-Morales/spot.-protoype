@@ -49,7 +49,7 @@
  function radiusLabel(l){return(l.radiusMeters/1609.344).toFixed(l.radiusMeters<3200?1:0)+' mi area';}
  function cameraFor(location,dimensions){const metersPerPixel=Math.cos(location.lat*Math.PI/180)*40075016.686/(256*2**C.MAP.baseZoom);
   const worldSpan=location.radiusMeters*1.25/metersPerPixel;
-  return{x:location.x,y:location.y,zoom:Math.max(.025,Math.min(2,Math.min(Math.max(180,dimensions.width-80),Math.max(180,dimensions.height-210))/worldSpan)),scope:'area'};
+  return{x:location.x,y:location.y,zoom:Math.max(.025,Math.min(2,Math.min(Math.max(80,dimensions.width-200),Math.max(90,dimensions.height-270))/worldSpan)),scope:'area'};
  }
  return Object.freeze({locations,normalize:norm,queryKey,exact,matches,byId:id=>byId.get(id)||null,nearby,distance,distanceLabel,radiusLabel,cameraFor});
 });

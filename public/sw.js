@@ -1,4 +1,4 @@
-const VERSION='spot-ai-4.5.0',SHELL=VERSION+'-shell',ASSETS=VERSION+'-assets';
+const VERSION='spot-ai-4.6.0',SHELL=VERSION+'-shell',ASSETS=VERSION+'-assets';
 self.addEventListener('install',event=>event.waitUntil((async()=>{const response=await fetch('/shell-manifest.json',{cache:'no-store'});if(!response.ok)throw Error('Offline manifest unavailable.');const data=await response.json();const cache=await caches.open(SHELL);await cache.addAll(data.files);})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if((key.startsWith('local-chat-')||key.startsWith('spot-ai-'))&&!key.startsWith(VERSION))await caches.delete(key);await clients.claim();})()));
 self.addEventListener('message',event=>{if(event.data?.type==='activate-update')self.skipWaiting();});

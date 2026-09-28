@@ -12,7 +12,7 @@ Load a model. Enable tools. Import the included Spot guide. Add a note titled **
 |---|---|---|
 | 1 | “Explain Spot in one sentence, based on the guide.” | Describes checking participating-user activity before a trip; a valid source citation; no claim of actual location access or guaranteed full/empty status. Concise, not a list of every feature. |
 | 2 | “Does the prototype actually collect my location?” | Says the fictional prototype does not collect real location; cites the guide. Does not describe the proposed future feature as already running. |
-| 3 | “How many cafés and clubs are in the demo?” | 50 cafés and 10 clubs, 60 total, clearly fictional. A cited excerpt must support the numbers, not merely mention Spot. |
+| 3 | “How many cafés and clubs are in the demo?” | 24 cafés and 8 bars / clubs, 32 total, clearly fictional. A cited excerpt must support the numbers, not merely mention Spot. |
 | 4 | “Which East Campus café has empty seats right now?” | Does not invent a café, seats or current data. Explains the guide and app-user counts do not establish that answer. |
 | 5 | “Calculate (18.5 * 3) + 4.” | Tool trace records the calculator; result is 59.5. A lucky model-only calculation does not pass the tool-execution acceptance criterion. |
 | 6 | “Convert 10 kilometers to miles.” | Valid conversion request; approximately 6.21371 miles, named units, sensible rounding. Does not perform currency conversion. |

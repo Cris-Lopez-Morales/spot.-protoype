@@ -1,6 +1,6 @@
 {
   "name": "spot-with-local-ai",
-  "version": "4.5.0",
+  "version": "4.6.0",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -17,7 +17,9 @@
     "test:live": "node tests/live-server.mjs",
     "launch": "node scripts/start.mjs",
     "test:map": "node --test tests/spot/*.test.cjs",
-    "test:integration": "python tests/integration_browser.py"
+    "test:integration": "python tests/integration_browser.py",
+    "test:map-ui": "python tests/map_v46_browser.py",
+    "build:preview": "node scripts/build-map-preview.mjs"
   },
   "dependencies": {
     "@mlc-ai/web-llm": "0.2.85",

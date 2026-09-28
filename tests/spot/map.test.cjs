@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),M=require('../../public/spot/map-core.js'),C=require('../../public/spot/core.js');
-test('clustering conserves every venue exactly once at each scale',()=>{for(const z of [.025,.07,.15,.4,1,2,4,8]){const g=M.cluster(C.VENUES,z,'juniper');const ids=g.flatMap(g=>g.ids);assert.equal(ids.length,60);assert.equal(new Set(ids).size,60);}});
+test('clustering conserves every venue exactly once at each scale',()=>{for(const z of [.025,.07,.15,.4,1,2,4,8]){const g=M.cluster(C.VENUES,z,'juniper');const ids=g.flatMap(g=>g.ids);assert.equal(ids.length,32);assert.equal(new Set(ids).size,32);}});
 test('selected establishment stays independently selectable',()=>{const g=M.cluster(C.VENUES,.1,'juniper');assert.deepEqual(g.find(g=>g.ids.includes('juniper')).ids,['juniper']);});
 test('cluster coordinates are member centroids',()=>{for(const g of M.cluster(C.VENUES,.1)){const vs=g.ids.map(C.venueById);assert.ok(Math.abs(g.x-vs.reduce((n,v)=>n+v.x,0)/vs.length)<.001);}});
 test('zooming increases geographic separation',()=>assert.ok(M.cluster(C.VENUES,8).length>M.cluster(C.VENUES,.05).length));

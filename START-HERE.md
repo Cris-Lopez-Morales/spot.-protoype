@@ -1,12 +1,19 @@
-# Spot + Ask Spot — start here
+# Spot + Ask Spot v4.6 — start here
 
 The chatbot is now **inside Spot**, not a separate project. Open **Ask Spot** in
 the top bar. Your map stays in place; close the panel to return. On a phone, use
 the **Ask** button beside the Spot logo.
 
+## Review the map without setup
+
+Open `preview/spot-v4.6-map-preview.html` in a browser. This is a self-contained
+map review, with the new readable labels and 32 more spaced-out fictional venues.
+Its Ask button explains how to run the complete project; it does not pretend to
+perform AI inference.
+
 ## Start the combined project
 
-1. Extract `spot-with-ai.zip` fully (do not run files inside the ZIP).
+1. Extract `spot-with-ai-v4.6.zip` fully (do not run files inside the ZIP).
 2. Install **Node.js 22.16.0 or newer** if you do not already have it.
 3. On Mac, open **Start Spot.command**. On Windows, open **Start Spot.cmd**.
    Alternatively, open a terminal in this folder and run `npm run launch`.
@@ -51,16 +58,25 @@ HTML app. Do not open `public/index.html` directly. Workers, local model files,
 PWA caching, and browser storage use the local server. `npm run launch` handles
 preparation and starts it for you.
 
-The previous no-AI, single-file prototype remains unchanged at:
-`rollback/spot-lincoln-v4.4.html`.
+The exact prior **AI-integrated** project is retained as
+`rollback/spot-with-ai-v4.5.zip`. Extract it to another folder to revert.
+The older no-AI single-file prototype is also retained at
+`rollback/spot-lincoln-v4.4.html`. These are code backups, not browser-data backups.
+
+Using the same localhost address preserves the existing storage origin. Saved
+IDs for removed fictional places are no longer displayed. Existing conversations
+are not rewritten. Export important chats before testing either version.
 
 ## Testing disclosure
 
-270 automated checks passed: 173 map logic tests, 66 application/context/server
-checks, and 31 browser UI/bridge checks. UI checks use explicit model, worker,
-storage and network fixtures. HTTP server checks run against the real local
-server, with a scripted inference backend. Real model generation, first-run
-package installation, model downloads, real-origin iframe behavior, physical
-phones, and offline-cache recovery were not verified in this environment.
+336 automated checks passed: 193 map logic checks, 68 application/context/server
+checks, 31 integrated UI/bridge checks, and 44 map layout/touch checks. UI tests
+render the actual map in mobile-emulated Chromium using an explicit offline
+harness; model, worker, storage and network components are fixtures. The standalone
+map preview was also separately opened as inline HTML for a smoke check.
+
+Real model generation, first-run installation/downloads, physical phones, mobile
+Safari, real-origin frame navigation and offline-cache recovery were not verified.
+This release changes map code and public fixture context, not AI runtime engines.
 
 See `README.md` and `docs/TEST-REPORT.md` for details.
