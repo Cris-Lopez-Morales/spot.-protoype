@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Spot v4.8 | GitHub Pages edition, build 4.8-pages-1.
+Spot v4.7 | GitHub Pages edition, build 4.7-pages-1.
 Self-contained: replace this index.html to update the entire app.
 No external scripts, styles, images, fonts, models, or build steps.
 
@@ -27,14 +27,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
-<html lang="en" data-build="4.8-pages-1">
+<html lang="en" data-build="4.7-pages-1">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f8fc">
   <meta name="description" content="Spot — a local, interactive prototype for exploring venue activity. Lincoln-region map with fictional venues, 5,000 demo accounts and 60 friends.">
-  <title>Spot v4.8 — Activity map</title>
-  <meta name="spot-build" content="4.8-pages-1">
+  <title>Spot v4.7 — Pages edition</title>
+  <meta name="spot-build" content="4.7-pages-1">
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2220%22%20fill%3D%22%236250E8%22%2F%3E%3Cpath%20d%3D%22M43.5%2015.8A20%2020%200%200%200%2015.8%2043.5M20.5%2048.2A20%2020%200%200%200%2048.2%2020.5%22%20stroke%3D%22%23F8F7FF%22%20stroke-width%3D%226.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%227%22%20fill%3D%22%23FF947D%22%2F%3E%3C%2Fsvg%3E">
   <meta name="color-scheme" content="light dark">
   <script>
@@ -646,86 +646,6 @@ button:disabled{cursor:not-allowed;opacity:.48;box-shadow:none!important}
   }, { once: true });
 })();
 </script>
-<style>
-/* v4.8 map-first UI. Data, search, and gestures remain local and independent. */
-:root{--map-label:#353647;--map-label-halo:#faf9f6;--map-chrome:rgba(255,255,255,.96);--quiet-ring:#8791a6}
-:root[data-theme="dark"]{--map-label:#f0effc;--map-label-halo:#1b2133;--map-chrome:rgba(25,28,46,.97);--quiet-ring:#98a4bf}
-[hidden]{display:none!important}
-.topbar{height:66px;padding:0 26px;gap:20px}.topbar .wordmark{font-size:30px}.topbar .topbar-tagline{font-size:12px}.topbar .demo-badge{font-size:10px;padding:6px 9px}.topbar-actions{gap:18px}.topbar-divider{height:17px}
-body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:block;height:calc(100dvh - 66px);min-height:260px;position:relative}
-.map-first .map-panel{height:100%;width:100%;position:relative;overflow:hidden;min-height:0;background:var(--map)}
-.map-first .map-viewport{position:absolute;inset:0;width:100%;height:100%;touch-action:none;overscroll-behavior:contain;cursor:grab;outline-offset:-4px}
-.map-first .map-viewport.dragging{cursor:grabbing}.map-canvas,.heat-canvas{position:absolute;inset:0;pointer-events:none}.heat-canvas{z-index:1}.map-first .map-pins{position:absolute;inset:0;z-index:3;pointer-events:none;contain:layout style}
-.map-first .map-discovery{position:absolute;top:20px;left:22px;width:364px;z-index:20;pointer-events:none}.map-discovery>*{pointer-events:auto}
-.map-discovery .location-search{position:relative;margin:0}.map-discovery .search-wrap{margin:0;position:relative}.map-discovery .search-input{height:51px;font-size:14px;padding:0 42px 0 44px;border:1px solid var(--line);border-radius:17px;background:var(--map-chrome);box-shadow:0 4px 22px #2636510c}.map-discovery .search-wrap>svg{top:16px;left:16px;color:var(--muted)}.map-discovery .clear-search{top:5px;right:5px}
-.map-discovery .location-suggestions{top:58px;left:0;right:0;max-height:min(350px,48dvh);overflow-y:auto;border-radius:18px;box-shadow:var(--theme-shadow);z-index:25}
-.map-discovery .filters{display:flex;align-items:center;gap:6px;margin:10px 0 0;padding:0;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;background:transparent}.map-discovery .filters::-webkit-scrollbar{display:none}
-.map-discovery .filter-chip{display:flex;justify-content:center;align-items:center;gap:5px;padding:9px 12px;font-size:11px;border-radius:30px;min-height:36px;flex-shrink:0;background:var(--map-chrome);box-shadow:0 2px 6px #26365105;border:1px solid var(--line);color:var(--ink)}
-:root .map-discovery .filter-chip.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}.map-discovery .filter-friends{width:37px;padding:8px}.filter-chip .saved-count{display:none}
-.map-discovery .search-area-context{margin:10px 0 0;display:flex;max-width:100%;border-radius:14px;padding:9px 11px;background:var(--map-chrome);font-size:11px;min-height:44px;border:1px solid var(--line)}.search-area-context strong{font-size:11px}.search-area-context small{font-size:10px}.search-area-context button{font-size:10px}.search-area-context .area-context-icon{width:28px;height:28px}
-.search-results{margin-top:10px;max-height:min(46dvh,390px);background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--theme-shadow);overflow:hidden;display:flex;flex-direction:column}
-.search-results-title{display:flex;align-items:center;justify-content:space-between;padding:7px 12px 6px 17px;border-bottom:1px solid var(--line);font-size:12px}.search-results-title .icon-button{width:32px;height:32px}
-.search-results .places-list{overflow-y:auto;min-height:0;padding:5px 8px 10px}.search-place-row{display:flex;align-items:center;gap:2px;border-radius:12px;padding-right:6px}.search-place-row:hover{background:var(--hover)}.search-place{display:flex;align-items:center;text-align:left;gap:9px;min-width:0;flex:1;padding:11px 5px 11px 3px}.search-place>span{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}.search-place strong{font-size:12px;line-height:1.35;color:var(--ink)}.search-place small{font-size:10px;color:var(--muted)}.search-place .venue-glyph{width:31px;height:31px;flex:none}.search-place>svg:last-child{color:var(--soft)}
-.result-heat-dot{width:10px;height:10px;border-radius:50%;background:rgb(var(--heat-rgb));flex:none}.result-heat-dot.heat-unknown{background:none;border:1.5px dashed var(--quiet-ring)}
-.map-first .map-top-tools{position:absolute;left:auto;right:24px;top:20px;z-index:12;display:flex;gap:8px;align-items:center}.map-first .map-view-tabs{display:flex;padding:4px;border-radius:14px;background:var(--map-chrome);border:1px solid var(--line);box-shadow:0 3px 16px #26365109}
-.map-first .map-view-tabs button{font-size:11px;padding:9px 12px;border-radius:10px;color:var(--muted);min-height:34px}.map-first .map-view-tabs button.active{background:var(--accent-soft);color:var(--accent);font-weight:650}
-.map-first .browse-places{background:var(--map-chrome);border:1px solid var(--line);border-radius:13px;width:43px;height:43px;box-shadow:0 3px 16px #26365109}
-.map-first .map-controls{position:absolute;right:24px;bottom:51px;top:auto;z-index:12;display:flex;flex-direction:column;gap:10px}.map-first .map-controls .icon-button{width:43px;height:42px;background:var(--map-chrome);color:var(--ink)}.map-first .zoom-group{background:var(--map-chrome);border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 2px 14px #26365109}.map-first .zoom-group .icon-button{border:0}.map-first .map-controls>.icon-button{border-radius:14px;border:1px solid var(--line);box-shadow:0 2px 14px #26365109}
-.heat-legend{position:absolute;left:22px;bottom:32px;width:210px;text-align:left;padding:13px 15px 11px;border-radius:17px;border:1px solid var(--line);background:var(--map-chrome);box-shadow:0 4px 20px #26365109;z-index:12;color:var(--ink)}
-.heat-legend-title{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:1.1px;font-weight:650;line-height:1}.heat-legend-title>span{font-size:9px;letter-spacing:0;font-weight:450;color:var(--muted);margin-left:auto}.heat-legend-title svg{color:var(--muted)}
-.heat-legend-scale{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:10px;color:var(--muted)}.heat-legend-scale i{display:block;height:6px;flex:1;border-radius:7px;background:linear-gradient(90deg,#a197e7,#c794d5,#e48eab,#f27d69)}.heat-legend-note{display:block;font-size:9px;color:var(--muted);margin-top:8px}
-.map-first .map-scale{position:absolute;left:auto;right:25px;bottom:16px;z-index:10;font-size:9px;color:var(--muted);border-color:var(--muted);background:none;text-shadow:0 1px 2px var(--map-label-halo)}.map-first .map-watermark{position:absolute;left:24px;bottom:10px;right:auto;font-size:9px;color:var(--muted);z-index:10;background:none;pointer-events:none;padding:0;text-shadow:0 1px 3px var(--map-label-halo)}
-.map-first .heat-pin{position:absolute;display:block;width:46px!important;min-width:46px!important;height:46px!important;padding:0!important;pointer-events:auto;touch-action:none;overflow:visible!important;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:50%;color:var(--accent-strong);transition:none!important;cursor:pointer;will-change:transform;z-index:3}
-.map-first .heat-pin:after,.map-first .heat-pin:before{display:none!important}.map-first .heat-pin.selected{z-index:6}.map-first .heat-pin.occluded{visibility:hidden;pointer-events:none}
-.map-place-glyph{width:46px;height:46px;display:grid;place-items:center;position:relative;filter:drop-shadow(0 2px 2px #25263a25);transition:transform .16s ease;pointer-events:none}.heat-pin:hover .map-place-glyph,.heat-pin.selected .map-place-glyph{transform:translateY(-2px) scale(1.09)}.heat-pin:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.map-place-glyph .venue-glyph{width:39px;height:39px}.area-glyph{color:var(--accent-strong)}
-.map-place-label{display:none;position:absolute;left:var(--label-x,0);top:var(--label-y,0);width:var(--label-width,140px);height:auto;text-align:center;color:var(--map-label);line-height:1.2;pointer-events:auto;text-shadow:-1px -1px 0 var(--map-label-halo),1px -1px 0 var(--map-label-halo),-1px 1px 0 var(--map-label-halo),1px 1px 0 var(--map-label-halo),0 0 5px var(--map-label-halo),0 0 7px var(--map-label-halo)}
-.heat-pin.label-visible .map-place-label{display:block}.map-place-label strong{font-size:13px;font-weight:710;letter-spacing:-.25px;display:block;overflow-wrap:normal}.map-place-label small{display:block;font-size:10px;font-weight:500;letter-spacing:0;color:var(--muted);margin-top:3px;line-height:1.3}
-.heat-pin.selected .map-place-label strong{font-size:15px;color:var(--accent-strong)}.heat-pin.selected .map-place-label small{color:var(--ink)}.heat-pin.cluster-pin .map-place-label strong{font-size:12px;font-weight:650}.heat-pin.cluster-pin .map-place-label small{font-size:9px;letter-spacing:.1px}
-.pin-saved{position:absolute;right:0;bottom:1px;font-size:16px;color:var(--signal);text-shadow:1px 1px 0 var(--map-label-halo),-1px -1px 0 var(--map-label-halo),-1px 1px 0 var(--map-label-halo),1px -1px 0 var(--map-label-halo)}.pin-friends{position:absolute;right:1px;bottom:4px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:2px solid var(--map-label-halo)}
-.map-place-actions{position:absolute;z-index:15;width:192px;pointer-events:auto}.map-action-buttons{display:flex;align-items:center;justify-content:center;gap:0;background:var(--map-chrome);padding:4px;border:1px solid var(--line);border-radius:18px;box-shadow:0 5px 20px #22263818;min-height:44px}
-.map-action-buttons .entry-tool{display:grid;place-items:center;width:36px;height:36px;min-width:36px;padding:0;border:0;box-shadow:none;border-radius:12px;background:transparent;color:var(--muted)}.map-action-buttons .entry-tool:hover,.map-action-buttons .entry-tool.is-active{background:var(--accent-soft);color:var(--accent)}
-.map-first .compare-tray{position:absolute;left:50%;bottom:31px;transform:translateX(-50%);width:330px;max-width:calc(100% - 32px);z-index:14;margin:0;border:1px solid var(--line);border-radius:17px;background:var(--map-chrome);box-shadow:var(--shadow);padding:11px}.compare-tray .compare-tray-top strong{font-size:11px}.compare-tray .compare-tray-top span{font-size:10px}.compare-tray .primary-button{font-size:11px;padding:9px}.compare-tray .compare-chips{gap:5px;margin-top:7px}.compare-tray .compare-chips button{font-size:10px}
-#detailHost:empty{display:none!important}#detailHost{pointer-events:none}#detailHost .comparison-card{pointer-events:auto;position:fixed;right:24px;top:90px;bottom:36px;width:min(640px,calc(100vw - 128px));max-height:calc(100dvh - 115px);margin:0;border-radius:22px}
-.heat-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;line-height:1.5;color:var(--ink)}.heat-status i,.history-orb{display:block;flex:none;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle,rgb(var(--heat-rgb)) 0%,rgba(var(--heat-rgb),.55) 42%,rgba(var(--heat-rgb),0) 75%)}.heat-status.heat-unknown i,.history-orb.heat-unknown{background:none;border:1px dashed var(--quiet-ring)}
-.activity-history{margin:17px 0}.activity-history>p{font-size:12px;line-height:1.6;margin:12px 0;color:var(--muted)}.history-steps{display:flex;gap:6px;margin:24px 0;justify-content:space-between}.history-steps>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px}.history-orb{width:38px;height:38px}.history-steps small{font-size:9px;text-align:center;color:var(--muted)}
-.map-first .search-anchor{z-index:4;pointer-events:none}.map-first .search-anchor .anchor-caption{font-size:10px;box-shadow:none}.map-first .map-empty{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:260px;text-align:center;border:1px solid var(--line);background:var(--surface);padding:20px;z-index:11}.map-empty p{font-size:12px}.map-empty strong{font-size:15px}
-@media(min-width:761px) and (max-width:1080px){.map-first .map-top-tools{top:auto;bottom:191px;right:20px}.map-first .compare-tray{left:270px;transform:none;width:290px}.topbar-tagline{display:none}}
-@media(max-width:760px){
- .topbar{height:58px;padding:0 16px;gap:12px}.topbar .wordmark{font-size:28px;gap:6px}.topbar .header-mark{display:block}.topbar .header-mark svg{width:26px;height:26px}.topbar-actions{gap:13px}.topbar .demo-badge{font-size:9px;padding:5px 8px}.topbar .topbar-tagline,.topbar-divider{display:none}.topbar .privacy-status{padding:6px}.appearance-toggle{width:33px;height:33px}
- .workspace{margin:0;width:100%}.explore-layout.map-first{height:calc(100dvh - 134px - env(safe-area-inset-bottom,0px));min-height:260px}.map-first .map-panel{display:block!important;height:100%;min-height:0}.map-first .map-viewport{height:100%;inset:0}
- .map-first .map-discovery{left:13px;right:13px;top:13px;width:auto}.map-discovery .search-input{height:46px;font-size:16px;border-radius:15px;padding-left:42px}.map-discovery .search-wrap>svg{top:13px;left:14px}.map-discovery .clear-search{top:3px;right:5px}.map-discovery .filters{margin-top:8px;gap:5px}.map-discovery .filter-chip{min-height:33px;padding:7px 10px;font-size:10px}.map-discovery .filter-friends{width:34px;padding:7px;min-width:34px}
- .map-discovery .search-area-context{margin-top:8px;padding:7px 9px;min-height:39px;border-radius:12px}.map-discovery .location-suggestions{top:52px;max-height:calc(100dvh - 240px)}.search-results{max-height:calc(100dvh - 320px)}
- .map-first .map-top-tools{top:auto;bottom:112px;right:13px;gap:5px}.map-first .map-view-tabs{padding:3px;border-radius:13px}.map-first .map-view-tabs button{font-size:9px;padding:7px 10px;min-height:29px}.map-first .browse-places{width:36px;height:37px;border-radius:12px}
- .map-first .map-controls{right:13px;bottom:39px;gap:0;flex-direction:row;align-items:flex-end}.map-first .zoom-group{border-radius:13px}.map-first .map-controls .icon-button{width:36px;height:31px}.map-first .map-controls>.icon-button{display:none}
- .heat-legend{left:13px;bottom:29px;width:181px;border-radius:15px;padding:11px 13px 10px}.heat-legend-title{font-size:8px;letter-spacing:.7px}.heat-legend-title>span{font-size:8px}.heat-legend-scale{font-size:9px;margin-top:8px;gap:7px}.heat-legend-note{font-size:8px;margin-top:6px}
- .map-first .map-scale{right:14px;bottom:12px;font-size:8px}.map-first .map-watermark{left:14px;bottom:11px;font-size:8px}
- .map-place-label strong{font-size:12px;letter-spacing:-.22px}.heat-pin.selected .map-place-label strong{font-size:14px}.map-place-label small{font-size:9px}.map-place-glyph .venue-glyph{width:36px;height:36px}.map-first .heat-pin{width:46px!important;height:46px!important;min-width:46px!important}
- .map-first .compare-tray{left:13px;right:57px;bottom:31px;width:auto;max-width:none;transform:none;padding:10px}.has-compare .heat-legend{display:none}.has-compare .map-first .map-top-tools{bottom:140px}
- #detailHost .comparison-card{left:10px;right:10px;width:auto;top:170px;bottom:91px;max-height:calc(100dvh - 262px);border-radius:19px}.comparison-header{padding:16px}.comparison-header h2{font-size:22px}
- .mobile-nav{height:76px;padding:3px 22px calc(4px + env(safe-area-inset-bottom,0px));height:calc(76px + env(safe-area-inset-bottom,0px));bottom:0;left:0;right:0;border-top:1px solid var(--line);background:var(--surface);z-index:30}.mobile-nav .nav-item{font-size:10px;gap:5px;height:59px;min-width:85px;border-radius:16px;padding:8px}.mobile-nav .nav-item.active{background:var(--accent-soft)}.mobile-nav .nav-item svg{width:20px;height:20px}.mobile-nav .nav-item::before{display:none}
- .toast{bottom:calc(88px + env(safe-area-inset-bottom,0px))}.content-page{padding-bottom:100px}.map-place-actions{width:192px}.map-action-buttons .entry-tool{min-height:36px}
-}
-@media(max-width:360px){.map-discovery .filter-chip{padding:7px 8px}.map-discovery .filter-chip svg{width:12px;height:12px}.topbar .demo-badge{display:none}.map-first .map-view-tabs button{padding:7px 8px}.heat-legend{width:169px}}
-@media(prefers-reduced-motion:reduce){.map-place-glyph{transition:none!important}}
-/* Explicitly clear legacy anchored panel coordinates. */
-:root .map-first .map-panel .map-controls{left:auto;right:24px;top:auto;bottom:51px;width:max-content;height:auto;align-items:flex-end}
-:root .map-first .map-panel .map-top-tools{bottom:auto;width:max-content}
-@media(max-width:1080px) and (min-width:761px){:root .map-first .map-panel .map-top-tools{bottom:191px;top:auto}}
-@media(max-width:760px){
- :root .map-first .map-panel .map-controls{left:auto;right:13px;top:auto;bottom:39px;flex-direction:column}
- :root .map-first .map-panel .map-top-tools{top:auto;bottom:112px;left:auto;right:13px}
- :root .map-first .map-top-tools .browse-places{display:grid}
- :root .has-compare .map-first .map-panel .map-top-tools{bottom:140px}
-}
-/* Marker labels may wrap; never inherit old numeric chip nowrap rules. */
-:root .heat-pin .map-place-label,:root .heat-pin .map-place-label strong,:root .heat-pin .map-place-label small{white-space:normal;overflow-wrap:break-word;max-width:var(--label-width,170px)}
-:root .heat-pin .map-place-label small{line-height:1.3}
-:root .heat-pin .map-place-label .map-friend-caption{font-size:9px;color:var(--muted);margin-top:3px}
-/* The floating search list is available on phones too (the retired mobile
-   sidebar rules hid .places-list whenever list-mode was not active). */
-:root .map-first .search-results .places-list{display:block;max-height:min(330px,38dvh);overflow:auto;min-height:0}
-
-</style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -743,7 +663,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
         <span class="topbar-tagline">Find the place. Feel the pulse.</span>
         <div class="topbar-actions">
 
-          <button class="demo-badge" data-action="about"><span class="demo-dot"></span><span>Demo map</span></button>
+          <button class="demo-badge" data-action="about"><span class="demo-dot"></span> 5,000 <span>demo users</span></button>
           <div id="appearanceControl" class="appearance"></div>
           <button class="privacy-status" id="privacyStatus" data-screen="privacy"></button>
         </div>
@@ -1000,12 +920,28 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
 
 </script>
   <script>
-
 /* View calculations and near-linear clustering. No browser or location access. */
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory();else root.SpotMapCore=factory();})(typeof globalThis!=='undefined'?globalThis:this,function(){
  'use strict';
  function zoomLevel(zoom){return Math.round(Math.log2(Math.max(.001,zoom))*4)/4;}
- function markerSpacing(zoom,mobile=false){return zoom<.16?(mobile?100:110):zoom<.55?(mobile?95:100):zoom<1.3?82:74;}
+ function markerSpacing(zoom, mobile=false){
+  // Screen-space spacing is deliberately generous in the overview. It only
+  // changes with zoom, never on pan, so groups and marker DOM stay stable.
+  return zoom<.2?(mobile?196:204):zoom<.65?(mobile?184:192):zoom<2?180:176;
+ }
+ // Readable, honest map labels. Every count refers only to fresh, detected
+ // app participation in the fixture, never everyone inside or available seats.
+ function describeMarker(venues,activities){
+  const grouped=venues.length>1;
+  const usable=activities.filter(a=>a&&a.hasData&&Number.isFinite(a.count)&&a.count>0);
+  const count=usable.reduce((n,a)=>n+Math.floor(a.count),0),known=usable.length>0;
+  const heading=grouped?`${venues.length} nearby spots`:(venues[0]?.name||'Unknown spot').split(' · ')[0].replace(/ (Coffee|Café)$/,'');
+  const countText=known?`${count.toLocaleString('en-US')} app ${count===1?'user':'users'}`:'No recent data';
+  const location=grouped?[...new Set(venues.map(v=>v.area))].join(', '):(venues[0]?.name||'Unknown spot');
+  const coverage=grouped&&usable.length<venues.length?` Recent data at ${usable.length} of ${venues.length} spots; others are unknown.`:'';
+  const label=`${location}. ${grouped?venues.length+' places. ':''}${countText} in the demo.${coverage} Not total occupancy. ${grouped?'Tap to explore this area.':'Tap for place details.'}`;
+  return {heading,countText,count,known,grouped,label,reportingVenues:usable.length};
+ }
  function intersects(a,b,gap=0){return a.x<b.x+b.w+gap&&a.x+a.w+gap>b.x&&a.y<b.y+b.h+gap&&a.y+a.h+gap>b.y;}
  function labelLayout(items,bounds,obstacles=[],gap=5){
   const occupied=obstacles.map(b=>({...b})),result=[];
@@ -1069,9 +1005,8 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   const zoom=Math.max(min,Math.min(max,Math.max(camera.zoom*1.45,fitted)));
   return{...camera,x:(x0+x1)/2,y:(y0+y1)/2,zoom};
  }
- return{drillDownCamera,zoomLevel,cluster,project,anchoredZoom,markerSpacing,intersects,labelLayout};
+ return{describeMarker,drillDownCamera,zoomLevel,cluster,project,anchoredZoom,markerSpacing,intersects,labelLayout};
 });
-
 
 </script>
   <script>
@@ -1228,7 +1163,6 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
 
 </script>
   <script>
-
 /* v4.6 — continuous, original, illustrative cartography. NOT surveyed GIS, real
  * building footprints, or routing data. Fictional venues use a deliberately sparse
  * authored layout, not a business census. All geometry is compiled once and rendered offline on one canvas.
@@ -1237,7 +1171,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
 (function(root){'use strict';
  const M=root.SpotCore.MAP, project=root.SpotCore.project, features=[], labels=[];
  const palettes={
-  light:{ground:'#f0f0ed',field:'#ebece7',field2:'#f0f1ec',urban:'#f7f5f0',neighborhood:'#f4f2ed',campus:'#e9e7f1',building:'#e4dfd6',buildingEdge:'#d3d0cc',park:'#dce7de',parkLine:'#c4d8cf',water:'#c7dde5',waterLine:'#aac7d4',road:'#ffffff',edge:'#d4dcd9',minor:'#fcfbf8',highway:'#ece3f8',highwayEdge:'#d5cde8',river:'#a5c9e3',text:'#64717c',sub:'#839099',halo:'#f7f5f0',trail:'#b1cbd6'},
+  light:{ground:'#e9edf4',field:'#e4e9f2',field2:'#e7ecf4',urban:'#f0f2f8',neighborhood:'#edf0f7',campus:'#e0def5',building:'#cfd7e6',buildingEdge:'#bfc9dc',park:'#d2e2e6',parkLine:'#bcd4dc',water:'#b7d3ee',waterLine:'#9fbedf',road:'#ffffff',edge:'#d9dfec',minor:'#fafbfe',highway:'#ece3f8',highwayEdge:'#d5cde8',river:'#a5c9e3',text:'#596780',sub:'#718198',halo:'#f0f3f9',trail:'#b1cbd6'},
   dark:{ground:'#151a2a',field:'#181f30',field2:'#1b2234',urban:'#1d2437',neighborhood:'#20283b',campus:'#2a2846',building:'#323e59',buildingEdge:'#414e6c',park:'#223947',parkLine:'#2c4a5e',water:'#1d3c5c',waterLine:'#284d6d',road:'#424d68',edge:'#1c2337',minor:'#2b354c',highway:'#636081',highwayEdge:'#32324d',river:'#2c5374',text:'#b3bed8',sub:'#94a3bf',halo:'#1d2437',trail:'#436071'}
  };
  const fillTypes=new Set(['field','field2','urban','neighborhood','campus','building','park','water']);
@@ -1438,9 +1372,8 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
    ctx.lineWidth=3;ctx.strokeStyle=palette.halo;ctx.strokeText(text,0,0);ctx.fillStyle=['road','park','water','highway'].includes(l.kind)?palette.sub:palette.text;ctx.fillText(text,0,0);ctx.restore();
   }
  }
- root.SpotCartography={attach,draw,invalidate(){lastDraw=null;},featureCount:features.length,getLabels:()=>lastLabels.map(b=>({...b})),getStats:()=>({...lastStats}),style:'map-first-heat-v4.8'};
+ root.SpotCartography={attach,draw,invalidate(){lastDraw=null;},featureCount:features.length,getLabels:()=>lastLabels.map(b=>({...b})),getStats:()=>({...lastStats}),style:'spaced-activity-v4.6'};
 })(window);
-
 
 </script>
   <script>
@@ -1470,47 +1403,25 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
 
 </script>
   <script>
-/* Spot v4.8: a display scale for sample APP PARTICIPATION, never occupancy.
- * Fixed bands do not re-normalize when the viewport, category, or friends change.
- * Groups sum fresh observations; unknown members stay explicitly unknown.
- * No timers, network calls, DOM filters, GPS, or animations in the heat renderer.
- */
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.SpotHeat=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
- 'use strict';
- const stops=[[0,[149,133,235]],[.34,[181,126,213]],[.68,[225,132,151]],[1,[245,109,91]]];
- function describe(activities){
-  const fresh=activities.filter(a=>a&&a.hasData&&Number.isFinite(a.count)&&a.count>0);
-  const count=fresh.reduce((s,a)=>s+Math.floor(a.count),0),known=count>0;
-  if(!known)return {known:false,count:0,level:'unknown',label:'No recent data',rgb:[137,145,164],intensity:0,radius:32,partial:false};
-  const intensity=Math.min(1,Math.sqrt(count/80)),level=count<=7?'light':count<=20?'moderate':count<=40?'elevated':'high';
-  const label={light:'Light app activity',moderate:'Moderate app activity',elevated:'More app activity',high:'High app activity'}[level];
-  let rgb=stops.at(-1)[1];for(let i=1;i<stops.length;i++){if(intensity<=stops[i][0]){const [lo,a]=stops[i-1],[hi,b]=stops[i],t=(intensity-lo)/(hi-lo);rgb=a.map((v,k)=>Math.round(v+(b[k]-v)*t));break;}}
-  return {known,count,level,label,rgb,intensity,radius:39+intensity*35,partial:fresh.length<activities.length};
- }
- let canvas,ctx,last='';
- function attach(el){canvas=el;ctx=el?.getContext('2d');last='';}
- function draw(items,d,dark){
-  if(!ctx||!d.width||!d.height)return;
-  const ratio=Math.min(globalThis.devicePixelRatio||1,2),w=Math.round(d.width*ratio),h=Math.round(d.height*ratio);
-  const key=[w,h,dark,...items.map(i=>[Math.round(i.x),Math.round(i.y),i.heat.count,i.selected,i.grouped].join('/'))].join(':');if(key===last)return;last=key;
-  if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;canvas.style.width=d.width+'px';canvas.style.height=d.height+'px';}
-  ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,d.width,d.height);
-  for(const item of items){const {x,y,heat,selected,grouped}=item;
-   const radius=heat.known?heat.radius+(grouped?8:0):32;
-   if(heat.known){const rgb=heat.rgb.join(','),g=ctx.createRadialGradient(x,y,3,x,y,radius);
-    g.addColorStop(0,`rgba(${rgb},${dark?.44:.31})`);g.addColorStop(.4,`rgba(${rgb},${dark?.31:.22})`);g.addColorStop(.72,`rgba(${rgb},${dark?.14:.10})`);g.addColorStop(1,`rgba(${rgb},0)`);
-    ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle=`rgba(${rgb},${dark?.34:.28})`;ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,radius*.57,0,Math.PI*2);ctx.stroke();
-   }else{ctx.beginPath();ctx.arc(x,y,25,0,Math.PI*2);ctx.setLineDash([3,5]);ctx.lineWidth=1.3;ctx.strokeStyle=dark?'#8390ac88':'#8c96aa99';ctx.stroke();ctx.setLineDash([]);}
-   if(selected){ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.strokeStyle=dark?'#e3dfff':'#6958b9';ctx.lineWidth=2;ctx.stroke();}
+/* Pure category header. No venue-name fragment, occupancy claim, or remote asset. */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.SpotVenueCover = factory();
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const coffee = '<path d="M27 40h39v17c0 12-8 21-20 21S27 69 27 57V40Z" class="cover-cup-fill"/><path d="M66 43h5a11 11 0 0 1 0 22h-7M25 81h47"/><path d="M38 30c-6-8 6-9 0-17M51 30c-6-8 6-9 0-17" class="cover-steam"/>';
+  const glass = '<path d="M26 34h49L51 61 26 34Z" class="cover-glass-fill"/><path d="m30 40 21 23 21-23M51 63v19M38 83h27M62 34l9-18"/><path d="M65 18a12 12 0 0 1 17 16" class="cover-steam"/>';
+  function render(venue) {
+    const cafe = venue?.category === 'cafe';
+    const category = cafe ? 'cafe' : 'club';
+    const label = cafe ? 'Café' : 'Bar / club';
+    return `<header class="detail-cover venue-cover venue-cover--${category}" data-cover-category="${category}"><div class="venue-cover-copy"><span class="venue-cover-eyebrow">PLACE OVERVIEW</span><span class="venue-cover-type">${label}</span></div><div class="venue-cover-art" aria-hidden="true"><svg viewBox="0 0 104 104" fill="none" focusable="false"><circle cx="52" cy="52" r="47" class="cover-disc"/><circle cx="52" cy="52" r="39" class="cover-orbit"/><g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${cafe ? coffee : glass}</g><circle cx="88" cy="23" r="4" class="cover-dot"/></svg></div><button class="icon-button venue-cover-close" data-action="close-detail" aria-label="Close place details"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>`;
   }
- }
- return {describe,attach,draw,invalidate(){last='';}};
+  return Object.freeze({ render });
 });
 
 </script>
   <script>
-
 /* Spot: intentionally offline, fictional-data interaction prototype.
  * No analytics, GPS access, real accounts, or live location sharing. The illustrative regional map is bundled; no tile or API requests.
  */
@@ -1564,13 +1475,12 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   function icon(name, size = 20) { return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ICONS.pin}</svg>`; }
   function avatar(p, size = '') { return `<span class="avatar ${escape(p.color)} ${size}" aria-hidden="true">${escape(p.initials)}</span>`; }
   function avatars(people, size = 'sm') { return `<span class="mini-avatars" aria-hidden="true">${people.slice(0, 3).map(p => avatar(p, size)).join('')}</span>`; }
-  function friendNames(people) { return people.slice(0,2).map(p=>p.name.split(' ')[0]).join(' & ') + (people.length>2?' & friends here':' here'); }
+  function friendNames(people) { return people.length <= 2 ? people.map(p => p.name.split(' ')[0]).join(' & ') + ' here' : people[0].name.split(' ')[0] + ' + ' + (people.length - 1) + ' friends here'; }
   function monogram(v) { return `<span class="place-monogram ${v.theme}" aria-hidden="true">${v.mark}</span>`; }
   const storageKey = 'spot-prototype-lincoln-v2';
   let storageAvailable = true, saved;
   try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) { storageAvailable = false; }
   let state = C.initialState(saved);
-  state.selected=null;state.mobileView='map';let resultsOpen=false;
   let snapshot = C.makeSnapshot();
   let timeOffset = 0;
   let modalType = null, modalPerson = null, detailId = null, modalReturnFocus = null, detailReturnFocus = null;
@@ -1589,7 +1499,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     $('#desktopNavigation').innerHTML = navMarkup(); $('#mobileNavigation').innerHTML = navMarkup(); $('.rail-bottom').innerHTML = icon('info', 19);
     const enabled=state.sharing||state.friendSharing;
     const status = $('#privacyStatus'); status.classList.toggle('enabled', enabled);
-    const label=state.sharing&&state.friendSharing?'Activity + friends · demo':state.friendSharing?'Friends only · demo':state.sharing?'Activity only · demo':'You’re not sharing';
+    const label=state.sharing&&state.friendSharing?'Count + friends · demo':state.friendSharing?'Friends only · demo':state.sharing?'Count only · demo':'You’re not sharing';
     status.innerHTML = `${icon(enabled ? 'shield' : 'eyeOff', 16)}<span class="status-text">${label}</span>`;
     status.setAttribute('aria-label', label+'. Open privacy settings');
   }
@@ -1598,51 +1508,53 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     if (!['explore', 'friends', 'privacy'].includes(screen)) return;
     clearTimeout(searchFitTimer);searchIsOpen=false;
     gestureBinding?.destroy();gestureBinding=null;
-    state.screen = screen; resultsOpen=false; detailId = null; closeModal(false); closeDetail(false);
+    state.screen = screen; detailId = null; closeModal(false); closeDetail(false);
     if (location.hash !== '#' + screen) { try { history.replaceState(null, '', '#' + screen); } catch (_) {} }
     render(); if (focus) $('#main').focus({ preventScroll: true }); window.scrollTo(0, 0);
   }
   function render() {
-    document.body.dataset.screen=state.screen;
     renderNav();
     if(state.screen!=='explore')document.body.classList.remove('has-compare');
     if (state.screen === 'explore') renderExplore();
     else if (state.screen === 'friends') renderFriends();
     else renderPrivacy();
   }
-
   function filterMarkup() {
-    return [['all','','All'],['cafe','coffee','Cafés'],['club','glass','Bars & clubs']].map(([value,symbol,text])=>`<button class="filter-chip ${state.category===value?'active':''}" data-category="${value}" aria-pressed="${state.category===value}">${symbol?icon(symbol,14):''}${text}</button>`).join('')+`<button class="filter-chip ${state.savedOnly?'active':''}" data-action="saved-filter" aria-pressed="${state.savedOnly}">${icon('bookmark',14)} Saved</button><button class="filter-chip filter-friends ${state.friendsOnly?'active':''}" data-action="friends-filter" aria-label="Only places with friends" aria-pressed="${state.friendsOnly}">${icon('friends',15)}</button>`;
+    return [['all', '', 'All places'], ['cafe', 'coffee', 'Cafés'], ['club', 'glass', 'Bars & clubs']].map(([value, symbol, text]) => `<button class="filter-chip ${state.category === value ? 'active' : ''}" data-category="${value}" aria-pressed="${state.category === value}">${symbol ? icon(symbol, 13) : ''}${text}</button>`).join('') + `<button class="filter-chip saved-filter ${state.savedOnly ? 'active' : ''}" data-action="saved-filter" aria-pressed="${state.savedOnly}">${icon('bookmark',13)} Saved${state.savedVenues.length ? `<span class="saved-count">${state.savedVenues.length}</span>` : ''}</button><button class="mobile-friends-filter ${state.friendsOnly ? 'active' : ''}" data-action="friends-filter" aria-label="Only places with friends" aria-pressed="${state.friendsOnly}">${icon('friends', 15)}</button>`;
   }
   function friendFilterMarkup() {
     const people = activeFriends();
     return `${people.length ? avatars(people) : icon('friends', 18)}<span>${state.friendsOnly ? 'Showing places with friends' : `${people.length} ${people.length === 1 ? 'friend' : 'friends'} around Lincoln`}</span>${icon(state.friendsOnly ? 'check' : 'chevron', 13)}`;
   }
-
-  function venueGlyph(v){
-    // Original small SVGs, not a remote icon pack or Bump assets.
-    const art=v.category==='cafe'?`<ellipse cx="25" cy="40" rx="18" ry="4" fill="#bbb4df"/><path d="M36 18h4a8 8 0 0 1 0 16h-5" fill="none" stroke="#f9f5ff" stroke-width="5"/><path d="M11 17h27v13c0 7-6 11-13 11s-14-4-14-11Z" fill="#fffaf5" stroke="#847eab" stroke-width="1.1"/><ellipse cx="24.5" cy="17" rx="13.5" ry="4.8" fill="#6c433c" stroke="#fffaf5" stroke-width="2.4"/><path d="M18 9c-3-4 3-4 0-8m9 8c-3-4 3-4 0-8" fill="none" stroke="#938ab6" stroke-width="1.6" stroke-linecap="round"/>`:`<path d="M11 13h29L25.5 31Z" fill="#fbe6ed" stroke="#968399" stroke-width="1.2"/><path d="m14 17 11.5 13L37 17Z" fill="#e58e9a"/><path d="M25.5 30v13m-9 0h18" stroke="#8e7c9e" stroke-width="2" stroke-linecap="round"/><path d="m29 18 9-17" stroke="#857698" stroke-width="1.5"/><circle cx="37" cy="10" r="6" fill="#d0dbaa" stroke="#fffaf5" stroke-width="1.4"/><path d="m37 5 0 10m-4-8 8 5" stroke="#9ba578" stroke-width="1"/>`;
-    return `<svg class="venue-glyph" width="42" height="42" viewBox="0 0 52 50" fill="none" aria-hidden="true">${art}</svg>`;
-  }
-  function heatBadge(a){const h=SpotHeat.describe([a]);return `<span class="heat-status heat-${h.level}"><i aria-hidden="true" style="--heat-rgb:${h.rgb.join(',')}"></i>${h.label}</span>`;}
   function cardMarkup(v) {
-    const a=C.activity(v,state,snapshot,now()),h=SpotHeat.describe([a]);
-    return `<div class="search-place-row"><button class="search-place" data-venue="${v.id}" data-card="${v.id}" aria-label="${escape(v.name)}. ${h.label}. Show on map.">${venueGlyph(v)}<span><strong>${escape(v.name)}</strong><small>${escape(v.area)} · ${v.category==='cafe'?'Café':'Bar / club'}</small></span><i class="result-heat-dot heat-${h.level}" style="--heat-rgb:${h.rgb.join(',')}" aria-label="${h.label}"></i>${icon('arrow',14)}</button>${saveButton(v.id,true)}</div>`;
+    const a = C.activity(v, state, snapshot, now());
+    const friendsText = a.friends.length ? friendNames(a.friends) : (a.hasData ? `${C.timeLabel(a.latest, now())} · sample activity` : 'Activity unknown');
+    return `<div class="place-row"><button class="place-card ${state.selected === v.id ? 'selected' : ''}" data-venue="${v.id}" data-card="${v.id}" aria-label="${escape(v.name)}, ${a.hasData ? a.count + ' participating app users in demo' : 'no recent app activity'}. View details.">
+      ${monogram(v)}<span class="place-card-info"><h3>${escape(v.name)}</h3><span class="place-meta">${v.category === 'cafe' ? 'Café' : 'Bar / club'}<span>·</span>${escape(v.street)}${searchArea?`<span>·</span>${PS.distanceLabel(PS.distance(v,searchArea))}`:''}</span><span class="card-bottom ${!a.hasData ? 'no-data' : ''}">${a.friends.length ? icon('friends', 11) : (a.hasData ? '<span class="quiet-dot"></span>' : icon('clock', 10))}${friendsText}</span></span><span class="count-pill ${a.hasData ? '' : 'unknown'}">${a.hasData ? a.count : '—'}</span></button><div class="entry-tools">${saveButton(v.id,true)}${compareButton(v.id,true)}</div></div>`;
   }
-
   function renderExplore() {
-    $('#main').innerHTML=`<div class="explore-layout map-first">
+    $('#main').innerHTML = `<div class="explore-layout ${state.mobileView === 'list' ? 'list-mode' : ''}">
+      <section class="places-panel" aria-label="Explore places">
+        <div class="panel-intro"><div class="eyebrow">${icon('pin', 11)} LINCOLN & BEYOND</div><h1>Know the area.<br>Find your spot.</h1><p>A neighborhood, a campus, somewhere new.<br>Find the spots around it.</p><div class="city-stats"><span><strong>5,000</strong> demo users</span><span><strong id="presentCount">610</strong> at places</span></div></div>
+        <div class="location-search"><div class="search-wrap">${icon('search', 17)}<label class="sr-only" for="venueSearch">Search areas, landmarks, or demo places</label><input id="venueSearch" class="search-input" type="search" autocomplete="off" maxlength="100" role="combobox" aria-autocomplete="list" aria-controls="locationSuggestions" aria-expanded="false" enterkeyhint="search" placeholder="Try East Campus, Haymarket…" value="${escape(state.query)}"><button class="clear-search" data-action="clear-search" aria-label="Clear search" ${state.query ? '' : 'hidden'}>${icon('close', 14)}</button></div><div id="locationSuggestions" class="location-suggestions" role="listbox" aria-label="Jump to an area or landmark" hidden></div></div><div id="searchAreaContext" class="search-area-context" hidden></div><div id="searchAnnouncement" class="sr-only" role="status" aria-live="polite"></div>
+        <div class="filters" aria-label="Place categories">${filterMarkup()}</div>
+        <button class="friends-filter ${state.friendsOnly ? 'active' : ''}" data-action="friends-filter" aria-pressed="${state.friendsOnly}">${friendFilterMarkup()}</button>
+        <div class="compare-tray" id="compareTray" role="region" aria-label="Selected places to compare" hidden></div><div class="list-heading"><span id="placeCount"></span><span class="heading-caption">Fictional venues</span><button class="mobile-view-switch" data-action="view-map">${icon('map', 13)} Map view</button></div>
+        <div class="places-list" id="placesList"></div>
+        <div class="panel-footnote">${icon('info', 13)}<span>Fictional venues and people. Counts are app users, not total occupancy. No GPS is collected.</span></div>
+      </section>
       <section class="map-panel" aria-label="Lincoln region map with fictional establishments">
-        <div class="map-viewport" id="mapViewport" tabindex="0" aria-label="Activity map. One finger pans; two fingers pinch to zoom. Select a place or search an area."><canvas id="mapCanvas" class="map-canvas" aria-hidden="true"></canvas><canvas id="heatCanvas" class="heat-canvas" aria-hidden="true"></canvas><div class="map-pins" id="mapPins"></div><div id="searchAnchor" class="search-anchor" hidden aria-hidden="true"></div></div>
-        <section class="map-discovery" aria-label="Find a place"><div class="location-search"><div class="search-wrap">${icon('search',19)}<label class="sr-only" for="venueSearch">Search an area or place</label><input id="venueSearch" class="search-input" type="search" autocomplete="off" maxlength="100" role="combobox" aria-autocomplete="list" aria-controls="locationSuggestions" aria-expanded="false" enterkeyhint="search" placeholder="Where do you want to go?" value="${escape(state.query)}"><button class="clear-search" data-action="clear-search" aria-label="Clear search" ${state.query?'':'hidden'}>${icon('close',15)}</button></div><div id="locationSuggestions" class="location-suggestions" role="listbox" aria-label="Jump to an area or landmark" hidden></div></div><div class="filters" aria-label="Filter places">${filterMarkup()}</div><div id="searchAreaContext" class="search-area-context" hidden></div><div class="search-results" id="searchResults" hidden><div class="search-results-title"><strong id="placeCount">Places</strong><button class="icon-button" data-action="hide-results" aria-label="Hide search results">${icon('close',15)}</button></div><div class="places-list" id="placesList"></div></div></section>
-        <div id="searchAnnouncement" class="sr-only" role="status" aria-live="polite"></div>
-        <div class="map-top-tools"><div class="map-view-tabs" aria-label="Map extent"><button data-action="region" aria-pressed="false">Region</button><button data-action="city" aria-pressed="false">Lincoln</button><button data-action="downtown" aria-pressed="true">Downtown</button></div><button class="icon-button browse-places" data-action="browse-places" aria-label="Browse places" title="Browse places">${icon('list',17)}</button></div>
-        <div class="map-controls"><div class="zoom-group"><button class="icon-button" data-action="zoom-in" aria-label="Zoom in">${icon('plus',18)}</button><button class="icon-button" data-action="zoom-out" aria-label="Zoom out">${icon('minus',18)}</button></div><button class="icon-button" data-action="recenter" aria-label="Show Lincoln and surrounding places">${icon('locate',18)}</button></div>
-        <button class="heat-legend" data-action="about" aria-label="About activity colors. Lavender means less app activity; coral means more. Gray means unknown, not empty."><span class="heat-legend-title">APP ACTIVITY <span>Demo</span>${icon('info',12)}</span><span class="heat-legend-scale"><span>Less</span><i></i><span>More</span></span><span class="heat-legend-note">Not total occupancy</span></button>
-        <div id="placeActions" class="map-place-actions" hidden></div><div id="compareTray" class="compare-tray" role="region" aria-label="Selected places to compare" hidden></div>
-        <div class="map-scale" id="mapScale" aria-label="Approximate map scale"></div><div class="map-watermark">Illustrative map · Fictional places</div><div id="mapEmpty"></div><div id="ownPresence"></div>
-      </section></div>`;
-    setupMap();refreshExplore();bindPlaceSearch();
+        <div class="map-viewport" id="mapViewport" tabindex="0" aria-label="Venue map. Drag to pan, use arrow keys to move, or select a place from the list."><canvas id="mapCanvas" class="map-canvas" aria-hidden="true"></canvas><div class="map-pins" id="mapPins"></div><div id="searchAnchor" class="search-anchor" hidden aria-hidden="true"></div></div>
+        <div class="map-location">${icon('pin', 15)} Lincoln & nearby <span>Regional demo</span></div>
+        <div class="map-top-tools"><div class="map-view-tabs" aria-label="Map extent"><button data-action="region" aria-pressed="true">Region</button><button data-action="city" aria-pressed="false">Lincoln</button><button data-action="downtown" aria-pressed="false">Downtown</button></div><button class="icon-button" data-action="about" aria-label="How to read the map">${icon('info', 17)}</button><button class="mobile-view-switch" data-action="view-list">${icon('list', 14)} List</button></div>
+        <div class="map-controls"><div class="zoom-group"><button class="icon-button" data-action="zoom-in" aria-label="Zoom in">${icon('plus', 17)}</button><button class="icon-button" data-action="zoom-out" aria-label="Zoom out">${icon('minus', 17)}</button></div><button class="icon-button" data-action="recenter" aria-label="Show Lincoln and surrounding places">${icon('locate', 17)}</button></div>
+        <div class="map-legend"><span class="legend-icon">${icon('friends', 16)}</span><div><strong>People, not just pins.</strong><p>Recent app users, not total occupancy. Dot = friends.</p></div></div>
+        <div class="map-scale" id="mapScale" aria-label="Approximate map scale"></div><div class="map-watermark"><span id="mapSource">Illustrative map · Fictional spots</span></div>
+        <div class="mobile-preview" id="mobilePreview"></div><div id="mapEmpty"></div><div id="ownPresence"></div>
+      </section>
+    </div>`;
+    setupMap(); refreshExplore();
+    bindPlaceSearch();
   }
   function visiblePlaces(){
     if(searchArea)return PS.nearby(C.filteredVenues({...state,query:''},snapshot,now()),searchArea);
@@ -1661,30 +1573,30 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   function renderSuggestions(){
     const host=$('#locationSuggestions'),input=$('#venueSearch');if(!host||!input)return;
     searchSuggestions=PS.matches(state.query);searchIndex=-1;
-    if(!searchSuggestions.length){dismissSuggestions();if($('#searchResults'))$('#searchResults').hidden=!resultsOpen;drawMap();return;}
-    if($('#searchResults'))$('#searchResults').hidden=true;searchIsOpen=true;host.hidden=false;input.setAttribute('aria-expanded','true');input.removeAttribute('aria-activedescendant');
+    if(!searchSuggestions.length){dismissSuggestions();return;}
+    searchIsOpen=true;host.hidden=false;input.setAttribute('aria-expanded','true');input.removeAttribute('aria-activedescendant');
     host.innerHTML=`<div class="suggestions-heading" role="presentation">${state.query?'Jump to a real area':'Explore a real area'}</div>`+searchSuggestions.map((l,i)=>`<button id="geo-option-${i}" role="option" aria-selected="false" tabindex="-1" data-location="${l.id}"><span class="suggestion-symbol">${icon(l.kind==='campus'?'compass':'pin',17)}</span><span><strong>${escape(l.name)}</strong><small>${escape(l.subtitle)} · ${escape(l.kind)}</small></span>${icon('arrow',14)}</button>`).join('')+'<div class="suggestions-footnote" role="presentation">Real areas · nearby spots are fictional</div>';
   }
   function jumpToArea(area,explicit=false){
     if(!area)return;clearTimeout(searchFitTimer);
     if(detailId||compareOpen)closeDetail(false);
-    searchArea=area;resultsOpen=false;
+    searchArea=area;
     if(explicit){state.query=area.name;$('#venueSearch').value=area.name;}
     if(isMobile()){state.mobileView='map';$('.explore-layout').classList.remove('list-mode');dimensions=null;}
     dismissSuggestions();refreshExplore();
     const d=mapDimensions();if(d){Object.assign(camera,PS.cameraFor(area,d));camera.initialized=true;clampCamera();drawMap();}
-    $('#searchAnnouncement').textContent=`Map centered on ${area.name}. Nearby places are fictional. Colors show sample app activity.`;
+    $('#searchAnnouncement').textContent=`Map centered on ${area.name}. ${visiblePlaces().length} fictional places nearby. Counts are sample app users.`;
     if(explicit&&isMobile())$('#venueSearch').blur();
   }
   function clearArea(){
-    clearTimeout(searchFitTimer);searchArea=null;state.query='';resultsOpen=false;
+    clearTimeout(searchFitTimer);searchArea=null;state.query='';
     if($('#venueSearch'))$('#venueSearch').value='';dismissSuggestions();refreshExplore();
   }
   function bindPlaceSearch(){
     const input=$('#venueSearch');searchContext();
     input.addEventListener('input',e=>{
       clearTimeout(searchFitTimer);if(detailId||compareOpen)closeDetail(false);
-      resultsOpen=!!e.target.value.trim();state.query=e.target.value;const found=PS.exact(state.query);
+      state.query=e.target.value;const found=PS.exact(state.query);
       if(found){jumpToArea(found);return;}
       searchArea=null;refreshExplore();
       if(state.query.length>=2)renderSuggestions();else if(!state.query)renderSuggestions();else dismissSuggestions();
@@ -1702,27 +1614,39 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
       }
       if(e.key==='Enter'){
         e.preventDefault();const chosen=searchIsOpen&&searchIndex>=0?searchSuggestions[searchIndex]:PS.exact(state.query)||(searchIsOpen?searchSuggestions[0]:null);
-        if(chosen)jumpToArea(chosen,true);else{clearTimeout(searchFitTimer);dismissSuggestions();resultsOpen=false;refreshExplore();if(isMobile()){state.mobileView='map';$('.explore-layout').classList.remove('list-mode');dimensions=null;input.blur();}fitSearchResults();}
+        if(chosen)jumpToArea(chosen,true);else{clearTimeout(searchFitTimer);dismissSuggestions();if(isMobile()){state.mobileView='map';$('.explore-layout').classList.remove('list-mode');dimensions=null;input.blur();}fitSearchResults();}
       }
       if(e.key==='Tab')dismissSuggestions();
     });
   }
 
-
   function refreshExplore() {
-    if(state.screen!=='explore'||!$('#placesList'))return;
-    const places=visiblePlaces();searchContext();
-    if(state.selected&&!places.some(v=>v.id===state.selected)){state.selected=null;if(detailId)closeDetail(false);}
-    $('#placesList').innerHTML=places.length?places.map(cardMarkup).join(''):`<div class="empty-state">${icon('search',26)}<h3>${state.savedOnly?'No saved spots yet':'No matching spots'}</h3><p>${state.savedOnly?'Tap a place on the map, then the bookmark to save it.':'Try East Campus, Haymarket, or another area. All businesses here are fictional.'}</p><button class="secondary-button" data-action="clear-filters">Explore all places</button></div>`;
-    $('#placeCount').textContent=state.savedOnly?'Your saved places':searchArea?'Near '+searchArea.name:'Explore places';
-    $('.clear-search').hidden=!state.query;$('.filters').innerHTML=filterMarkup();
-    $('#searchResults').hidden=!resultsOpen||searchIsOpen;
-    $('#mapEmpty').innerHTML=places.length?'':`<div class="map-empty"><strong>${state.savedOnly?'Your usuals start here':'No matching places'}</strong><p>${state.savedOnly?'Save a spot from its map marker.':'Try another area or filter.'}</p><button class="secondary-button" data-action="clear-filters">Explore places</button></div>`;
-    $('#ownPresence').innerHTML='';renderCompareTray();updateMapData(places);
+    if (state.screen !== 'explore' || !$('#placesList')) return;
+    const places = visiblePlaces();
+    searchContext();
+    if (!places.some(v => v.id === state.selected)) state.selected = places[0]?.id || null;
+    $('#placesList').innerHTML = places.length ? places.map(cardMarkup).join('') : `<div class="empty-state">${icon(state.savedOnly?'bookmark':'search', 29)}<h3>${state.savedOnly&&!state.savedVenues.length?'Your usuals start here.':'No spots found'}</h3><p>${state.savedOnly&&!state.savedVenues.length?'Save a place with the bookmark, then find it here in a tap.':(searchArea?'No matching demo places in this area. Try changing a filter or choose All areas.':'Try a Lincoln-area landmark, neighborhood, town, or demo venue. This offline prototype does not search every address.')}</p><button class="secondary-button" data-action="clear-filters">${state.savedOnly?'Explore all places':'Clear filters'}</button></div>`;
+    $('#placeCount').textContent = `${places.length} ${places.length === 1 ? 'place' : 'places'} ${searchArea?'near '+searchArea.name:'in the region'}`;
+    $('.clear-search').hidden = !state.query;
+    $('.filters').innerHTML = filterMarkup();
+    const friendFilter = $('.friends-filter'); friendFilter.innerHTML = friendFilterMarkup(); friendFilter.classList.toggle('active', state.friendsOnly); friendFilter.setAttribute('aria-pressed', String(state.friendsOnly));
+    const stats = C.populationStats(state, snapshot, now());
+    if ($('#presentCount')) $('#presentCount').textContent = stats.present.toLocaleString();
+    $('#mapEmpty').innerHTML = places.length ? '' : `<div class="map-empty"><strong>No matching places</strong><p>There’s more to explore.</p><button class="secondary-button" data-action="clear-filters">Clear filters</button></div>`;
+    const selected = C.venueById(state.selected);
+    const preview = $('#mobilePreview'); preview.classList.toggle('empty-preview', !selected);
+    if (selected) {
+      const a = C.activity(selected, state, snapshot, now());
+      preview.innerHTML = `<div class="preview-eyebrow"><span>${places.length} ${places.length === 1 ? 'place' : 'places'} ${searchArea?'near '+escape(searchArea.name):'around Lincoln'}</span><button data-action="view-list">See all ${icon('arrow', 12)}</button></div><button class="preview-card" data-venue="${selected.id}" aria-label="View ${escape(selected.name)} details"><span class="preview-top">${monogram(selected)}<span class="place-card-info"><h3>${escape(selected.name)}</h3><span class="place-meta">${selected.category === 'cafe' ? 'Café' : 'Bar / club'} · ${escape(selected.street)}</span></span><span class="count-pill ${a.hasData ? '' : 'unknown'}">${a.hasData ? a.count : '—'}</span></span><span class="preview-bottom"><span class="${a.friends.length ? 'friends-label' : ''}">${a.friends.length ? icon('friends', 12) : icon('clock', 11)}${a.friends.length ? friendNames(a.friends) : (a.hasData ? C.timeLabel(a.latest, now()) : 'Activity unknown')}</span><span>App users · demo ${icon('chevron', 12)}</span></span></button>`;
+    } else preview.innerHTML = '';
+    const own = C.activity(C.venueById('juniper'), state, snapshot, now()).own;
+    $('#ownPresence').innerHTML = own ? `<div class="friend-presence-label">${icon('shield', 12)} You’re included at Juniper · demo</div>` : '';
+    renderCompareTray();
+    updateMapData(places);
   }
-  /* Stable keyed markers, one heat canvas, and the existing pointer gesture engine. */
+  /* A single rAF frame, cached clusters, keyed pins, and a culled canvas basemap. */
   const MC=window.SpotMapCore;
-  const camera={x:C.MAP.downtown[0],y:C.MAP.downtown[1],zoom:1,initialized:false};
+  const camera={x:C.MAP.center[0],y:C.MAP.center[1],zoom:.12,initialized:false};
   let currentGroups=new Map(),mapResizeObserver,gestureBinding=null;
   let frameRequest=0,dimensions=null,mapPlaces=[],mapActivity=new Map(),mapRevision=0,groupKey='',groups=[];
   let pinNodes=new Map(),frameTimes=[],clusterBuilds=0;
@@ -1738,7 +1662,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   }
   function mapDimensions(){
     const el=$('#mapViewport');if(!el)return null;
-    if(!dimensions){const rect=el.getBoundingClientRect();dimensions={width:rect.width,height:rect.height,centerX:rect.width/2,centerY:isMobile()?Math.max(160,(rect.height+30)/2):rect.height/2,left:rect.left,top:rect.top};}
+    if(!dimensions){const rect=el.getBoundingClientRect();dimensions={width:rect.width,height:rect.height,centerX:rect.width/2,centerY:isMobile()?Math.max(95,(rect.height-130)/2):rect.height/2,left:rect.left,top:rect.top};}
     return dimensions;
   }
   function clampCamera(){camera.x=Math.max(0,Math.min(C.MAP.width,camera.x));camera.y=Math.max(0,Math.min(C.MAP.height,camera.y));camera.zoom=Math.max(.025,Math.min(8,camera.zoom));}
@@ -1746,13 +1670,13 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     gestureBinding?.destroy();mapResizeObserver?.disconnect();if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;
     const viewport=$('#mapViewport');if(!viewport)return;
     dimensions=null;pinNodes=new Map();groupKey='';
-    SpotCartography.attach($('#mapCanvas'));SpotHeat.attach($('#heatCanvas'));
-    if(!camera.initialized){camera.x=C.MAP.downtown[0];camera.y=C.MAP.downtown[1];camera.zoom=isMobile()?1:1.25;camera.scope='downtown';camera.initialized=true;}
+    SpotCartography.attach($('#mapCanvas'));
+    if(!camera.initialized)fitMap();
     mapResizeObserver=new ResizeObserver(()=>{dimensions=null;drawMap();});mapResizeObserver.observe(viewport);
     gestureBinding=SpotMapGestures.bind(viewport,{
       getCamera:()=>camera,
       getDimensions:()=>mapDimensions(),
-      setCamera:next=>{clearTimeout(searchFitTimer);dismissSuggestions();resultsOpen=false;if($('#searchResults'))$('#searchResults').hidden=true;Object.assign(camera,next);camera.scope='custom';clampCamera();drawMap();},
+      setCamera:next=>{clearTimeout(searchFitTimer);dismissSuggestions();Object.assign(camera,next);camera.scope='custom';clampCamera();drawMap();},
       onTap:(target,type)=>{
         // A completed tap may open a grouped area. Gesture recognition is
         // unchanged: drags/pinches never reach this callback.
@@ -1779,77 +1703,63 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   }
   function openCluster(key){
     const group=currentGroups.get(key),d=mapDimensions();if(!group||!d)return;
-    clearTimeout(searchFitTimer);dismissSuggestions();resultsOpen=false;if($('#searchResults'))$('#searchResults').hidden=true;closeDetail(false);
+    clearTimeout(searchFitTimer);dismissSuggestions();
     const members=group.venues.map(id=>C.venueById(id)).filter(Boolean);
     const next=MC.drillDownCamera(members,camera,d);
     Object.assign(camera,next);camera.scope='custom';clampCamera();drawMap();
     const areas=[...new Set(members.map(v=>v.area))];
-    const message=areas.length===1?`Exploring places around ${areas[0]}`:'Exploring nearby demo places';
+    const message=areas.length===1?`${areas[0]} · ${members.length} demo places`:`Exploring ${members.length} nearby demo places`;
     const announcement=$('#searchAnnouncement');if(announcement)announcement.textContent=message;
   }
   function focusMap(id,zoom){const v=C.venueById(id);if(!v)return;camera.x=v.x;camera.y=v.y;if(zoom)camera.zoom=zoom;camera.scope='custom';drawMap();}
   function drawMap(){scheduleMap();}
-
   function markerContent(g){
-    const places=g.ids.map(id=>C.venueById(id)).filter(Boolean),aa=g.ids.map(id=>mapActivity.get(id));
-    const heat=SpotHeat.describe(aa),grouped=places.length>1,selected=!grouped&&detailId===places[0].id;
-    const friends=aa.flatMap(a=>a?.friends||[]),saved=places.some(v=>state.savedVenues.includes(v.id));
-    const areas=[...new Set(places.map(v=>v.area))];
-    const nearby=[...C.MAP.areas].sort((a,b)=>Math.hypot(a.x-g.x,a.y-g.y)-Math.hypot(b.x-g.x,b.y-g.y))[0];
-    const name=grouped?(areas.length===1?areas[0]:nearby?.name||'Nearby spots'):places[0].name;
-    const subtitle=grouped?'Explore area ↗':selected?(heat.known?heat.label:'No recent data'):saved?'Saved place':friends.length?'Friends here':'';
-    const glyph=grouped?`<svg class="area-glyph" width="36" height="36" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="13" stroke="currentColor" stroke-width="1.5"/><circle cx="20" cy="20" r="6" fill="currentColor" fill-opacity=".45"/><path d="m27 10 5-1-1 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`:venueGlyph(places[0]);
-    const sub=subtitle;const friendCaption='';
-    const label=`${name}. ${grouped?'Combined ':''}${heat.label}.${heat.partial?' Some nearby activity is unknown.':''}${friends.length?' '+friendNames(friends)+'.':''}${saved?' Saved place.':''} ${grouped?'Activate to explore this area.':'Activate for map actions.'} Demo, not total occupancy.`;
-    return {heat,grouped,selected,name,subtitle:sub,friendCaption,width:Math.min(isMobile()?154:170,Math.max(88,placeNameWidth(name)+12)),cls:`heat-pin ${grouped?'cluster-pin':'venue-pin'} heat-${heat.level} ${selected?'selected':''} ${saved?'is-saved':''} ${friends.length?'has-friends':''}`,label,
-     html:`<span class="map-place-glyph">${glyph}${saved?'<span class="pin-saved" aria-hidden="true">♥</span>':friends.length?'<span class="pin-friends" aria-hidden="true"></span>':''}</span><span class="map-place-label"><strong>${escape(name)}</strong>${sub?`<small>${escape(sub)}</small>`:''}${friendCaption?`<small class="map-friend-caption">${escape(friendCaption)}</small>`:''}</span>`};
-  }
-  function mapChrome(d){
-    const map=$('#mapViewport').getBoundingClientRect(),out=[];
-    for(const sel of ['.map-discovery','.map-top-tools','.map-controls','.heat-legend','#compareTray','#placeActions']){
-      const el=$(sel);if(!el||el.hidden||!el.getClientRects().length)continue;
-      const r=el.getBoundingClientRect();if(r.width&&r.height)out.push({x:r.left-map.left-5,y:r.top-map.top-5,w:r.width+10,h:r.height+10});
-    }return out;
-  }
-  function positionActions(d){
-    const host=$('#placeActions');if(!host||!detailId){if(host)host.hidden=true;return;}
-    const v=C.venueById(detailId),p=MC.project(v,camera,d);
-    if(p.x<24||p.x>d.width-24||p.y<145||p.y>d.height-64){host.hidden=true;return;}
-    host.hidden=false;host.style.left=Math.max(12,Math.min(d.width-204,p.x-96))+'px';host.style.top=Math.max(156,Math.min(d.height-85,p.y+32))+'px';
+    const places=g.ids.map(id=>C.venueById(id)).filter(Boolean);
+    const aa=g.ids.map(id=>mapActivity.get(id)||{count:0,hasData:false,friends:[]});
+    const model=MC.describeMarker(places,aa);
+    const friends=aa.flatMap(a=>a.friends||[]),saved=g.ids.some(id=>state.savedVenues.includes(id));
+    const selected=g.ids.length===1&&state.selected===g.ids[0];
+    const markerStatus=friends.length?'<span class="marker-presence" aria-hidden="true"></span>':saved?`<span class="marker-saved" aria-hidden="true">${icon('bookmark',10)}</span>`:'';
+    const glyph=model.grouped?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>':icon(places[0].category==='cafe'?'coffee':'glass',16);
+    const width=model.grouped?154:Math.min(180,Math.max(144,placeNameWidth(model.heading)+52));
+    const label=model.label+(friends.length?` ${friends.length} friends sharing here.`:'')+(saved?' Saved place.':'');
+    return {cls:`${model.grouped?'cluster-pin':'venue-pin'} activity-marker ${selected?'selected':''} ${model.known?'':'unknown'} ${friends.length?'has-friends':''} ${saved?'is-saved':''}`,
+      count:model.count,width,label,
+      html:`<span class="activity-marker-card ${model.grouped?'is-area':'is-place'}"><span class="activity-marker-symbol ${model.grouped?'area-symbol':places[0].category}">${glyph}</span><span class="activity-marker-copy"><span class="activity-marker-title">${escape(model.heading)}</span><span class="activity-marker-count">${icon(model.known?'person':'clock',11)}<span>${escape(model.countText)}</span></span></span>${model.grouped?'<span class="activity-marker-jump" aria-hidden="true">↗</span>':''}${markerStatus}</span>`};
   }
   function drawMapNow(){
     const start=performance.now(),d=mapDimensions(),layer=$('#mapPins');if(!d||!layer||state.screen!=='explore')return;
     const mobile=isMobile(),spacing=MC.markerSpacing(camera.zoom,mobile);
-    positionActions(d);const chrome=mapChrome(d),areaObstacles=[];
-    const anchor=$('#searchAnchor');if(anchor){anchor.hidden=!searchArea;if(searchArea){const p=MC.project(searchArea,camera,d);anchor.style.transform=`translate3d(${Math.round(p.x)}px,${Math.round(p.y)}px,0)`;if(anchor.dataset.area!==searchArea.id){anchor.innerHTML=`<span class="anchor-ring"></span><span class="anchor-caption">${escape(searchArea.name)}</span>`;anchor.dataset.area=searchArea.id;}areaObstacles.push({x:p.x-70,y:p.y-43,w:140,h:56});}}
-    const key=[mapRevision,MC.zoomLevel(camera.zoom),detailId,mobile,spacing].join(':');
-    if(groupKey!==key){groups=MC.cluster(mapPlaces,camera.zoom,detailId,spacing);groupKey=key;clusterBuilds++;}
-    currentGroups=new Map();const needed=new Set(),items=[],heatItems=[],glyphBoxes=[];
-    for(const g of groups){const p=MC.project(g,camera,d);if(p.x< -110||p.y< -110||p.x>d.width+110||p.y>d.height+110)continue;
+    const areaObstacles=[];const anchor=$('#searchAnchor');if(anchor){anchor.hidden=!searchArea;if(searchArea){const ap=MC.project(searchArea,camera,d);anchor.style.transform=`translate3d(${Math.round(ap.x)}px,${Math.round(ap.y)}px,0)`;if(anchor.dataset.area!==searchArea.id){anchor.innerHTML=`<span class="anchor-ring"></span><span class="anchor-caption">${escape(searchArea.name)}</span>`;anchor.dataset.area=searchArea.id;}areaObstacles.push({x:ap.x-8,y:ap.y-8,w:16,h:16},{x:ap.x-84,y:ap.y-40,w:168,h:24});}}
+    const key=[mapRevision,MC.zoomLevel(camera.zoom),camera.zoom>=1?state.selected:null,mobile,spacing].join(':');
+    if(groupKey!==key){groups=MC.cluster(mapPlaces,camera.zoom,camera.zoom>=1?state.selected:null,spacing);groupKey=key;clusterBuilds++;}
+    currentGroups=new Map();const needed=new Set(),pinBoxes=[],labelCandidates=[];
+    for(const g of groups){const p=MC.project(g,camera,d);if(p.x< -105||p.y< -65||p.x>d.width+105||p.y>d.height+80)continue;
       needed.add(g.key);if(g.ids.length>1)currentGroups.set(g.key,{x:g.x,y:g.y,venues:g.ids});
-      let node=pinNodes.get(g.key);if(!node){node=document.createElement('button');node.type='button';node.style.left='0';node.style.top='0';pinNodes.set(g.key,node);layer.appendChild(node);}
-      const m=markerContent(g),version=key+':'+g.ids.join(',');
-      if(node.dataset.version!==version){node.className=m.cls;node.innerHTML=m.html;node.setAttribute('aria-label',m.label);node.setAttribute('aria-pressed',String(m.selected));node.title=m.label;node.dataset.members=g.ids.join(',');node.dataset.version=version;node.dataset.heat=m.heat.level;node.style.setProperty('--heat-rgb',m.heat.rgb.join(','));
-       if(m.grouped){node.dataset.cluster=g.key;delete node.dataset.pin;}else{node.dataset.pin=g.ids[0];delete node.dataset.cluster;}}
-      node.style.transform=`translate3d(${Math.round(p.x)}px,${Math.round(p.y)}px,0) translate(-50%,-50%)`;node.classList.remove('label-visible');
-      const glyph={x:p.x-23,y:p.y-23,w:46,h:46};
-      const occluded=chrome.some(o=>MC.intersects(glyph,o))||areaObstacles.some(o=>MC.intersects(glyph,o));
-      node.classList.toggle('occluded',occluded);node.tabIndex=occluded?-1:0;
-      if(!occluded)heatItems.push({x:p.x,y:p.y,heat:m.heat,selected:m.selected,grouped:m.grouped});glyphBoxes.push(glyph);
-      items.push({g,p,m,node,occluded,priority:m.selected?0:state.savedVenues.some(id=>g.ids.includes(id))?1:m.grouped?3:2});
+      let node=pinNodes.get(g.key);
+      if(!node){node=document.createElement('button');node.type='button';node.style.left='0';node.style.top='0';pinNodes.set(g.key,node);layer.appendChild(node);}
+      const version=key+':'+g.ids.join(',');
+      if(node.dataset.version!==version){const m=markerContent(g);node.className=m.cls;node.innerHTML=m.html;node.setAttribute('aria-label',m.label);node.title=m.label;node.dataset.count=m.count;node.dataset.members=g.ids.join(',');node.dataset.version=version;node.dataset.width=m.width;node.style.setProperty('--marker-width',m.width+'px');
+        if(g.ids.length>1){node.dataset.cluster=g.key;delete node.dataset.pin;}else{node.dataset.pin=g.ids[0];delete node.dataset.cluster;}}
+      node.style.transform=`translate3d(${Math.round(p.x)}px,${Math.round(p.y)}px,0) translate(-50%,-50%)`;
+      const w=Number(node.dataset.width),selected=g.ids.length===1&&g.ids[0]===state.selected;
+      pinBoxes.push({x:p.x-w/2-3,y:p.y-27,w:w+6,h:57});
+      // Names and counts now live inside one readable card; no duplicate
+      // floating name is allowed to collide with neighboring cards or roads.
+
     }
     for(const [key,node]of pinNodes){if(!needed.has(key)){node.remove();pinNodes.delete(key);}}
-    const occupied=[...glyphBoxes,...chrome,...areaObstacles],labelBoxes=[];
-    for(const {p,m,node,priority,occluded}of items.sort((a,b)=>a.priority-b.priority||a.g.key.localeCompare(b.g.key))){
-      if(occluded)continue;
-      const w=m.width,h=m.selected?(m.name.length>19?58:44):m.subtitle?(m.name.length>19?57:43):(m.name.length>19?40:25);
-      const candidates=[{x:p.x-w/2,y:p.y-29-h,w,h},{x:p.x-w/2,y:p.y+28,w,h},{x:p.x+31,y:p.y-h/2,w,h},{x:p.x-31-w,y:p.y-h/2,w,h}];
-      if(priority===0)for(const shift of [-35,35,-55,55])candidates.push({x:p.x-w/2+shift,y:p.y-36-h,w,h});
-      const b=candidates.find(b=>b.x>8&&b.y>7&&b.x+b.w<d.width-8&&b.y+b.h<d.height-20&&!occupied.some(o=>MC.intersects(b,o,5)));
-      if(b){occupied.push(b);labelBoxes.push(b);node.classList.add('label-visible');node.style.setProperty('--label-x',(b.x-p.x+23)+'px');node.style.setProperty('--label-y',(b.y-p.y+23)+'px');node.style.setProperty('--label-width',w+'px');}
+    // Labels have their own collision pass. Names emerge with zoom instead of
+    // stacking over other pins and road names. Nothing is removed from search.
+    const chrome=[{x:0,y:0,w:d.width,h:60}];
+    if(mobile)chrome.push({x:0,y:d.height-182,w:d.width,h:182});
+    else chrome.push({x:0,y:d.height-155,w:330,h:155});
+    const layout=MC.labelLayout(labelCandidates,{x:10,y:62,w:Math.max(0,d.width-20),h:Math.max(0,d.height-(mobile?254:96))},[...pinBoxes,...chrome,...areaObstacles]);
+    for(const l of layout){const node=pinNodes.get(l.key),candidate=labelCandidates.find(c=>c.key===l.key);if(!node||!candidate)continue;
+      node.classList.add('label-visible');node.style.setProperty('--label-x',(l.x-candidate.x+candidate.pinWidth/2)+'px');node.style.setProperty('--label-y',(l.y-candidate.y+22)+'px');node.style.setProperty('--label-width',l.w+'px');
     }
-    SpotCartography.draw(camera,d,[...glyphBoxes,...labelBoxes,...chrome,...areaObstacles]);SpotHeat.draw(heatItems,d,document.documentElement.dataset.theme==='dark');
-    const scale=$('#mapScale');if(scale){const meters=Math.cos(40.8*Math.PI/180)*40075016.686/(256*2**C.MAP.baseZoom),raw=65/camera.zoom*meters,pow=10**Math.floor(Math.log10(raw)),rounded=[1,2,5,10].find(n=>n*pow>=raw)*pow;scale.style.width=(rounded/meters*camera.zoom)+'px';scale.textContent=rounded>=1000?(rounded/1000)+' km':rounded+' m';}
+    SpotCartography.draw(camera,d,[...pinBoxes,...layout,...chrome,...areaObstacles]);
+    const scale=$('#mapScale');if(scale){const metersPerWorldPixel=Math.cos(40.8*Math.PI/180)*40075016.686/(256*2**C.MAP.baseZoom),raw=80/camera.zoom*metersPerWorldPixel,pow=10**Math.floor(Math.log10(raw)),rounded=[1,2,5,10].find(n=>n*pow>=raw)*pow;scale.style.width=(rounded/metersPerWorldPixel*camera.zoom)+'px';scale.textContent=rounded>=1000?(rounded/1000)+' km':rounded+' m';}
     $$('[data-action="region"], [data-action="city"], [data-action="downtown"]').forEach(b=>{const active=b.dataset.action===camera.scope;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
     frameTimes.push(performance.now()-start);if(frameTimes.length>240)frameTimes.shift();
   }
@@ -1867,7 +1777,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
       searchArea=null;state.query='';state.category='all';state.savedOnly=false;state.friendsOnly=false;
       if($('#venueSearch'))$('#venueSearch').value='';refreshExplore();
     }
-    state.selected=id;resultsOpen=false;if($('#searchResults'))$('#searchResults').hidden=true;dismissSuggestions();
+    state.selected=id;
     $$('[data-card]').forEach(el=>{const yes=el.dataset.card===id;el.classList.toggle('selected',yes);el.setAttribute('aria-pressed',String(yes));});
     // Do not rebuild the list or reset the map camera when tapping a visible pin.
     if(!fromPin){if(isMobile()&&state.mobileView==='list'){state.mobileView='map';$('.explore-layout').classList.remove('list-mode');dimensions=null;}
@@ -1878,26 +1788,27 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     state.category = 'all'; state.query = ''; state.friendsOnly = false; state.savedOnly = false; state.selected = id; state.mobileView = 'map';
     navigate('explore', false);focusMap(id,1.5);openDetail(id);
   }
-
   function renderDetail() {
-    // Selection reveals only lightweight map actions, not an overview card.
-    const v=C.venueById(detailId),host=$('#placeActions');if(!v||!host)return;
-    host.hidden=false;host.innerHTML=`<div class="map-action-buttons" role="toolbar" aria-label="Actions for ${escape(v.name)}">${saveButton(v.id,true)}${compareButton(v.id,true)}<button class="entry-tool" data-action="share-place" data-id="${v.id}" aria-label="Share ${escape(v.name)}" title="Share place">${icon('share',17)}</button><button class="entry-tool" data-action="directions" data-id="${v.id}" aria-label="Directions preview for ${escape(v.name)}" title="Directions preview">${icon('directions',18)}</button><button class="entry-tool" data-action="place-history" data-id="${v.id}" aria-label="Sample history for ${escape(v.name)}" title="Sample activity history">${icon('clock',17)}</button></div>`;
-    drawMap();
+    const v=C.venueById(detailId); if(!v)return;
+    const old=$('.detail-card'), expanded=!!old?.classList.contains('expanded'), scroll=old?.scrollTop||0;
+    const a=C.activity(v,state,snapshot,now());
+    $('#detailHost').innerHTML=`<section class="detail-card ${expanded?'expanded':''}" role="region" aria-labelledby="detailTitle" tabindex="-1">${window.SpotVenueCover.render(v)}<div class="detail-content"><p class="detail-category">${icon('pin',11)} ${escape(v.area)}</p><h2 id="detailTitle">${escape(v.name)}</h2><div class="spot-toolbar">${saveButton(v.id)}${compareButton(v.id)}<button class="place-action" data-action="share-place" data-id="${v.id}">${icon('share',15)}<span>Share</span></button><button class="place-action" data-action="directions" data-id="${v.id}" aria-label="Preview directions to ${escape(v.name)}">${icon('directions',15)}<span>Directions</span></button></div><div class="activity-box ${a.hasData?'':'unknown'}"><div class="activity-top"><span class="activity-number">${a.hasData?a.count:'—'}</span><div class="activity-text"><strong>${a.hasData?'participating app '+(a.count===1?'user':'users'):'No recent app activity'}</strong><span>${a.hasData?C.timeLabel(a.latest,now())+' · demo data':'Current activity is unknown'}</span></div></div><p>${a.hasData?'A sample of app users, not everyone inside. This doesn’t tell us whether seats are available.':'No recent activity does not mean this place is empty. Visitors may not use the app.'}</p>${a.own?`<span class="you-label">${icon('check',12)} Your count contribution is included once.</span>`:''}</div><button class="detail-expand" data-action="expand-detail" aria-expanded="${expanded}">${expanded?'Less detail':'More details'} ${icon('chevron',12)}</button><p class="detail-description">${escape(v.description)}</p>${timelineMarkup(v)}<div class="detail-section"><h3>Friends here <span>Sharing with you</span></h3>${a.friends.length?a.friends.map(p=>`<div class="detail-friend">${avatar(p,'sm')}<strong>${escape(p.name)}</strong><span>In this demo</span></div>`).join(''):'<p class="no-friends-text">No friends are sharing this place right now.</p>'}</div><div class="detail-address">${icon('pin',15)} ${escape(v.address)} · approximate pin</div><div class="detail-actions"><button class="secondary-button" data-action="show-on-map" data-id="${v.id}">${icon('map',15)} See on map</button><button class="secondary-button" data-screen="friends">${icon('friends',15)} Friends</button></div><p class="detail-footer">Fictional venue · Not a real business listing</p></div></section>`;
+    $('.detail-card').scrollTop=scroll;
   }
-  function setBackgroundInert(value) { $('.app-shell').inert=value;$('.skip-link').inert=value;$('#detailHost').inert=value; }
-  function openDetail(id){
-    closeModal(false);compareOpen=false;document.body.classList.remove('has-comparison','has-detail');$('#detailHost').innerHTML='';detailReturnFocus=document.activeElement;detailId=id;state.selected=id;renderDetail();renderCompareTray();
-    try{history.replaceState(null,'','#place/'+encodeURIComponent(id));}catch(_){}
-    setBackgroundInert(false);document.body.style.overflow='';
-    const v=C.venueById(id),h=SpotHeat.describe([C.activity(v,state,snapshot,now())]);$('#searchAnnouncement').textContent=`${v.name}. ${h.label}. Save, compare, share, directions preview, and history actions are below the map marker.`;
+  function setBackgroundInert(value) { $('.app-shell').inert = value; $('.skip-link').inert = value; $('#detailHost').inert=value; }
+  function openDetail(id) {
+    closeModal(false); compareOpen=false;document.body.classList.remove('has-comparison'); detailReturnFocus=document.activeElement;detailId=id;renderDetail();renderCompareTray();
+    try { history.replaceState(null,'','#place/'+encodeURIComponent(id)); } catch (_) {}
+    document.body.classList.add('has-detail');setBackgroundInert(false);document.body.style.overflow='';
+    // Non-modal: no focus trap, backdrop, or inert app. Search and pins stay active.
+    if(!isMobile())$('.detail-card').focus({preventScroll:true});
   }
   function restoreFocus(element, fallback) {
     if (element && element.isConnected && typeof element.focus === 'function') element.focus({ preventScroll: true });
     else if (fallback) fallback.focus({ preventScroll: true });
   }
   function closeDetail(focus = true) {
-    const hadDetail=!!detailId||compareOpen;detailId=null;state.selected=null;compareOpen=false;$('#detailHost').innerHTML='';if($('#placeActions')){$('#placeActions').hidden=true;$('#placeActions').innerHTML='';}drawMap();document.body.classList.remove('has-detail','has-comparison');
+    const hadDetail=!!detailId||compareOpen;detailId=null;compareOpen=false;$('#detailHost').innerHTML='';document.body.classList.remove('has-detail','has-comparison');
     if(C.parsePlaceHash(location.hash))try{history.replaceState(null,'','#explore');}catch(_){}
     renderCompareTray();
     if (!modalType) { setBackgroundInert(false); document.body.style.overflow = ''; }
@@ -1909,7 +1820,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     return [['all','All friends',stats.friends],['around','Around now',stats.friendsPresent],['requests','Requests',stats.requests]].map(([id,title,count])=>`<button class="friend-tab ${friendsTab===id?'active':''}" data-friends-tab="${id}" aria-pressed="${friendsTab===id}">${title}<span>${count}</span></button>`).join('');
   }
   function renderFriends() {
-    $('#main').innerHTML=`<section class="content-page friends-page"><div class="page-heading"><div><div class="eyebrow">YOUR LINCOLN CIRCLE</div><h1>Your people.</h1><p>A familiar face at your next favorite place.</p></div><button class="primary-button" data-action="add-friend">${icon('userPlus',15)} Add friend</button></div><div class="friend-tabs" id="friendTabs" aria-label="Filter friends">${friendsTabMarkup()}</div><div class="friend-search search-wrap">${icon('search',17)}<label class="sr-only" for="friendsListSearch">Search your friends or their shared places</label><input id="friendsListSearch" class="search-input" type="search" autocomplete="off" maxlength="100" placeholder="Search a name, place, or area…" value="${escape(friendsQuery)}"></div><div class="friend-page-grid"><div><div class="friend-results-caption" id="friendResultsCount"></div><div class="friends-cards-grid" id="friendsCards"></div><div id="relationshipExtras"></div></div><aside><div class="friend-summary"><div class="mini-avatars">${activeFriends().slice(0,4).map(p=>avatar(p,'sm')).join('')}</div><h3>${activeFriends().length} friends around Lincoln.</h3><p>See their shared spots, then tap a place to find it on the map.</p><button class="text-button" data-friends-tab="around">See who’s around ${icon('arrow',13)}</button></div><div class="friend-note">${icon('shield',22)}<h3>Friends, not followers.</h3><p>Outside your friends, people see a venue’s activity—not your name or a personal pin.</p></div><div class="friend-note">${icon('info',19)}<h3>All familiar faces are fictional.</h3><p>60 sample friends and 6 requests are included to try a larger network. Nothing is shared with another person.</p></div></aside></div></section>`;
+    $('#main').innerHTML=`<section class="content-page friends-page"><div class="page-heading"><div><div class="eyebrow">YOUR LINCOLN CIRCLE</div><h1>Your people.</h1><p>A familiar face at your next favorite place.</p></div><button class="primary-button" data-action="add-friend">${icon('userPlus',15)} Add friend</button></div><div class="friend-tabs" id="friendTabs" aria-label="Filter friends">${friendsTabMarkup()}</div><div class="friend-search search-wrap">${icon('search',17)}<label class="sr-only" for="friendsListSearch">Search your friends or their shared places</label><input id="friendsListSearch" class="search-input" type="search" autocomplete="off" maxlength="100" placeholder="Search a name, place, or area…" value="${escape(friendsQuery)}"></div><div class="friend-page-grid"><div><div class="friend-results-caption" id="friendResultsCount"></div><div class="friends-cards-grid" id="friendsCards"></div><div id="relationshipExtras"></div></div><aside><div class="friend-summary"><div class="mini-avatars">${activeFriends().slice(0,4).map(p=>avatar(p,'sm')).join('')}</div><h3>${activeFriends().length} friends around Lincoln.</h3><p>See their shared spots, then tap a place to find it on the map.</p><button class="text-button" data-friends-tab="around">See who’s around ${icon('arrow',13)}</button></div><div class="friend-note">${icon('shield',22)}<h3>Friends, not followers.</h3><p>Outside your friends, people see a venue’s count—not your name or a personal pin.</p></div><div class="friend-note">${icon('info',19)}<h3>All familiar faces are fictional.</h3><p>60 sample friends and 6 requests are included to try a larger network. Nothing is shared with another person.</p></div></aside></div></section>`;
     $('#friendsListSearch').addEventListener('input',e=>{friendsQuery=e.target.value;refreshFriendCards();});
     refreshFriendCards();
   }
@@ -1931,7 +1842,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   function renderPrivacy() {
     const visibility=C.ownVisibility(state,snapshot,now()), enabled=state.sharing||state.friendSharing;
     const title=!enabled?'You’re not sharing your location.':state.sharing&&state.friendSharing?'Sharing on your terms.':state.sharing?'A count, not your name.':'Visible only to selected friends.';
-    $('#main').innerHTML=`<section class="content-page privacy-page"><div class="page-heading"><div><div class="eyebrow">ALWAYS YOUR CALL</div><h1>Your presence. Your choice.</h1><p>Two separate choices. Nothing shared by default.</p></div><button class="secondary-button pause-all" data-action="pause-all" ${!enabled?'disabled':''}>${icon('eyeOff',15)} Pause all sharing</button></div><div class="privacy-banner"><span class="banner-icon">${icon(enabled?'shield':'eyeOff',23)}</span><div><h2>${title}</h2><p>These are simulated settings. Your device location is never accessed.</p></div></div><div class="privacy-settings-grid"><div class="settings-card"><div class="setting-row"><div><span class="setting-kicker">THE PUBLIC MAP</span><h3>Contribute to map activity</h3><p>Include your demo presence in a venue’s total. No name or individual public pin.</p></div><button class="toggle ${state.sharing?'on':''}" role="switch" aria-checked="${state.sharing}" aria-label="Contribute to map activity in this demo" data-action="toggle-sharing"></button></div><div class="setting-note">${icon('map',15)}<span>Independent of friend sharing. Turn this off without changing who can see your name.</span></div></div><div class="settings-card"><div class="setting-row"><div><span class="setting-kicker">YOUR SELECTED FRIENDS</span><h3>Share my venue with friends</h3><p>Only friends you choose can see your name at a spot. Friendship alone never enables this.</p></div><button class="toggle ${state.friendSharing?'on':''}" role="switch" aria-checked="${state.friendSharing}" aria-label="Share my venue with selected friends in this demo" data-action="toggle-friend-sharing"></button></div><div class="audience-setting"><span>${state.shareWith.length?`${state.shareWith.length} selected ${state.shareWith.length===1?'friend':'friends'}`:'No friends selected'} <small>· ${state.friendSharing?'enabled in demo':'sharing off'}</small></span><button class="text-button" data-action="choose-audience">${state.shareWith.length?'Edit friends':'Choose friends'} ${icon('chevron',13)}</button></div></div></div><section class="visibility-preview" aria-labelledby="visibilityTitle"><div class="visibility-heading"><div><div class="eyebrow">AT JUNIPER COFFEE</div><h2 id="visibilityTitle">What your settings show</h2></div><span class="sample-label">LOCAL SIMULATION</span></div><div class="visibility-columns"><div><span class="visibility-icon">${icon('map',20)}</span><h3>On the public map</h3><strong id="publicVisibility">${visibility.countIncluded?'Included in the venue count':'Your presence is not included'}</strong><p>${visibility.countIncluded?'One contribution. No public name or personal pin.':'You can still browse every place.'}</p></div><div><span class="visibility-icon">${icon('friends',20)}</span><h3>For selected friends</h3><strong id="friendVisibility">${visibility.visibleTo.length?`Your name at Juniper · ${visibility.visibleTo.length} ${visibility.visibleTo.length===1?'friend':'friends'}`:'Your venue is hidden'}</strong><p>${visibility.visibleTo.length?'Only your selected audience can see this in the intended app.':'No named venue is visible from your settings.'}</p></div></div></section><div class="privacy-rules"><div class="privacy-rule">${icon('shield',19)}<div><h3>Being visible is not an invitation.</h3><p>Friends can ask before joining. There’s no availability status to manage.</p></div></div><div class="privacy-rule">${icon('friends',19)}<div><h3>You choose each connection.</h3><p>New friends are not added to your sharing audience. Removing or blocking someone also revokes their permission to see your venue.</p></div></div><div class="privacy-rule">${icon('clock',19)}<div><h3>Fresh presence, not personal history.</h3><p>Presence expires after 15 minutes without an observation. The place timeline uses authored sample counts, never your location history.</p></div></div><div class="privacy-rule">${icon('lock',19)}<div><h3>A local prototype.</h3><p>Saved spots, appearance, and demo sharing choices stay in this browser. No GPS, analytics, live accounts, or background tracking. Sharing place info is an explicit action you control.</p></div></div></div><div class="reset-row"><p>Reset clears saved spots, comparison selections, demo friend changes, and sharing settings. Your chosen appearance is kept.</p><button class="secondary-button" data-action="confirm-reset">${icon('reset',14)} Reset demo</button></div>${storageAvailable?'':'<p class="storage-warning">Browser storage is unavailable. Changes work in this tab but may not survive closing it.</p>'}</section>`;
+    $('#main').innerHTML=`<section class="content-page privacy-page"><div class="page-heading"><div><div class="eyebrow">ALWAYS YOUR CALL</div><h1>Your presence. Your choice.</h1><p>Two separate choices. Nothing shared by default.</p></div><button class="secondary-button pause-all" data-action="pause-all" ${!enabled?'disabled':''}>${icon('eyeOff',15)} Pause all sharing</button></div><div class="privacy-banner"><span class="banner-icon">${icon(enabled?'shield':'eyeOff',23)}</span><div><h2>${title}</h2><p>These are simulated settings. Your device location is never accessed.</p></div></div><div class="privacy-settings-grid"><div class="settings-card"><div class="setting-row"><div><span class="setting-kicker">THE PUBLIC MAP</span><h3>Contribute to activity counts</h3><p>Include your demo presence in a venue’s total. No name or individual public pin.</p></div><button class="toggle ${state.sharing?'on':''}" role="switch" aria-checked="${state.sharing}" aria-label="Contribute to activity counts in this demo" data-action="toggle-sharing"></button></div><div class="setting-note">${icon('map',15)}<span>Independent of friend sharing. Turn this off without changing who can see your name.</span></div></div><div class="settings-card"><div class="setting-row"><div><span class="setting-kicker">YOUR SELECTED FRIENDS</span><h3>Share my venue with friends</h3><p>Only friends you choose can see your name at a spot. Friendship alone never enables this.</p></div><button class="toggle ${state.friendSharing?'on':''}" role="switch" aria-checked="${state.friendSharing}" aria-label="Share my venue with selected friends in this demo" data-action="toggle-friend-sharing"></button></div><div class="audience-setting"><span>${state.shareWith.length?`${state.shareWith.length} selected ${state.shareWith.length===1?'friend':'friends'}`:'No friends selected'} <small>· ${state.friendSharing?'enabled in demo':'sharing off'}</small></span><button class="text-button" data-action="choose-audience">${state.shareWith.length?'Edit friends':'Choose friends'} ${icon('chevron',13)}</button></div></div></div><section class="visibility-preview" aria-labelledby="visibilityTitle"><div class="visibility-heading"><div><div class="eyebrow">AT JUNIPER COFFEE</div><h2 id="visibilityTitle">What your settings show</h2></div><span class="sample-label">LOCAL SIMULATION</span></div><div class="visibility-columns"><div><span class="visibility-icon">${icon('map',20)}</span><h3>On the public map</h3><strong id="publicVisibility">${visibility.countIncluded?'Included in the venue count':'Your presence is not included'}</strong><p>${visibility.countIncluded?'One contribution. No public name or personal pin.':'You can still browse every place.'}</p></div><div><span class="visibility-icon">${icon('friends',20)}</span><h3>For selected friends</h3><strong id="friendVisibility">${visibility.visibleTo.length?`Your name at Juniper · ${visibility.visibleTo.length} ${visibility.visibleTo.length===1?'friend':'friends'}`:'Your venue is hidden'}</strong><p>${visibility.visibleTo.length?'Only your selected audience can see this in the intended app.':'No named venue is visible from your settings.'}</p></div></div></section><div class="privacy-rules"><div class="privacy-rule">${icon('shield',19)}<div><h3>Being visible is not an invitation.</h3><p>Friends can ask before joining. There’s no availability status to manage.</p></div></div><div class="privacy-rule">${icon('friends',19)}<div><h3>You choose each connection.</h3><p>New friends are not added to your sharing audience. Removing or blocking someone also revokes their permission to see your venue.</p></div></div><div class="privacy-rule">${icon('clock',19)}<div><h3>Fresh presence, not personal history.</h3><p>Presence expires after 15 minutes without an observation. The place timeline uses authored sample counts, never your location history.</p></div></div><div class="privacy-rule">${icon('lock',19)}<div><h3>A local prototype.</h3><p>Saved spots, appearance, and demo sharing choices stay in this browser. No GPS, analytics, live accounts, or background tracking. Sharing place info is an explicit action you control.</p></div></div></div><div class="reset-row"><p>Reset clears saved spots, comparison selections, demo friend changes, and sharing settings. Your chosen appearance is kept.</p><button class="secondary-button" data-action="confirm-reset">${icon('reset',14)} Reset demo</button></div>${storageAvailable?'':'<p class="storage-warning">Browser storage is unavailable. Changes work in this tab but may not survive closing it.</p>'}</section>`;
   }
   function showModal(type, personId = null) {
     modalReturnFocus = document.activeElement; modalType = type; modalPerson = personId;
@@ -1945,17 +1856,17 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     if (focus && hadModal) restoreFocus(modalReturnFocus, $('#main'));
   }
   function renderModal() {
-    let content = modalType==='activity-history'?`<div class="modal-symbol">${icon('clock',24)}</div><h2>${escape(C.venueById(modalPerson)?.name||'Place')} activity</h2>${timelineMarkup(C.venueById(modalPerson))}`:extraModalContent(modalType);
+    let content = extraModalContent(modalType);
     if (content) { /* New local-only feature dialogs are built above. */ }
-    else if (modalType === 'about') content=`<div class="modal-symbol">${icon('map',25)}</div><div class="eyebrow">SPOT · MAP EDITION</div><p data-build-label>v4.8 · Build 4.8-pages-1</p><h2>Follow the activity.</h2><p>Places live directly on the map. Tap an icon for quick actions; tap a grouped area to explore it. No overview cards to close.</p><div class="modal-callout"><strong>Lavender → rose → coral</strong><br>Circles become warmer and a little broader with more recently detected app participation. A gray dashed ring means no recent data, not an empty place.</div><div class="modal-facts"><div class="modal-fact">${icon('info',17)}<span>Colors do not measure total attendance, capacity, wait times, or seats. A larger establishment may have more app users without being more crowded.</span></div><div class="modal-fact">${icon('map',17)}<span>A grouped circle combines the fresh app activity of its places. Zoom in to see individual venues. Places without recent observations stay unknown.</span></div><div class="modal-fact">${icon('shield',17)}<span>Fictional establishments and demo activity. No location collection, visit tracking, network requests, or real sharing.</span></div></div><p class="map-explanation">The same small fictional café and bar directory across Lincoln and nearby towns is retained. Search recognizes the built-in real areas, including East Campus; the businesses and building shapes are illustrative. This is not an exact street or building map.</p><button class="primary-button" data-action="close-modal" style="width:100%">Back to the map ${icon('arrow',15)}</button><details class="prototype-tools"><summary>Prototype testing tools</summary><p>Let sample observations expire or reset the local demo. Reset does not change appearance.</p><div class="button-row"><button class="secondary-button" data-action="advance-time">Advance 15 min</button><button class="secondary-button" data-action="confirm-reset">Reset demo</button></div></details>`;
-    else if (modalType === 'share') content = `<div class="modal-symbol">${icon('shield', 25)}</div><h2>Contribute to map activity?</h2><p>In this demo, switching on adds one fictional visitor—you—to Juniper Coffee.</p><div class="modal-facts"><div class="modal-fact">${icon('map', 15)}<span>People outside your friends see only the combined venue activity.</span></div><div class="modal-fact">${icon('friends', 15)}<span>Your name stays hidden from friends unless you separately choose them and enable friend sharing.</span></div><div class="modal-fact">${icon('eyeOff', 15)}<span>You can switch it off at any time. Your sample presence is removed immediately.</span></div></div><div class="modal-callout"><strong>Simulation only.</strong> This does not request GPS permission, run in the background, or share anything with another person.</div><div class="button-row"><button class="secondary-button" data-action="close-modal">Not now</button><button class="primary-button" data-action="enable-sharing">Enable activity contribution</button></div>`;
+    else if (modalType === 'about') content = `<div class="modal-symbol">${icon('map', 25)}</div><div class="eyebrow">SPOT · LINCOLN EDITION</div><p class="map-explanation" data-build-label>v4.7 · Pages edition · Build 4.7-pages-1</p><h2>A little local insight.</h2><p>See recent app activity at a place without asking anyone to check in. Friends add a familiar face; everyone else is part of a count.</p><div class="modal-callout"><strong>Lincoln, with 5,000 demo accounts.</strong><br>32 made-up places (24 cafés and 8 bars / clubs) · 60 friends · 42 sharing at the start. 610 accounts start at venues; 4,390 are not mapped. This is not a complete building inventory. Pins are approximate placeholders, not real businesses.</div><div class="modal-facts"><div class="modal-fact">${icon('pin', 15)}<span>Each pin represents one establishment, not an individual person.</span></div><div class="modal-fact">${icon('friends', 15)}<span>A count is participating app users—not total visitors, a “full” status, or available seats.</span></div><div class="modal-fact">${icon('clock', 15)}<span>Stale activity disappears. A dash means unknown, not empty. All activity is simulated.</span></div></div><p class="map-explanation">The map covers Lincoln and nearby towns with an original illustrative layout. It is not a street survey, building inventory, or navigation map. The search recognizes 40 built-in Lincoln-area neighborhoods, campuses, parks, lakes and towns. These are approximate area centers, not street addresses. Nearby distances are straight-line estimates from the area center, not your device. It does not search every address or the whole state. Some areas have no demo venues nearby. All map artwork, the search index and sample activity are bundled for offline use.</p><button class="primary-button" data-action="close-modal" style="width:100%">Explore the demo ${icon('arrow', 15)}</button><details class="prototype-tools"><summary>Prototype testing tools</summary><p>Advance the demo clock to see activity expire, or restore the fictional scenario. These are testing controls, not app features.</p><div class="button-row"><button class="secondary-button" data-action="advance-time">${icon('clock', 12)} Advance 15 min</button><button class="secondary-button" data-action="confirm-reset">${icon('reset', 12)} Reset demo</button></div></details>`;
+    else if (modalType === 'share') content = `<div class="modal-symbol">${icon('shield', 25)}</div><h2>Contribute to the count?</h2><p>In this demo, switching on adds one fictional visitor—you—to Juniper Coffee.</p><div class="modal-facts"><div class="modal-fact">${icon('map', 15)}<span>People outside your friends see only the combined venue count.</span></div><div class="modal-fact">${icon('friends', 15)}<span>Your name stays hidden from friends unless you separately choose them and enable friend sharing.</span></div><div class="modal-fact">${icon('eyeOff', 15)}<span>You can switch it off at any time. Your sample presence is removed immediately.</span></div></div><div class="modal-callout"><strong>Simulation only.</strong> This does not request GPS permission, run in the background, or share anything with another person.</div><div class="button-row"><button class="secondary-button" data-action="close-modal">Not now</button><button class="primary-button" data-action="enable-sharing">Enable count contribution</button></div>`;
     else if (modalType === 'add-friend') content = `<div class="modal-symbol">${icon('userPlus', 25)}</div><h2>Find your people.</h2><p>Search the sample directory by name or handle.</p><div class="search-wrap">${icon('search', 17)}<label class="sr-only" for="friendSearch">Search demo people</label><input id="friendSearch" class="search-input" autocomplete="off" maxlength="80" placeholder="Try Jordan or @casey.r"></div><div id="directoryList" class="directory-list"></div><p class="modal-note">Demo only. Requests stay in this browser and do not contact anyone.</p>`;
     else if (modalType === 'manage') {
       const p = C.personById(modalPerson); if (!p) return closeModal();
-      content = `<div class="manage-profile">${avatar(p)}<div><h2>${escape(p.name)}</h2><p>@${escape(p.handle)}</p></div></div><p>You control your connections. Removing or blocking this demo friend hides their name at venues, but does not remove their anonymous contribution to a venue’s activity.</p><div class="manage-actions"><button class="secondary-button" data-action="confirm-remove" data-person="${p.id}">${icon('person', 16)} Remove friend</button><button class="danger-button" data-action="confirm-block" data-person="${p.id}">${icon('block', 16)} Block in demo</button></div>`;
+      content = `<div class="manage-profile">${avatar(p)}<div><h2>${escape(p.name)}</h2><p>@${escape(p.handle)}</p></div></div><p>You control your connections. Removing or blocking this demo friend hides their name at venues, but does not remove their anonymous contribution to a venue’s count.</p><div class="manage-actions"><button class="secondary-button" data-action="confirm-remove" data-person="${p.id}">${icon('person', 16)} Remove friend</button><button class="danger-button" data-action="confirm-block" data-person="${p.id}">${icon('block', 16)} Block in demo</button></div>`;
     } else if (modalType === 'confirm-remove' || modalType === 'confirm-block') {
       const p = C.personById(modalPerson); if (!p) return closeModal(); const block = modalType === 'confirm-block';
-      content = `<div class="modal-symbol">${icon(block ? 'block' : 'person', 24)}</div><h2>${block ? 'Block' : 'Remove'} ${escape(p.name.split(' ')[0])}?</h2><p>Their name and venue will no longer appear in your friends view. The venue’s public activity stays the same.</p><div class="button-row"><button class="secondary-button" data-action="close-modal">Keep friend</button><button class="danger-button" data-relation="${block ? 'block' : 'remove'}" data-person="${p.id}">${block ? 'Block' : 'Remove'}</button></div>`;
+      content = `<div class="modal-symbol">${icon(block ? 'block' : 'person', 24)}</div><h2>${block ? 'Block' : 'Remove'} ${escape(p.name.split(' ')[0])}?</h2><p>Their name and venue will no longer appear in your friends view. The venue’s public count stays the same.</p><div class="button-row"><button class="secondary-button" data-action="close-modal">Keep friend</button><button class="danger-button" data-relation="${block ? 'block' : 'remove'}" data-person="${p.id}">${block ? 'Block' : 'Remove'}</button></div>`;
     } else if (modalType === 'reset') content = `<div class="modal-symbol">${icon('reset', 24)}</div><h2>A fresh start?</h2><p>This clears saved spots, comparison selections, audience choices, and demo friend changes. It restores the original sample places and turns both kinds of sharing off. Appearance is kept.</p><div class="button-row"><button class="secondary-button" data-action="close-modal">Keep exploring</button><button class="primary-button" data-action="reset-demo">Reset demo</button></div>`;
     $('#modalHost').innerHTML = `<div class="modal-backdrop" data-action="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1"><button class="icon-button modal-close" data-action="close-modal" aria-label="Close dialog">${icon('close', 18)}</button>${content}</section></div>`;
     const title = $('.modal h2'); if (title) title.id = 'modalTitle';
@@ -2007,7 +1918,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     if (list && Number.isFinite(scroll)) list.scrollTop = scroll;
     if (detailId) renderDetail();
     if (compareOpen) renderComparison();
-    const scope = source?.closest('#placeActions') ? $('#placeActions') : source?.closest('.detail-card') ? $('#detailHost') : source?.closest('.comparison-card') ? $('#detailHost') : $('#placesList');
+    const scope = source?.closest('.detail-card') ? $('#detailHost') : source?.closest('.comparison-card') ? $('#detailHost') : $('#placesList');
     const selector = source?.hasAttribute('data-save') ? `[data-save="${id}"]` : `[data-compare="${id}"]`;
     (scope?.querySelector(selector) || $('[data-action="saved-filter"]'))?.focus({preventScroll:true});
   }
@@ -2032,14 +1943,16 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     if (ids.length < 2) { closeDetail(false); renderCompareTray(); return; }
     const old = $('.compare-table-wrap'); const left=old?.scrollLeft||0, top=$('.comparison-card')?.scrollTop||0;
     const data = ids.map(id=>({v:C.venueById(id), a:C.activity(C.venueById(id),state,snapshot,now())}));
-    $('#detailHost').innerHTML = `<section class="detail-card comparison-card" role="region" aria-labelledby="compareTitle" tabindex="-1"><div class="comparison-header"><div><div class="eyebrow">YOUR SHORTLIST</div><h2 id="compareTitle">A closer look.</h2><p>Same moment. Different spots.</p></div><button class="icon-button" data-action="close-detail" aria-label="Close comparison">${icon('close',17)}</button></div><div class="comparison-explainer">${icon('info',15)}<span>App participation varies by place. Colors describe app activity, not crowding or available seats.</span></div><div class="compare-table-wrap" tabindex="0" aria-label="Comparison of selected places. Scroll sideways to see all columns."><table class="compare-table ${ids.length===3?'three-places':''}"><caption class="sr-only">Recent sample app activity for your selected places. No crowding ranking.</caption><thead><tr><th scope="col">Place</th>${data.map(({v})=>`<th scope="col"><div class="compare-place-head">${monogram(v)}<button class="entry-tool" data-compare="${v.id}" aria-label="Remove ${escape(v.name)} from comparison">${icon('close',13)}</button></div><button class="compare-place-name" data-venue="${v.id}">${escape(v.name)}</button><span class="compare-subtitle">${v.category==='cafe'?'Café':'Bar / club'} · ${escape(v.area)}</span></th>`).join('')}</tr></thead><tbody><tr><th scope="row">App activity<small>Sample only</small></th>${data.map(({a})=>`<td>${heatBadge(a)}${!a.hasData?'<small>Unknown, not empty</small>':''}</td>`).join('')}</tr><tr><th scope="row">Friends here<small>Sharing with you</small></th>${data.map(({a})=>`<td>${a.friends.length?escape(friendNames(a.friends)):'No friends sharing'}</td>`).join('')}</tr><tr><th scope="row">Updated</th>${data.map(({a})=>`<td>${a.hasData?C.timeLabel(a.latest,now()):'No recent activity'}</td>`).join('')}</tr><tr><th scope="row">Your usuals</th>${data.map(({v})=>`<td>${saveButton(v.id)}</td>`).join('')}</tr><tr><th scope="row">Explore</th>${data.map(({v})=>`<td><button class="text-button" data-venue="${v.id}">View spot ${icon('arrow',12)}</button></td>`).join('')}</tr></tbody></table></div><p class="comparison-footnote">Keep searching or select any map pin. Your shortlist stays here until you clear it.</p></section>`;
+    $('#detailHost').innerHTML = `<section class="detail-card comparison-card" role="region" aria-labelledby="compareTitle" tabindex="-1"><div class="comparison-header"><div><div class="eyebrow">YOUR SHORTLIST</div><h2 id="compareTitle">A closer look.</h2><p>Same moment. Different spots.</p></div><button class="icon-button" data-action="close-detail" aria-label="Close comparison">${icon('close',17)}</button></div><div class="comparison-explainer">${icon('info',15)}<span>App participation varies by place. These counts don’t rank crowding or tell you whether seats are available.</span></div><div class="compare-table-wrap" tabindex="0" aria-label="Comparison of selected places. Scroll sideways to see all columns."><table class="compare-table ${ids.length===3?'three-places':''}"><caption class="sr-only">Recent sample app activity for your selected places. No crowding ranking.</caption><thead><tr><th scope="col">Place</th>${data.map(({v})=>`<th scope="col"><div class="compare-place-head">${monogram(v)}<button class="entry-tool" data-compare="${v.id}" aria-label="Remove ${escape(v.name)} from comparison">${icon('close',13)}</button></div><button class="compare-place-name" data-venue="${v.id}">${escape(v.name)}</button><span class="compare-subtitle">${v.category==='cafe'?'Café':'Bar / club'} · ${escape(v.area)}</span></th>`).join('')}</tr></thead><tbody><tr><th scope="row">App users<small>Recently detected<br>Demo only</small></th>${data.map(({a})=>`<td><strong class="compare-count">${a.hasData?a.count:'—'}</strong>${!a.hasData?'<small>Unknown, not empty</small>':''}</td>`).join('')}</tr><tr><th scope="row">Friends here<small>Sharing with you</small></th>${data.map(({a})=>`<td>${icon('friends',13)} ${a.friends.length}</td>`).join('')}</tr><tr><th scope="row">Updated</th>${data.map(({a})=>`<td>${a.hasData?C.timeLabel(a.latest,now()):'No recent activity'}</td>`).join('')}</tr><tr><th scope="row">Your usuals</th>${data.map(({v})=>`<td>${saveButton(v.id)}</td>`).join('')}</tr><tr><th scope="row">Explore</th>${data.map(({v})=>`<td><button class="text-button" data-venue="${v.id}">View spot ${icon('arrow',12)}</button></td>`).join('')}</tr></tbody></table></div><p class="comparison-footnote">Keep searching or select any map pin. Your shortlist stays here until you clear it.</p></section>`;
     $('.compare-table-wrap').scrollLeft=left; $('.comparison-card').scrollTop=top;
   }
-
-  function timelineMarkup(v){
-    if(!v)return '';
-    const history=C.sampleHistory(v.id,snapshot,now());if(!history)return '<p class="modal-note">No sample history for this place. Activity is unknown, not empty.</p>';
-    return `<div class="activity-history"><div class="eyebrow">SAMPLE HISTORY · NOT LIVE</div><p>Illustrative app participation over time, not a crowd forecast.</p><div class="history-steps">${history.values.map(point=>{const h=SpotHeat.describe([{hasData:Number.isFinite(point.count)&&point.count>0,count:point.count}]);return `<div><span class="history-orb heat-${h.level}" style="--heat-rgb:${h.rgb.join(',')}" role="img" aria-label="${h.label}"></span><small>${escape(point.label||C.timeLabel(point.at,now()))}</small></div>`;}).join('')}</div><p class="modal-note">The fixture uses sample history. Missing or expired observations mean unknown, not zero visitors.</p></div>`;
+  function timelineMarkup(v) {
+    const history = C.sampleHistory(v.id,snapshot,now());
+    if (!history) return `<section class="activity-timeline"><div class="timeline-heading"><h3>Activity over time</h3><span class="sample-label">SAMPLE HISTORY</span></div><p class="history-empty">No sample history for this place. Missing activity does not mean it is empty.</p></section>`;
+    const max=Math.max(...history.values.map(p=>p.count),1), plot=history.values.map((p,i)=>[12+i*44,70-(p.count/max)*52]);
+    const line=plot.map(p=>p.join(',')).join(' '), area=`M${plot.map(p=>p.join(',')).join(' L')} L276,78 L12,78 Z`;
+    const summary=history.fresh ? ({up:'Sample activity increased',down:'Sample activity decreased',steady:'Sample activity stayed similar'}[history.direction]) : 'No fresh sample activity';
+    return `<section class="activity-timeline ${history.fresh?'':'stale-history'}"><div class="timeline-heading"><h3>Activity over time</h3><span class="sample-label">SAMPLE HISTORY</span></div><div class="timeline-summary"><strong>${summary}</strong><span>30-minute example</span></div><svg class="history-chart" viewBox="0 0 288 86" role="img" aria-label="Illustrative app-user counts at five-minute intervals: ${history.values.map(p=>p.count).join(', ')}. These are authored sample values, not measured activity."><path class="chart-guide" d="M12 26H276 M12 52H276 M12 78H276"/><path class="chart-area" d="${area}"/><polyline class="chart-line" points="${line}"/>${plot.map(([x,y],i)=>`<circle class="chart-dot" cx="${x}" cy="${y}" r="${i===6?3.5:2}"/>`).join('')}</svg><div class="timeline-axis"><span>30 min before</span><span>15 min before</span><span>Latest sample</span></div><p class="history-note">Latest sample: ${C.timeLabel(history.lastAt,now())}. ${history.fresh?'Illustrative values, not measured visits or a prediction.':'History is stale; no new points are invented when presence expires.'}</p></section>`;
   }
   function renderAudienceList() {
     const host=$('#audienceList'); if(!host)return;
@@ -2056,7 +1969,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   }
   function extraModalContent(type) {
     const v=C.venueById(modalPerson);
-    if(type==='audience') return `<div class="modal-symbol">${icon('friends',24)}</div><h2>Choose who sees you.</h2><p>Only selected friends can see your demo venue. Adding a friend never adds them to this list automatically.</p><div class="audience-search search-wrap">${icon('search',16)}<label class="sr-only" for="audienceSearch">Search friends to share with</label><input id="audienceSearch" class="search-input" maxlength="80" placeholder="Search your friends…" value="${escape(audienceQuery)}"></div><div class="audience-meta"><strong id="audienceCount">${audienceDraft.size} selected</strong><span>No real location is collected</span></div><div id="audienceList" class="audience-list"></div><div class="modal-callout"><strong>Separate from public activity.</strong> Friend sharing does not turn on your contribution to venue counts. Being visible is not an invitation to join.</div><div class="button-row"><button class="secondary-button" data-action="close-modal">Cancel</button><button class="primary-button" data-action="save-audience">${state.friendSharing?'Save selection':'Save & enable demo'}</button></div><p class="modal-note">Saving an empty selection keeps friend visibility off.</p>`;
+    if(type==='audience') return `<div class="modal-symbol">${icon('friends',24)}</div><h2>Choose who sees you.</h2><p>Only selected friends can see your demo venue. Adding a friend never adds them to this list automatically.</p><div class="audience-search search-wrap">${icon('search',16)}<label class="sr-only" for="audienceSearch">Search friends to share with</label><input id="audienceSearch" class="search-input" maxlength="80" placeholder="Search your friends…" value="${escape(audienceQuery)}"></div><div class="audience-meta"><strong id="audienceCount">${audienceDraft.size} selected</strong><span>No real location is collected</span></div><div id="audienceList" class="audience-list"></div><div class="modal-callout"><strong>Separate from public counts.</strong> Friend sharing does not turn on your contribution to venue counts. Being visible is not an invitation to join.</div><div class="button-row"><button class="secondary-button" data-action="close-modal">Cancel</button><button class="primary-button" data-action="save-audience">${state.friendSharing?'Save selection':'Save & enable demo'}</button></div><p class="modal-note">Saving an empty selection keeps friend visibility off.</p>`;
     if(type==='share-place' && v){
       const payload=C.sharePayload(v.id,location.href), text=payload.text+(payload.url?'\n'+payload.url:'');
       return `<div class="modal-symbol">${icon('share',24)}</div><h2>Share the spot.</h2><p>A place to meet, without sharing anyone’s location.</p><label class="share-label" for="shareText">Place information</label><textarea id="shareText" class="share-text" rows="5" readonly>${escape(text)}</textarea><p class="share-safety">${icon('shield',14)} No friend names, presence counts, or personal location are included.</p><p class="modal-note">${payload.url?'This link opens this fictional place in the hosted prototype.':'This is a local demo, not a public website. Shareable text is included instead of a link to a file on your device.'}</p><div class="button-row"><button class="primary-button" data-action="copy-place">${icon('copy',15)} Copy ${payload.url?'place link':'place info'}</button>${typeof navigator.share==='function'?`<button class="secondary-button" data-action="native-share">${icon('share',15)} Share…</button>`:''}</div><p id="shareStatus" class="share-status" role="status" aria-live="polite"></p>`;
@@ -2091,7 +2004,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     if(action==='review-compare'){openComparison();return true;}
     if(action==='clear-compare'){state.compareIds=[];if(compareOpen)closeDetail(false);refreshExplore();if(detailId)renderDetail();return true;}
     if(action==='toggle-friend-sharing'){
-      if(state.friendSharing){C.setFriendSharing(state,snapshot,false,now());setPrivacyView();toast('Hidden from friends. Your activity contribution is unchanged.');}
+      if(state.friendSharing){C.setFriendSharing(state,snapshot,false,now());setPrivacyView();toast('Hidden from friends. Your count contribution is unchanged.');}
       else {audienceDraft=new Set(state.shareWith);audienceQuery='';showModal('audience');}return true;
     }
     if(action==='choose-audience'){audienceDraft=new Set(state.shareWith);audienceQuery='';showModal('audience');return true;}
@@ -2125,13 +2038,10 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     if (target.dataset.manageFriend) { showModal('manage', target.dataset.manageFriend); return; }
     if (target.dataset.relation) { relationAction(target.dataset.person, target.dataset.relation); return; }
     const action = target.dataset.action;
-    if(action==='place-history'){showModal('activity-history',target.dataset.id);return;}
-    if(action==='browse-places'){resultsOpen=!resultsOpen;dismissSuggestions();refreshExplore();drawMap();return;}
-    if(action==='hide-results'){resultsOpen=false;$('#searchResults').hidden=true;drawMap();return;}
     if (action === 'about') showModal('about');
     else if (action === 'close-modal') closeModal();
     else if(action==='close-detail')closeDetail();
-    
+    else if(action==='expand-detail'){const card=$('.detail-card');const expanded=card.classList.toggle('expanded');target.setAttribute('aria-expanded',String(expanded));target.innerHTML=(expanded?'Less detail':'More details')+icon('chevron',12);}
     else if (action === 'clear-search') { clearArea(); $('#venueSearch').focus();renderSuggestions(); }
     else if(action==='clear-area'){clearArea();fitMap('city');}
     else if (action === 'clear-filters') { clearTimeout(searchFitTimer);searchArea=null;dismissSuggestions();state.query = ''; state.category = 'all'; state.friendsOnly = false; state.savedOnly = false; $('#venueSearch').value = ''; refreshExplore(); fitMap(); }
@@ -2148,10 +2058,10 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     }
     else if (action === 'add-friend') showModal('add-friend');
     else if (action === 'toggle-sharing') {
-      if (state.sharing) { C.setSharing(state, snapshot, false, now()); persist(); render(); toast('Activity contribution off. Your friend-sharing choice is unchanged.'); }
+      if (state.sharing) { C.setSharing(state, snapshot, false, now()); persist(); render(); toast('Count contribution off. Your friend-sharing choice is unchanged.'); }
       else showModal('share');
     }
-    else if (action === 'enable-sharing') { C.setSharing(state, snapshot, true, now()); persist(); closeModal(false); render(); toast('Activity contribution on. Your name stays private unless you share with friends.'); }
+    else if (action === 'enable-sharing') { C.setSharing(state, snapshot, true, now()); persist(); closeModal(false); render(); toast('Count contribution on. Your name stays private unless you share with friends.'); }
     else if (action === 'confirm-remove' || action === 'confirm-block') { modalType = action; modalPerson = target.dataset.person; renderModal(); $('.modal').focus(); }
     else if (action === 'confirm-reset') showModal('reset');
     else if (action === 'reset-demo') resetDemo();
@@ -2185,7 +2095,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   // suspended tab expires records correctly. Do not invent fresh observations.
   function refreshTimeSensitiveViews() {
     if (modalType) return;
-    if(detailId){const active=document.activeElement,inActions=active?.closest('#placeActions'),sel=active?.getAttribute('aria-label');renderDetail();if(inActions&&sel){[...$('#placeActions').querySelectorAll('button')].find(b=>b.getAttribute('aria-label')===sel)?.focus({preventScroll:true});}}
+    if (detailId) { const active = document.activeElement; const activeAction = active?.dataset?.action; renderDetail(); if (activeAction) $(`[data-action="${activeAction}"]`, $('.detail-card'))?.focus({ preventScroll: true }); }
     if (compareOpen) renderComparison();
     if (state.screen === 'explore') refreshExplore();
     else if(state.screen === 'privacy')renderPrivacy();
@@ -2201,13 +2111,12 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   window.addEventListener('pageshow', e => { if (e.persisted) { clearInterval(refreshInterval); refreshInterval = setInterval(refreshTimeSensitiveViews, 15000); refreshTimeSensitiveViews(); } });
   // In-page testing hooks contain fictional state only. Never ship a comparable
   // client-authoritative friend/location API as real access control.
-  window.SpotDemo = Object.freeze({ getSelectedVenueId:()=>detailId, getState: () => JSON.parse(JSON.stringify(state)), getOwnVisibility:()=>C.ownVisibility(state,snapshot,now()),getHistory:id=>C.sampleHistory(id,snapshot,now()),getSharePayload:id=>C.sharePayload(id,location.href),getCompareOpen:()=>compareOpen, getActivity: id => { const v = C.venueById(id); return v ? C.activity(v, state, snapshot, now()) : null; }, getSearchArea:()=>searchArea?{...searchArea}:null,getNearbyIds:()=>visiblePlaces().map(v=>v.id),getCamera: () => ({ ...camera }), getGestureState:()=>gestureBinding?.info()||{count:0,mode:'idle'}, getStats: () => C.populationStats(state,snapshot,now()), getMapMode:()=> 'offline-canvas-regional', getMapStyle:()=> 'map-first-heat-v4.8', getHeat:id=>SpotHeat.describe([C.activity(C.venueById(id),state,snapshot,now())]), getRenderStats:()=>({frames:frameTimes.length,frameTimes:[...frameTimes],clusterBuilds,pinNodes:pinNodes.size,geometry:SpotCartography.featureCount,cartography:SpotCartography.getStats()}), flushMap:()=>{if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;drawMapNow();}, setCamera:(update)=>{for(const k of ['x','y','zoom'])if(Number.isFinite(update[k]))camera[k]=update[k];clampCamera();drawMap();}, advanceTime: ms => { if (!Number.isFinite(ms) || ms < 0) throw new TypeError('Use a positive demo time offset.'); timeOffset += ms; refreshTimeSensitiveViews(); }, reset: resetDemo });
+  window.SpotDemo = Object.freeze({ getSelectedVenueId:()=>detailId, getState: () => JSON.parse(JSON.stringify(state)), getOwnVisibility:()=>C.ownVisibility(state,snapshot,now()),getHistory:id=>C.sampleHistory(id,snapshot,now()),getSharePayload:id=>C.sharePayload(id,location.href),getCompareOpen:()=>compareOpen, getActivity: id => { const v = C.venueById(id); return v ? C.activity(v, state, snapshot, now()) : null; }, getSearchArea:()=>searchArea?{...searchArea}:null,getNearbyIds:()=>visiblePlaces().map(v=>v.id),getCamera: () => ({ ...camera }), getGestureState:()=>gestureBinding?.info()||{count:0,mode:'idle'}, getStats: () => C.populationStats(state,snapshot,now()), getMapMode:()=> 'offline-canvas-regional', getMapStyle:()=> 'spaced-activity-v4.6', getRenderStats:()=>({frames:frameTimes.length,frameTimes:[...frameTimes],clusterBuilds,pinNodes:pinNodes.size,geometry:SpotCartography.featureCount,cartography:SpotCartography.getStats()}), flushMap:()=>{if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;drawMapNow();}, setCamera:(update)=>{for(const k of ['x','y','zoom'])if(Number.isFinite(update[k]))camera[k]=update[k];clampCamera();drawMap();}, advanceTime: ms => { if (!Number.isFinite(ms) || ms < 0) throw new TypeError('Use a positive demo time offset.'); timeOffset += ms; refreshTimeSensitiveViews(); }, reset: resetDemo });
   document.addEventListener('pointerdown',e=>{if(!e.target.closest('.location-search'))dismissSuggestions();});
-  window.addEventListener('spot-theme-change',()=>{SpotCartography.invalidate();SpotHeat.invalidate();drawMap();});
+  window.addEventListener('spot-theme-change',()=>{SpotCartography.invalidate();drawMap();});
   render();
   if(initialPlace)selectVenue(initialPlace,true);
 })();
-
 
 </script>
   
