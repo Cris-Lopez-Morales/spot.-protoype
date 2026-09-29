@@ -1,0 +1,19 @@
+{
+  "name": "spot-prototype",
+  "version": "4.7.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.16.0"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "launch": "node scripts/start.mjs",
+    "build": "node scripts/build-standalone.mjs",
+    "test": "node --test tests/*.test.mjs tests/spot/*.test.cjs",
+    "test:browser": "python tests/browser_test.py",
+    "test:map": "node --test tests/spot/*.test.cjs"
+  },
+  "dependencies": {}
+}
