@@ -1,6 +1,0 @@
-{
-  "original": "spot-lincoln-v4.4.html",
-  "sha256": "8a8ffda5be9bf7c6fa9e81196b287f8ec5a6882f86a9189c35197cbbbed38030",
-  "verification": "Byte-identical to the original Spot v4.4 attachment; no AI added to this rollback file.",
-  "earlier_versions": "v4.2 and v4.3 retained for original regression tests."
-}
