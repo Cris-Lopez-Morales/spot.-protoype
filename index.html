@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Spot v4.8 | GitHub Pages edition, build 4.8-pages-1.
+Spot v4.9 | GitHub Pages edition, build 4.9-pages-1.
 Self-contained: replace this index.html to update the entire app.
 No external scripts, styles, images, fonts, models, or build steps.
 
@@ -27,14 +27,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
-<html lang="en" data-build="4.8-pages-1">
+<html lang="en" data-build="4.9-pages-1">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f8fc">
   <meta name="description" content="Spot — a local, interactive prototype for exploring venue activity. Lincoln-region map with fictional venues, 5,000 demo accounts and 60 friends.">
-  <title>Spot v4.8 — Activity map</title>
-  <meta name="spot-build" content="4.8-pages-1">
+  <title>Spot v4.9 — Activity map</title>
+  <meta name="spot-build" content="4.9-pages-1">
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2220%22%20fill%3D%22%236250E8%22%2F%3E%3Cpath%20d%3D%22M43.5%2015.8A20%2020%200%200%200%2015.8%2043.5M20.5%2048.2A20%2020%200%200%200%2048.2%2020.5%22%20stroke%3D%22%23F8F7FF%22%20stroke-width%3D%226.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%227%22%20fill%3D%22%23FF947D%22%2F%3E%3C%2Fsvg%3E">
   <meta name="color-scheme" content="light dark">
   <script>
@@ -647,7 +647,7 @@ button:disabled{cursor:not-allowed;opacity:.48;box-shadow:none!important}
 })();
 </script>
 <style>
-/* v4.8 map-first UI. Data, search, and gestures remain local and independent. */
+/* v4.9 map-first UI. Data, search, and gestures remain local and independent. */
 :root{--map-label:#353647;--map-label-halo:#faf9f6;--map-chrome:rgba(255,255,255,.96);--quiet-ring:#8791a6}
 :root[data-theme="dark"]{--map-label:#f0effc;--map-label-halo:#1b2133;--map-chrome:rgba(25,28,46,.97);--quiet-ring:#98a4bf}
 [hidden]{display:none!important}
@@ -826,6 +826,14 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   function makeSnapshot(now = Date.now()) {
     return { createdAt: now, ownSeenAt: null };
   }
+  // Demo-only refresh. Does not invent counts, revive null-age fixtures, or
+  // enable sharing. Real presence must continue to expire without observations.
+  function refreshDemoSnapshot(snapshot, state, at) {
+    if (!snapshot || !Number.isFinite(at)) return false;
+    snapshot.createdAt = at;
+    snapshot.ownSeenAt = state.sharing || state.friendSharing ? at : null;
+    return true;
+  }
   function isFresh(seenAt, now) { return Number.isFinite(seenAt) && seenAt <= now && now - seenAt < TTL; }
   function seenAtForAge(age, snapshot) { return age === null ? null : snapshot.createdAt - age * 60000; }
   function friendVisible(person, state, snapshot, now) {
@@ -937,7 +945,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     const s = 256 * 2 ** MAP.baseZoom;
     return { x: (lng + 180) / 360 * s - MAP.worldOrigin[0], y: (1 - Math.asinh(Math.tan(lat * Math.PI / 180)) / Math.PI) / 2 * s - MAP.worldOrigin[1] };
   }
-  return { TTL, VENUES, PEOPLE, USERS, DEFAULT_RELATIONS, POPULATION, MAP, project, populationStats, normalize, venueById, personById, initialState, persistent, makeSnapshot, isFresh, friendVisible, friendsAt, activity, filteredVenues, timeLabel, changeRelation, setSharing, setFriendSharing, setAudience, pauseAll, ownVisibility, validVenueIds, validAudience, toggleSaved, toggleCompare, sampleHistory, parsePlaceHash, publicPlaceUrl, sharePayload };
+  return { TTL, VENUES, PEOPLE, USERS, DEFAULT_RELATIONS, POPULATION, MAP, project, populationStats, normalize, venueById, personById, initialState, persistent, makeSnapshot, refreshDemoSnapshot, isFresh, friendVisible, friendsAt, activity, filteredVenues, timeLabel, changeRelation, setSharing, setFriendSharing, setAudience, pauseAll, ownVisibility, validVenueIds, validAudience, toggleSaved, toggleCompare, sampleHistory, parsePlaceHash, publicPlaceUrl, sharePayload };
 });
 
 </script>
@@ -1058,18 +1066,44 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   const z=Math.min(max,Math.max(min,camera.zoom*factor));
   return{...camera,zoom:z,x:camera.x+(point.x-d.centerX)*(1/camera.zoom-1/z),y:camera.y+(point.y-d.centerY)*(1/camera.zoom-1/z)};
  }
- // Fit the group's actual bounds into the useful viewport on touch, mouse,
- // or keyboard activation. A single drag still cannot change zoom.
+ // Find a genuinely unobstructed rectangle. Called only on a deliberate
+ // area tap, not on every animation frame. Search, legend and map controls
+ // are measured by the UI; no hard-coded desktop/mobile center assumptions.
+ function clearViewportRect(d, obstacles=[]){
+  const edge=10,bounds={x:edge,y:edge,w:Math.max(1,d.width-edge*2),h:Math.max(1,d.height-edge*2)};
+  const ox=[],xs=new Set([bounds.x,bounds.x+bounds.w]),ys=new Set([bounds.y,bounds.y+bounds.h]);
+  for(const o of obstacles){
+   const x=Math.max(bounds.x,o.x-8),y=Math.max(bounds.y,o.y-8),r=Math.min(bounds.x+bounds.w,o.x+o.w+8),bt=Math.min(bounds.y+bounds.h,o.y+o.h+8);
+   if(r<=x||bt<=y)continue;
+   ox.push({x,y,w:r-x,h:bt-y});xs.add(x);xs.add(r);ys.add(y);ys.add(bt);
+  }
+  const xx=[...xs].sort((a,b)=>a-b),yy=[...ys].sort((a,b)=>a-b);let best=null,score=-1;
+  for(let i=0;i<xx.length-1;i++)for(let j=i+1;j<xx.length;j++)for(let k=0;k<yy.length-1;k++)for(let l=k+1;l<yy.length;l++){
+   const r={x:xx[i],y:yy[k],w:xx[j]-xx[i],h:yy[l]-yy[k]};
+   if(ox.some(o=>intersects(r,o)))continue;
+   // Prefer useful two-dimensional space over a long, unusably thin strip.
+   const area=r.w*r.h*Math.min(1,r.w/180)*Math.min(1,r.h/160);
+   if(area>score){best=r;score=area;}
+  }
+  return best||bounds;
+ }
+ // Fit every member of a tapped group, including room for icons and labels.
+ // The old minimum multiplier overrode the fit and could crop edge members.
  function drillDownCamera(places,camera,d,min=.025,max=8){
   const valid=places.filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y));
-  if(!valid.length)return{...camera};
+  if(!valid.length||!d?.width||!d?.height)return{...camera};
   const xs=valid.map(p=>p.x),ys=valid.map(p=>p.y),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
-  const availableW=Math.max(90,d.width-200),availableH=Math.max(90,Math.min(d.centerY-84,d.height-215-d.centerY)*2);
-  const fitted=Math.min(availableW/Math.max(24,x1-x0),availableH/Math.max(24,y1-y0));
-  const zoom=Math.max(min,Math.min(max,Math.max(camera.zoom*1.45,fitted)));
-  return{...camera,x:(x0+x1)/2,y:(y0+y1)/2,zoom};
+  const rect=d.fitRect||{x:12,y:132,w:Math.max(1,d.width-24),h:Math.max(1,d.height-292)};
+  const insetX=Math.min(86,rect.w*.24),insetY=Math.min(76,rect.h*.24);
+  const availableW=Math.max(1,rect.w-insetX*2),availableH=Math.max(1,rect.h-insetY*2);
+  const fitted=Math.min(availableW/Math.max(1,x1-x0),availableH/Math.max(1,y1-y0));
+  // A cap prevents a tiny group from jumping from a regional view to street
+  // level. There is deliberately NO forced zoom-in if it would defeat fitting.
+  const zoom=Math.max(min,Math.min(max,3,camera.zoom*3,fitted));
+  const cx=rect.x+rect.w/2,cy=rect.y+rect.h/2;
+  return{...camera,x:(x0+x1)/2+(d.centerX-cx)/zoom,y:(y0+y1)/2+(d.centerY-cy)/zoom,zoom};
  }
- return{drillDownCamera,zoomLevel,cluster,project,anchoredZoom,markerSpacing,intersects,labelLayout};
+ return{clearViewportRect,drillDownCamera,zoomLevel,cluster,project,anchoredZoom,markerSpacing,intersects,labelLayout};
 });
 
 
@@ -1192,7 +1226,9 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
       ignoreNativeClickUntil = Date.now() + 750;
       release(e.pointerId);
       if (!session.info().count) viewport.classList.remove('dragging');
-      if (result.tap?.target?.isConnected) onTap(result.tap.target, result.tap.type);
+      if (result.tap && (!result.tap.target || result.tap.target.isConnected)) {
+        onTap?.(result.tap.target, result.tap.type, result.tap);
+      }
     }
     // Capture-phase document listeners still clean up when a pointer finishes
     // over a card or outside the map; unrelated pointer IDs are ignored.
@@ -1203,7 +1239,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
       // Low-level pointer handling activates each pin once. Block compatibility
       // clicks from reactivating it after dragging, while keeping keyboard and
       // assistive clicks (detail 0) and deliberate programmatic taps available.
-      if (e.detail > 0 && Date.now() < ignoreNativeClickUntil) { e.preventDefault(); e.stopImmediatePropagation(); }
+      if ((e.detail > 0 || e.pointerType === 'touch' || e.pointerType === 'pen' || e.sourceCapabilities?.firesTouchEvents === true) && Date.now() < ignoreNativeClickUntil) { e.preventDefault(); e.stopImmediatePropagation(); }
     }, true);
     listen(viewport, 'dblclick', e => {
       e.preventDefault();
@@ -1438,7 +1474,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
    ctx.lineWidth=3;ctx.strokeStyle=palette.halo;ctx.strokeText(text,0,0);ctx.fillStyle=['road','park','water','highway'].includes(l.kind)?palette.sub:palette.text;ctx.fillText(text,0,0);ctx.restore();
   }
  }
- root.SpotCartography={attach,draw,invalidate(){lastDraw=null;},featureCount:features.length,getLabels:()=>lastLabels.map(b=>({...b})),getStats:()=>({...lastStats}),style:'map-first-heat-v4.8'};
+ root.SpotCartography={attach,draw,invalidate(){lastDraw=null;},featureCount:features.length,getLabels:()=>lastLabels.map(b=>({...b})),getStats:()=>({...lastStats}),style:'map-first-heat-v4.9'};
 })(window);
 
 
@@ -1470,7 +1506,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
 
 </script>
   <script>
-/* Spot v4.8: a display scale for sample APP PARTICIPATION, never occupancy.
+/* Spot v4.9: a display scale for sample APP PARTICIPATION, never occupancy.
  * Fixed bands do not re-normalize when the viewport, category, or friends change.
  * Groups sum fresh observations; unknown members stay explicitly unknown.
  * No timers, network calls, DOM filters, GPS, or animations in the heat renderer.
@@ -1497,11 +1533,24 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,d.width,d.height);
   for(const item of items){const {x,y,heat,selected,grouped}=item;
    const radius=heat.known?heat.radius+(grouped?8:0):32;
-   if(heat.known){const rgb=heat.rgb.join(','),g=ctx.createRadialGradient(x,y,3,x,y,radius);
-    g.addColorStop(0,`rgba(${rgb},${dark?.44:.31})`);g.addColorStop(.4,`rgba(${rgb},${dark?.31:.22})`);g.addColorStop(.72,`rgba(${rgb},${dark?.14:.10})`);g.addColorStop(1,`rgba(${rgb},0)`);
+   if(heat.known){
+    const rgb=heat.rgb.join(','),g=ctx.createRadialGradient(x,y,0,x,y,radius),ring=radius*.64;
+    // A visible colored disc + defined boundary, not just a faint glow.
+    // Light mode has a stronger wash and a darkened outline against pale streets.
+    g.addColorStop(0,`rgba(${rgb},${dark?.52:.70})`);
+    g.addColorStop(.42,`rgba(${rgb},${dark?.43:.58})`);
+    g.addColorStop(.64,`rgba(${rgb},${dark?.30:.39})`);
+    g.addColorStop(.82,`rgba(${rgb},${dark?.13:.15})`);
+    g.addColorStop(1,`rgba(${rgb},0)`);
     ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle=`rgba(${rgb},${dark?.34:.28})`;ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,radius*.57,0,Math.PI*2);ctx.stroke();
-   }else{ctx.beginPath();ctx.arc(x,y,25,0,Math.PI*2);ctx.setLineDash([3,5]);ctx.lineWidth=1.3;ctx.strokeStyle=dark?'#8390ac88':'#8c96aa99';ctx.stroke();ctx.setLineDash([]);}
+    // A quiet keyline keeps the outline distinct over both roads and buildings.
+    ctx.beginPath();ctx.arc(x,y,ring,0,Math.PI*2);ctx.strokeStyle=dark?'rgba(16,18,32,.5)':'rgba(255,255,255,.9)';ctx.lineWidth=4;ctx.stroke();
+    ctx.strokeStyle=dark?`rgba(${rgb},.88)`:`rgb(${heat.rgb.map(v=>Math.round(v*.68)).join(',')})`;
+    ctx.lineWidth=2;ctx.stroke();
+   }else{
+    ctx.beginPath();ctx.arc(x,y,25,0,Math.PI*2);ctx.fillStyle=dark?'rgba(131,144,172,.08)':'rgba(137,145,164,.10)';ctx.fill();
+    ctx.setLineDash([3,5]);ctx.lineWidth=1.6;ctx.strokeStyle=dark?'#9caac7':'#69748a';ctx.stroke();ctx.setLineDash([]);
+   }
    if(selected){ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.strokeStyle=dark?'#e3dfff':'#6958b9';ctx.lineWidth=2;ctx.stroke();}
   }
  }
@@ -1573,6 +1622,14 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   state.selected=null;state.mobileView='map';let resultsOpen=false;
   let snapshot = C.makeSnapshot();
   let timeOffset = 0;
+  const DEMO_REFRESH_MS = 30000;
+  let demoAutoRefresh = true, lastDemoRefreshAt = snapshot.createdAt;
+  function renewDemo(force = false) {
+    if (!demoAutoRefresh) return false;
+    const at = now();
+    if (!force && at >= lastDemoRefreshAt && at-lastDemoRefreshAt < DEMO_REFRESH_MS) return false;
+    C.refreshDemoSnapshot(snapshot,state,at);lastDemoRefreshAt=at;return true;
+  }
   let modalType = null, modalPerson = null, detailId = null, modalReturnFocus = null, detailReturnFocus = null;
   let toastTimeout, refreshInterval;
   const now = () => Date.now() + timeOffset;
@@ -1604,7 +1661,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   }
   function render() {
     document.body.dataset.screen=state.screen;
-    renderNav();
+    renewDemo();renderNav();
     if(state.screen!=='explore')document.body.classList.remove('has-compare');
     if (state.screen === 'explore') renderExplore();
     else if (state.screen === 'friends') renderFriends();
@@ -1638,7 +1695,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
         <div id="searchAnnouncement" class="sr-only" role="status" aria-live="polite"></div>
         <div class="map-top-tools"><div class="map-view-tabs" aria-label="Map extent"><button data-action="region" aria-pressed="false">Region</button><button data-action="city" aria-pressed="false">Lincoln</button><button data-action="downtown" aria-pressed="true">Downtown</button></div><button class="icon-button browse-places" data-action="browse-places" aria-label="Browse places" title="Browse places">${icon('list',17)}</button></div>
         <div class="map-controls"><div class="zoom-group"><button class="icon-button" data-action="zoom-in" aria-label="Zoom in">${icon('plus',18)}</button><button class="icon-button" data-action="zoom-out" aria-label="Zoom out">${icon('minus',18)}</button></div><button class="icon-button" data-action="recenter" aria-label="Show Lincoln and surrounding places">${icon('locate',18)}</button></div>
-        <button class="heat-legend" data-action="about" aria-label="About activity colors. Lavender means less app activity; coral means more. Gray means unknown, not empty."><span class="heat-legend-title">APP ACTIVITY <span>Demo</span>${icon('info',12)}</span><span class="heat-legend-scale"><span>Less</span><i></i><span>More</span></span><span class="heat-legend-note">Not total occupancy</span></button>
+        <button class="heat-legend" data-action="about" aria-label="About activity colors. Lavender means less app activity; coral means more. Gray means unknown, not empty."><span class="heat-legend-title">APP ACTIVITY <span id="demoRefreshLabel">${demoAutoRefresh?'Auto demo':'Paused'}</span>${icon('info',12)}</span><span class="heat-legend-scale"><span>Less</span><i></i><span>More</span></span><span class="heat-legend-note">Simulated · Not total occupancy</span></button>
         <div id="placeActions" class="map-place-actions" hidden></div><div id="compareTray" class="compare-tray" role="region" aria-label="Selected places to compare" hidden></div>
         <div class="map-scale" id="mapScale" aria-label="Approximate map scale"></div><div class="map-watermark">Illustrative map · Fictional places</div><div id="mapEmpty"></div><div id="ownPresence"></div>
       </section></div>`;
@@ -1725,7 +1782,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   const camera={x:C.MAP.downtown[0],y:C.MAP.downtown[1],zoom:1,initialized:false};
   let currentGroups=new Map(),mapResizeObserver,gestureBinding=null;
   let frameRequest=0,dimensions=null,mapPlaces=[],mapActivity=new Map(),mapRevision=0,groupKey='',groups=[];
-  let pinNodes=new Map(),frameTimes=[],clusterBuilds=0;
+  let pinNodes=new Map(),frameTimes=[],clusterBuilds=0,heatTargets=[],lastGroupFit=null;
   const labelWidths=new Map(),labelMeasure=document.createElement('canvas').getContext('2d');
   function placeNameWidth(name){
     if(!labelWidths.has(name)){labelMeasure.font="600 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";labelWidths.set(name,Math.min(172,Math.ceil(labelMeasure.measureText(name).width)+12));}
@@ -1752,15 +1809,26 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     gestureBinding=SpotMapGestures.bind(viewport,{
       getCamera:()=>camera,
       getDimensions:()=>mapDimensions(),
-      setCamera:next=>{clearTimeout(searchFitTimer);dismissSuggestions();resultsOpen=false;if($('#searchResults'))$('#searchResults').hidden=true;Object.assign(camera,next);camera.scope='custom';clampCamera();drawMap();},
-      onTap:(target,type)=>{
-        // A completed tap may open a grouped area. Gesture recognition is
-        // unchanged: drags/pinches never reach this callback.
-        if(type!=='touch')target.focus({preventScroll:true});
-        target.click();
+      setCamera:next=>{if(detailId)closeDetail(false);clearTimeout(searchFitTimer);dismissSuggestions();resultsOpen=false;if($('#searchResults'))$('#searchResults').hidden=true;Object.assign(camera,next);camera.scope='custom';clampCamera();drawMap();},
+      onTap:(target,type,tap)=>{
+        // Only completed taps reach here. Drags and pinches cannot activate or
+        // dismiss twice through the browser's compatibility click event.
+        if(!target){
+          if(detailId||compareOpen){dismissMapSelection();return;}
+          // The visible circle has a larger hit area than the small category
+          // icon. Resolve only visible circles, nearest first.
+          const hit=heatTargets.filter(h=>Math.hypot(h.x-tap.x,h.y-tap.y)<=h.radius)
+            .sort((a,b)=>Math.hypot(a.x-tap.x,a.y-tap.y)-Math.hypot(b.x-tap.x,b.y-tap.y))[0];
+          target=hit?pinNodes.get(hit.key):null;
+        }
+        if(target?.isConnected){if(type!=='touch')target.focus({preventScroll:true});target.click();}
+        else dismissMapSelection();
       },
-      onWheel:e=>{clearTimeout(searchFitTimer);dismissSuggestions();const d=mapDimensions(),unit=e.deltaMode===1?16:e.deltaMode===2?d.height:1;const dy=Math.max(-150,Math.min(150,e.deltaY*unit));zoomMap(Math.exp(-dy*.003),{x:e.clientX-d.left,y:e.clientY-d.top});},
+      onWheel:e=>{if(detailId)closeDetail(false);clearTimeout(searchFitTimer);dismissSuggestions();const d=mapDimensions(),unit=e.deltaMode===1?16:e.deltaMode===2?d.height:1;const dy=Math.max(-150,Math.min(150,e.deltaY*unit));zoomMap(Math.exp(-dy*.003),{x:e.clientX-d.left,y:e.clientY-d.top});},
       onDoubleClick:e=>{const d=mapDimensions();zoomMap(1.8,{x:e.clientX-d.left,y:e.clientY-d.top});}
+    });
+    viewport.addEventListener('click',e=>{
+      if(e.detail===0&&!e.target.closest('[data-pin],[data-cluster]'))dismissMapSelection();
     });
     viewport.addEventListener('keydown',e=>{
       if(e.target!==viewport)return;const delta={ArrowLeft:[-70,0],ArrowRight:[70,0],ArrowUp:[0,-70],ArrowDown:[0,70]}[e.key];
@@ -1781,7 +1849,9 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     const group=currentGroups.get(key),d=mapDimensions();if(!group||!d)return;
     clearTimeout(searchFitTimer);dismissSuggestions();resultsOpen=false;if($('#searchResults'))$('#searchResults').hidden=true;closeDetail(false);
     const members=group.venues.map(id=>C.venueById(id)).filter(Boolean);
-    const next=MC.drillDownCamera(members,camera,d);
+    const fitRect=MC.clearViewportRect(d,mapChrome(d));
+    const next=MC.drillDownCamera(members,camera,{...d,fitRect});
+    lastGroupFit={ids:members.map(v=>v.id),rect:{...fitRect},before:{...camera},after:{...next}};
     Object.assign(camera,next);camera.scope='custom';clampCamera();drawMap();
     const areas=[...new Set(members.map(v=>v.area))];
     const message=areas.length===1?`Exploring places around ${areas[0]}`:'Exploring nearby demo places';
@@ -1824,7 +1894,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     const anchor=$('#searchAnchor');if(anchor){anchor.hidden=!searchArea;if(searchArea){const p=MC.project(searchArea,camera,d);anchor.style.transform=`translate3d(${Math.round(p.x)}px,${Math.round(p.y)}px,0)`;if(anchor.dataset.area!==searchArea.id){anchor.innerHTML=`<span class="anchor-ring"></span><span class="anchor-caption">${escape(searchArea.name)}</span>`;anchor.dataset.area=searchArea.id;}areaObstacles.push({x:p.x-70,y:p.y-43,w:140,h:56});}}
     const key=[mapRevision,MC.zoomLevel(camera.zoom),detailId,mobile,spacing].join(':');
     if(groupKey!==key){groups=MC.cluster(mapPlaces,camera.zoom,detailId,spacing);groupKey=key;clusterBuilds++;}
-    currentGroups=new Map();const needed=new Set(),items=[],heatItems=[],glyphBoxes=[];
+    currentGroups=new Map();heatTargets=[];const needed=new Set(),items=[],heatItems=[],glyphBoxes=[];
     for(const g of groups){const p=MC.project(g,camera,d);if(p.x< -110||p.y< -110||p.x>d.width+110||p.y>d.height+110)continue;
       needed.add(g.key);if(g.ids.length>1)currentGroups.set(g.key,{x:g.x,y:g.y,venues:g.ids});
       let node=pinNodes.get(g.key);if(!node){node=document.createElement('button');node.type='button';node.style.left='0';node.style.top='0';pinNodes.set(g.key,node);layer.appendChild(node);}
@@ -1835,7 +1905,10 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
       const glyph={x:p.x-23,y:p.y-23,w:46,h:46};
       const occluded=chrome.some(o=>MC.intersects(glyph,o))||areaObstacles.some(o=>MC.intersects(glyph,o));
       node.classList.toggle('occluded',occluded);node.tabIndex=occluded?-1:0;
-      if(!occluded)heatItems.push({x:p.x,y:p.y,heat:m.heat,selected:m.selected,grouped:m.grouped});glyphBoxes.push(glyph);
+      if(!occluded){
+        heatItems.push({x:p.x,y:p.y,heat:m.heat,selected:m.selected,grouped:m.grouped});
+        heatTargets.push({key:g.key,x:p.x,y:p.y,radius:m.heat.known?(m.heat.radius+(m.grouped?8:0))*.64:25});
+      }glyphBoxes.push(glyph);
       items.push({g,p,m,node,occluded,priority:m.selected?0:state.savedVenues.some(id=>g.ids.includes(id))?1:m.grouped?3:2});
     }
     for(const [key,node]of pinNodes){if(!needed.has(key)){node.remove();pinNodes.delete(key);}}
@@ -1861,7 +1934,14 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     const xs=vs.map(v=>v.x),ys=vs.map(v=>v.y),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
     camera.x=(x0+x1)/2;camera.y=(y0+y1)/2;camera.zoom=Math.min(2,Math.max(.025,Math.min((d.width-200)/(x1-x0+150),(d.height-(isMobile()?230:150))/(y1-y0+150))));camera.scope='custom';drawMap();
   }
+  function dismissMapSelection(){
+    if(detailId||compareOpen)closeDetail(false);
+    resultsOpen=false;if($('#searchResults'))$('#searchResults').hidden=true;
+    dismissSuggestions();drawMap();
+    const input=$('#venueSearch');if(document.activeElement===input)input.blur();
+  }
   function selectVenue(id,open=false,fromPin=false){
+    if(fromPin&&detailId===id){dismissMapSelection();return;}
     const v=C.venueById(id);if(!v)return;
     if(!fromPin && !mapPlaces.some(place=>place.id===id)){
       searchArea=null;state.query='';state.category='all';state.savedOnly=false;state.friendsOnly=false;
@@ -1890,7 +1970,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     closeModal(false);compareOpen=false;document.body.classList.remove('has-comparison','has-detail');$('#detailHost').innerHTML='';detailReturnFocus=document.activeElement;detailId=id;state.selected=id;renderDetail();renderCompareTray();
     try{history.replaceState(null,'','#place/'+encodeURIComponent(id));}catch(_){}
     setBackgroundInert(false);document.body.style.overflow='';
-    const v=C.venueById(id),h=SpotHeat.describe([C.activity(v,state,snapshot,now())]);$('#searchAnnouncement').textContent=`${v.name}. ${h.label}. Save, compare, share, directions preview, and history actions are below the map marker.`;
+    const v=C.venueById(id),h=SpotHeat.describe([C.activity(v,state,snapshot,now())]);$('#searchAnnouncement').textContent=`${v.name}. ${h.label}. Save, compare, share, directions preview, and history actions are below the map marker. Tap the map or this marker again to dismiss.`;
   }
   function restoreFocus(element, fallback) {
     if (element && element.isConnected && typeof element.focus === 'function') element.focus({ preventScroll: true });
@@ -1931,7 +2011,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   function renderPrivacy() {
     const visibility=C.ownVisibility(state,snapshot,now()), enabled=state.sharing||state.friendSharing;
     const title=!enabled?'You’re not sharing your location.':state.sharing&&state.friendSharing?'Sharing on your terms.':state.sharing?'A count, not your name.':'Visible only to selected friends.';
-    $('#main').innerHTML=`<section class="content-page privacy-page"><div class="page-heading"><div><div class="eyebrow">ALWAYS YOUR CALL</div><h1>Your presence. Your choice.</h1><p>Two separate choices. Nothing shared by default.</p></div><button class="secondary-button pause-all" data-action="pause-all" ${!enabled?'disabled':''}>${icon('eyeOff',15)} Pause all sharing</button></div><div class="privacy-banner"><span class="banner-icon">${icon(enabled?'shield':'eyeOff',23)}</span><div><h2>${title}</h2><p>These are simulated settings. Your device location is never accessed.</p></div></div><div class="privacy-settings-grid"><div class="settings-card"><div class="setting-row"><div><span class="setting-kicker">THE PUBLIC MAP</span><h3>Contribute to map activity</h3><p>Include your demo presence in a venue’s total. No name or individual public pin.</p></div><button class="toggle ${state.sharing?'on':''}" role="switch" aria-checked="${state.sharing}" aria-label="Contribute to map activity in this demo" data-action="toggle-sharing"></button></div><div class="setting-note">${icon('map',15)}<span>Independent of friend sharing. Turn this off without changing who can see your name.</span></div></div><div class="settings-card"><div class="setting-row"><div><span class="setting-kicker">YOUR SELECTED FRIENDS</span><h3>Share my venue with friends</h3><p>Only friends you choose can see your name at a spot. Friendship alone never enables this.</p></div><button class="toggle ${state.friendSharing?'on':''}" role="switch" aria-checked="${state.friendSharing}" aria-label="Share my venue with selected friends in this demo" data-action="toggle-friend-sharing"></button></div><div class="audience-setting"><span>${state.shareWith.length?`${state.shareWith.length} selected ${state.shareWith.length===1?'friend':'friends'}`:'No friends selected'} <small>· ${state.friendSharing?'enabled in demo':'sharing off'}</small></span><button class="text-button" data-action="choose-audience">${state.shareWith.length?'Edit friends':'Choose friends'} ${icon('chevron',13)}</button></div></div></div><section class="visibility-preview" aria-labelledby="visibilityTitle"><div class="visibility-heading"><div><div class="eyebrow">AT JUNIPER COFFEE</div><h2 id="visibilityTitle">What your settings show</h2></div><span class="sample-label">LOCAL SIMULATION</span></div><div class="visibility-columns"><div><span class="visibility-icon">${icon('map',20)}</span><h3>On the public map</h3><strong id="publicVisibility">${visibility.countIncluded?'Included in the venue count':'Your presence is not included'}</strong><p>${visibility.countIncluded?'One contribution. No public name or personal pin.':'You can still browse every place.'}</p></div><div><span class="visibility-icon">${icon('friends',20)}</span><h3>For selected friends</h3><strong id="friendVisibility">${visibility.visibleTo.length?`Your name at Juniper · ${visibility.visibleTo.length} ${visibility.visibleTo.length===1?'friend':'friends'}`:'Your venue is hidden'}</strong><p>${visibility.visibleTo.length?'Only your selected audience can see this in the intended app.':'No named venue is visible from your settings.'}</p></div></div></section><div class="privacy-rules"><div class="privacy-rule">${icon('shield',19)}<div><h3>Being visible is not an invitation.</h3><p>Friends can ask before joining. There’s no availability status to manage.</p></div></div><div class="privacy-rule">${icon('friends',19)}<div><h3>You choose each connection.</h3><p>New friends are not added to your sharing audience. Removing or blocking someone also revokes their permission to see your venue.</p></div></div><div class="privacy-rule">${icon('clock',19)}<div><h3>Fresh presence, not personal history.</h3><p>Presence expires after 15 minutes without an observation. The place timeline uses authored sample counts, never your location history.</p></div></div><div class="privacy-rule">${icon('lock',19)}<div><h3>A local prototype.</h3><p>Saved spots, appearance, and demo sharing choices stay in this browser. No GPS, analytics, live accounts, or background tracking. Sharing place info is an explicit action you control.</p></div></div></div><div class="reset-row"><p>Reset clears saved spots, comparison selections, demo friend changes, and sharing settings. Your chosen appearance is kept.</p><button class="secondary-button" data-action="confirm-reset">${icon('reset',14)} Reset demo</button></div>${storageAvailable?'':'<p class="storage-warning">Browser storage is unavailable. Changes work in this tab but may not survive closing it.</p>'}</section>`;
+    $('#main').innerHTML=`<section class="content-page privacy-page"><div class="page-heading"><div><div class="eyebrow">ALWAYS YOUR CALL</div><h1>Your presence. Your choice.</h1><p>Two separate choices. Nothing shared by default.</p></div><button class="secondary-button pause-all" data-action="pause-all" ${!enabled?'disabled':''}>${icon('eyeOff',15)} Pause all sharing</button></div><div class="privacy-banner"><span class="banner-icon">${icon(enabled?'shield':'eyeOff',23)}</span><div><h2>${title}</h2><p>These are simulated settings. Your device location is never accessed.</p></div></div><div class="privacy-settings-grid"><div class="settings-card"><div class="setting-row"><div><span class="setting-kicker">THE PUBLIC MAP</span><h3>Contribute to map activity</h3><p>Include your demo presence in a venue’s total. No name or individual public pin.</p></div><button class="toggle ${state.sharing?'on':''}" role="switch" aria-checked="${state.sharing}" aria-label="Contribute to map activity in this demo" data-action="toggle-sharing"></button></div><div class="setting-note">${icon('map',15)}<span>Independent of friend sharing. Turn this off without changing who can see your name.</span></div></div><div class="settings-card"><div class="setting-row"><div><span class="setting-kicker">YOUR SELECTED FRIENDS</span><h3>Share my venue with friends</h3><p>Only friends you choose can see your name at a spot. Friendship alone never enables this.</p></div><button class="toggle ${state.friendSharing?'on':''}" role="switch" aria-checked="${state.friendSharing}" aria-label="Share my venue with selected friends in this demo" data-action="toggle-friend-sharing"></button></div><div class="audience-setting"><span>${state.shareWith.length?`${state.shareWith.length} selected ${state.shareWith.length===1?'friend':'friends'}`:'No friends selected'} <small>· ${state.friendSharing?'enabled in demo':'sharing off'}</small></span><button class="text-button" data-action="choose-audience">${state.shareWith.length?'Edit friends':'Choose friends'} ${icon('chevron',13)}</button></div></div></div><section class="visibility-preview" aria-labelledby="visibilityTitle"><div class="visibility-heading"><div><div class="eyebrow">AT JUNIPER COFFEE</div><h2 id="visibilityTitle">What your settings show</h2></div><span class="sample-label">LOCAL SIMULATION</span></div><div class="visibility-columns"><div><span class="visibility-icon">${icon('map',20)}</span><h3>On the public map</h3><strong id="publicVisibility">${visibility.countIncluded?'Included in the venue count':'Your presence is not included'}</strong><p>${visibility.countIncluded?'One contribution. No public name or personal pin.':'You can still browse every place.'}</p></div><div><span class="visibility-icon">${icon('friends',20)}</span><h3>For selected friends</h3><strong id="friendVisibility">${visibility.visibleTo.length?`Your name at Juniper · ${visibility.visibleTo.length} ${visibility.visibleTo.length===1?'friend':'friends'}`:'Your venue is hidden'}</strong><p>${visibility.visibleTo.length?'Only your selected audience can see this in the intended app.':'No named venue is visible from your settings.'}</p></div></div></section><div class="privacy-rules"><div class="privacy-rule">${icon('shield',19)}<div><h3>Being visible is not an invitation.</h3><p>Friends can ask before joining. There’s no availability status to manage.</p></div></div><div class="privacy-rule">${icon('friends',19)}<div><h3>You choose each connection.</h3><p>New friends are not added to your sharing audience. Removing or blocking someone also revokes their permission to see your venue.</p></div></div><div class="privacy-rule">${icon('clock',19)}<div><h3>Fresh presence, not personal history.</h3><p>Real presence should expire without new observations. This demo renews its fictional observations every 30 seconds and when you return. Pausing sharing still removes your own sample presence. The timeline is authored sample data, not your location history.</p></div></div><div class="privacy-rule">${icon('lock',19)}<div><h3>A local prototype.</h3><p>Saved spots, appearance, and demo sharing choices stay in this browser. No GPS, analytics, live accounts, or background tracking. Sharing place info is an explicit action you control.</p></div></div></div><div class="reset-row"><p>Reset clears saved spots, comparison selections, demo friend changes, and sharing settings. Your chosen appearance is kept.</p><button class="secondary-button" data-action="confirm-reset">${icon('reset',14)} Reset demo</button></div>${storageAvailable?'':'<p class="storage-warning">Browser storage is unavailable. Changes work in this tab but may not survive closing it.</p>'}</section>`;
   }
   function showModal(type, personId = null) {
     modalReturnFocus = document.activeElement; modalType = type; modalPerson = personId;
@@ -1947,7 +2027,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   function renderModal() {
     let content = modalType==='activity-history'?`<div class="modal-symbol">${icon('clock',24)}</div><h2>${escape(C.venueById(modalPerson)?.name||'Place')} activity</h2>${timelineMarkup(C.venueById(modalPerson))}`:extraModalContent(modalType);
     if (content) { /* New local-only feature dialogs are built above. */ }
-    else if (modalType === 'about') content=`<div class="modal-symbol">${icon('map',25)}</div><div class="eyebrow">SPOT · MAP EDITION</div><p data-build-label>v4.8 · Build 4.8-pages-1</p><h2>Follow the activity.</h2><p>Places live directly on the map. Tap an icon for quick actions; tap a grouped area to explore it. No overview cards to close.</p><div class="modal-callout"><strong>Lavender → rose → coral</strong><br>Circles become warmer and a little broader with more recently detected app participation. A gray dashed ring means no recent data, not an empty place.</div><div class="modal-facts"><div class="modal-fact">${icon('info',17)}<span>Colors do not measure total attendance, capacity, wait times, or seats. A larger establishment may have more app users without being more crowded.</span></div><div class="modal-fact">${icon('map',17)}<span>A grouped circle combines the fresh app activity of its places. Zoom in to see individual venues. Places without recent observations stay unknown.</span></div><div class="modal-fact">${icon('shield',17)}<span>Fictional establishments and demo activity. No location collection, visit tracking, network requests, or real sharing.</span></div></div><p class="map-explanation">The same small fictional café and bar directory across Lincoln and nearby towns is retained. Search recognizes the built-in real areas, including East Campus; the businesses and building shapes are illustrative. This is not an exact street or building map.</p><button class="primary-button" data-action="close-modal" style="width:100%">Back to the map ${icon('arrow',15)}</button><details class="prototype-tools"><summary>Prototype testing tools</summary><p>Let sample observations expire or reset the local demo. Reset does not change appearance.</p><div class="button-row"><button class="secondary-button" data-action="advance-time">Advance 15 min</button><button class="secondary-button" data-action="confirm-reset">Reset demo</button></div></details>`;
+    else if (modalType === 'about') content=`<div class="modal-symbol">${icon('map',25)}</div><div class="eyebrow">SPOT · MAP EDITION</div><p data-build-label>v4.9 · Build 4.9-pages-1</p><h2>Follow the activity.</h2><p>Places live directly on the map. Tap an icon for quick actions; tap a grouped area to explore it. Tap the map or the selected marker again to dismiss the actions.</p><div class="modal-callout"><strong>Lavender → rose → coral</strong><br>Circles become warmer and a little broader with more recently detected app participation. A gray dashed ring means no recent data, not an empty place.</div><div class="modal-facts"><div class="modal-fact">${icon('info',17)}<span>Colors do not measure total attendance, capacity, wait times, or seats. A larger establishment may have more app users without being more crowded.</span></div><div class="modal-fact">${icon('map',17)}<span>A grouped circle combines the fresh app activity of its places. Zoom in to see individual venues. Places without recent observations stay unknown.</span></div><div class="modal-fact">${icon('shield',17)}<span>Fictional establishments and automatically refreshed demo activity. Known samples refresh every 30 seconds and when you return; missing-data samples stay unknown. No location collection, visit tracking, network requests, or real sharing.</span></div></div><p class="map-explanation">The same small fictional café and bar directory across Lincoln and nearby towns is retained. Search recognizes the built-in real areas, including East Campus; the businesses and building shapes are illustrative. This is not an exact street or building map.</p><button class="primary-button" data-action="close-modal" style="width:100%">Back to the map ${icon('arrow',15)}</button><details class="prototype-tools"><summary>Prototype testing tools</summary><p>Automatic demo refresh is ${demoAutoRefresh?'on':'paused'}. Test expiry by pausing updates and advancing the sample clock. Reset does not change appearance.</p><div class="button-row"><button class="secondary-button" data-action="toggle-demo-refresh">${demoAutoRefresh?'Pause demo updates':'Resume demo updates'}</button><button class="secondary-button" data-action="advance-time">Pause &amp; advance 15 min</button><button class="secondary-button" data-action="confirm-reset">Reset demo</button></div></details>`;
     else if (modalType === 'share') content = `<div class="modal-symbol">${icon('shield', 25)}</div><h2>Contribute to map activity?</h2><p>In this demo, switching on adds one fictional visitor—you—to Juniper Coffee.</p><div class="modal-facts"><div class="modal-fact">${icon('map', 15)}<span>People outside your friends see only the combined venue activity.</span></div><div class="modal-fact">${icon('friends', 15)}<span>Your name stays hidden from friends unless you separately choose them and enable friend sharing.</span></div><div class="modal-fact">${icon('eyeOff', 15)}<span>You can switch it off at any time. Your sample presence is removed immediately.</span></div></div><div class="modal-callout"><strong>Simulation only.</strong> This does not request GPS permission, run in the background, or share anything with another person.</div><div class="button-row"><button class="secondary-button" data-action="close-modal">Not now</button><button class="primary-button" data-action="enable-sharing">Enable activity contribution</button></div>`;
     else if (modalType === 'add-friend') content = `<div class="modal-symbol">${icon('userPlus', 25)}</div><h2>Find your people.</h2><p>Search the sample directory by name or handle.</p><div class="search-wrap">${icon('search', 17)}<label class="sr-only" for="friendSearch">Search demo people</label><input id="friendSearch" class="search-input" autocomplete="off" maxlength="80" placeholder="Try Jordan or @casey.r"></div><div id="directoryList" class="directory-list"></div><p class="modal-note">Demo only. Requests stay in this browser and do not contact anyone.</p>`;
     else if (modalType === 'manage') {
@@ -1988,7 +2068,7 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   }
   function resetDemo() {searchArea=null;clearTimeout(searchFitTimer);dismissSuggestions();
     try { localStorage.removeItem(storageKey); } catch (_) { storageAvailable = false; }
-    closeModal(false); closeDetail(false);friendsTab='all';friendsQuery=''; state = C.initialState();compareOpen=false;document.body.classList.remove('has-compare','has-comparison'); snapshot = C.makeSnapshot(); timeOffset = 0; camera.initialized = false;
+    closeModal(false); closeDetail(false);friendsTab='all';friendsQuery=''; state = C.initialState();compareOpen=false;document.body.classList.remove('has-compare','has-comparison'); snapshot = C.makeSnapshot(); timeOffset = 0; demoAutoRefresh=true;lastDemoRefreshAt=snapshot.createdAt;camera.initialized = false;
     navigate('explore'); toast('Fresh start. Sharing is off and demo data is restored.');
   }
   // Small, explicit tools: no extra main navigation or social status system.
@@ -2155,8 +2235,12 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
     else if (action === 'confirm-remove' || action === 'confirm-block') { modalType = action; modalPerson = target.dataset.person; renderModal(); $('.modal').focus(); }
     else if (action === 'confirm-reset') showModal('reset');
     else if (action === 'reset-demo') resetDemo();
+    else if(action==='toggle-demo-refresh'){
+      demoAutoRefresh=!demoAutoRefresh;if(demoAutoRefresh)renewDemo(true);
+      closeModal(false);refreshTimeSensitiveViews();toast(demoAutoRefresh?'Automatic demo updates resumed.':'Demo updates paused for testing.');
+    }
     else if (action === 'advance-time') {
-      timeOffset += C.TTL; closeModal(false); render(); toast('Demo clock advanced. Unsupported activity has expired.');
+      demoAutoRefresh=false;timeOffset += C.TTL; closeModal(false); render(); toast('Updates paused. Sample observations expired. Resume updates in About.');
     }
   });
   document.addEventListener('keydown', e => {
@@ -2181,27 +2265,33 @@ body[data-screen="explore"]{overflow:hidden}.explore-layout.map-first{display:bl
   window.addEventListener('hashchange', () => {clearTimeout(searchFitTimer);searchArea=null;dismissSuggestions(); const id=C.parsePlaceHash(location.hash);if(id){if(state.screen!=='explore')navigate('explore',false);state.savedOnly=false;state.friendsOnly=false;state.query='';state.category='all';if($('#venueSearch'))$('#venueSearch').value='';refreshExplore();selectVenue(id,true);return;}const next=location.hash.slice(1);if(['explore','friends','privacy'].includes(next)&&(next!==state.screen||detailId||compareOpen))navigate(next); });
   let previousMobile = isMobile();
   window.addEventListener('resize', () => { if (previousMobile !== isMobile()) { previousMobile = isMobile(); dimensions=null; if(state.screen==='explore')drawMap(); } });
-  // Freshness uses wall-clock time rather than timer ticks, so returning from a
-  // suspended tab expires records correctly. Do not invent fresh observations.
-  function refreshTimeSensitiveViews() {
-    if (modalType) return;
+  // The simulation renews its authored observations, not real location data.
+  // Suspend the timer when hidden and perform one immediate catch-up on return.
+  // No accumulated timer ticks, extra people, or restored sharing permissions.
+  function refreshTimeSensitiveViews(forceDemo=false) {
+    renewDemo(forceDemo===true);
+    const label=$('#demoRefreshLabel');if(label)label.textContent=demoAutoRefresh?'Auto demo':'Paused';
+    if(gestureBinding?.info().count)return; // leave a live pan/pinch untouched
+    if(modalType){if(state.screen==='explore')updateMapData(visiblePlaces());return;}
     if(detailId){const active=document.activeElement,inActions=active?.closest('#placeActions'),sel=active?.getAttribute('aria-label');renderDetail();if(inActions&&sel){[...$('#placeActions').querySelectorAll('button')].find(b=>b.getAttribute('aria-label')===sel)?.focus({preventScroll:true});}}
-    if (compareOpen) renderComparison();
-    if (state.screen === 'explore') refreshExplore();
-    else if(state.screen === 'privacy')renderPrivacy();
-    else if (state.screen === 'friends') {
-      const active = document.activeElement;
-      if (!active || active === document.body || active === $('#main')) renderFriends();
-      else if (now() - snapshot.createdAt >= C.TTL) renderFriends();
-    }
+    if(compareOpen)renderComparison();
+    if(state.screen==='explore')refreshExplore();
+    else if(state.screen==='privacy')renderPrivacy();
+    else if(state.screen==='friends')refreshFriendCards();
   }
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshTimeSensitiveViews(); });
-  refreshInterval = setInterval(refreshTimeSensitiveViews, 15000);
-  window.addEventListener('pagehide', () => clearInterval(refreshInterval));
-  window.addEventListener('pageshow', e => { if (e.persisted) { clearInterval(refreshInterval); refreshInterval = setInterval(refreshTimeSensitiveViews, 15000); refreshTimeSensitiveViews(); } });
+  function stopDemoTimer(){clearInterval(refreshInterval);refreshInterval=null;}
+  function startDemoTimer(){
+    stopDemoTimer();if(!document.hidden)refreshInterval=setInterval(()=>refreshTimeSensitiveViews(),DEMO_REFRESH_MS);
+  }
+  function resumeDemo(){if(!document.hidden){refreshTimeSensitiveViews(true);startDemoTimer();}}
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDemoTimer();else resumeDemo();});
+  window.addEventListener('focus',resumeDemo);
+  window.addEventListener('pagehide',stopDemoTimer);
+  window.addEventListener('pageshow',resumeDemo);
+  startDemoTimer();
   // In-page testing hooks contain fictional state only. Never ship a comparable
   // client-authoritative friend/location API as real access control.
-  window.SpotDemo = Object.freeze({ getSelectedVenueId:()=>detailId, getState: () => JSON.parse(JSON.stringify(state)), getOwnVisibility:()=>C.ownVisibility(state,snapshot,now()),getHistory:id=>C.sampleHistory(id,snapshot,now()),getSharePayload:id=>C.sharePayload(id,location.href),getCompareOpen:()=>compareOpen, getActivity: id => { const v = C.venueById(id); return v ? C.activity(v, state, snapshot, now()) : null; }, getSearchArea:()=>searchArea?{...searchArea}:null,getNearbyIds:()=>visiblePlaces().map(v=>v.id),getCamera: () => ({ ...camera }), getGestureState:()=>gestureBinding?.info()||{count:0,mode:'idle'}, getStats: () => C.populationStats(state,snapshot,now()), getMapMode:()=> 'offline-canvas-regional', getMapStyle:()=> 'map-first-heat-v4.8', getHeat:id=>SpotHeat.describe([C.activity(C.venueById(id),state,snapshot,now())]), getRenderStats:()=>({frames:frameTimes.length,frameTimes:[...frameTimes],clusterBuilds,pinNodes:pinNodes.size,geometry:SpotCartography.featureCount,cartography:SpotCartography.getStats()}), flushMap:()=>{if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;drawMapNow();}, setCamera:(update)=>{for(const k of ['x','y','zoom'])if(Number.isFinite(update[k]))camera[k]=update[k];clampCamera();drawMap();}, advanceTime: ms => { if (!Number.isFinite(ms) || ms < 0) throw new TypeError('Use a positive demo time offset.'); timeOffset += ms; refreshTimeSensitiveViews(); }, reset: resetDemo });
+  window.SpotDemo = Object.freeze({ getLastGroupFit:()=>lastGroupFit?JSON.parse(JSON.stringify(lastGroupFit)):null, getDemoRefresh:()=>({enabled:demoAutoRefresh,lastAt:lastDemoRefreshAt,interval:DEMO_REFRESH_MS,timerRunning:refreshInterval!==null}), setDemoRefresh:enabled=>{demoAutoRefresh=enabled===true;refreshTimeSensitiveViews(true);},  getSelectedVenueId:()=>detailId, getState: () => JSON.parse(JSON.stringify(state)), getOwnVisibility:()=>C.ownVisibility(state,snapshot,now()),getHistory:id=>C.sampleHistory(id,snapshot,now()),getSharePayload:id=>C.sharePayload(id,location.href),getCompareOpen:()=>compareOpen, getActivity: id => { const v = C.venueById(id); return v ? C.activity(v, state, snapshot, now()) : null; }, getSearchArea:()=>searchArea?{...searchArea}:null,getNearbyIds:()=>visiblePlaces().map(v=>v.id),getCamera: () => ({ ...camera }), getGestureState:()=>gestureBinding?.info()||{count:0,mode:'idle'}, getStats: () => C.populationStats(state,snapshot,now()), getMapMode:()=> 'offline-canvas-regional', getMapStyle:()=> 'map-first-heat-v4.9', getHeat:id=>SpotHeat.describe([C.activity(C.venueById(id),state,snapshot,now())]), getRenderStats:()=>({frames:frameTimes.length,frameTimes:[...frameTimes],clusterBuilds,pinNodes:pinNodes.size,geometry:SpotCartography.featureCount,cartography:SpotCartography.getStats()}), flushMap:()=>{if(frameRequest)cancelAnimationFrame(frameRequest);frameRequest=0;drawMapNow();}, setCamera:(update)=>{for(const k of ['x','y','zoom'])if(Number.isFinite(update[k]))camera[k]=update[k];clampCamera();drawMap();}, advanceTime: ms => { if (!Number.isFinite(ms) || ms < 0) throw new TypeError('Use a positive demo time offset.'); timeOffset += ms; refreshTimeSensitiveViews(); }, reset: resetDemo });
   document.addEventListener('pointerdown',e=>{if(!e.target.closest('.location-search'))dismissSuggestions();});
   window.addEventListener('spot-theme-change',()=>{SpotCartography.invalidate();SpotHeat.invalidate();drawMap();});
   render();
