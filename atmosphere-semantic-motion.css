@@ -1,0 +1,10 @@
+/* Coordinate anchors do not move on hover, selection, or activation.
+   Load after the site's current styles. Only inner SVG geometry is animated. */
+#mapPins .heat-pin .map-place-glyph,
+#mapPins .heat-pin:hover .map-place-glyph,
+#mapPins .heat-pin.selected .map-place-glyph { transform:none!important; transition:border-color .18s ease,box-shadow .18s ease; }
+.at-semantic-ornament { pointer-events:none!important; }
+@media(prefers-reduced-motion:reduce){
+ #mapPins .map-place-glyph {transition:none!important;}
+ .at-semantic-ornament {display:none!important;}
+}

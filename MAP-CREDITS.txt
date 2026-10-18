@@ -1,0 +1,8 @@
+MapLibre GL JS 5.24.0: BSD-3-Clause. See MAPLIBRE-LICENSE.txt.
+Map design derived from OpenFreeMap Liberty / OSM Liberty / OSM Bright. Code BSD-3-Clause; original design CC BY 4.0. Atmosphere modifies colors, road/label treatment, POI visibility and building zoom/detail. See OPENFREEMAP-STYLES-LICENSE.txt and OSM-LIBERTY-LICENSE.txt.
+Style source: https://tiles.openfreemap.org/styles/liberty
+OpenFreeMap: https://openfreemap.org/
+OpenMapTiles: https://openmaptiles.org/
+Geographic data: © OpenStreetMap contributors, ODbL https://www.openstreetmap.org/copyright
+Building footprints: original OSM central snapshot + Lincoln/Lancaster County GIS 2024, https://gis.lincoln.ne.gov/public/rest/services/BuildingSafety/BuildingFootprints/MapServer/7
+No Apple Maps assets or geographic data copied.
