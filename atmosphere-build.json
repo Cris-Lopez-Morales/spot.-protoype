@@ -1,6 +1,12 @@
 {
   "name": "Atmosphere",
-  "builtAt": "2026-10-18T22:38:11.507Z",
+  "builtAt": "2026-10-18T23:16:32.228Z",
   "logoConcept": 24,
-  "simulated": true
+  "simulated": true,
+  "release": "tactile-icons-bars-and-city-buildings",
+  "buildingSource": "City of Lincoln/Lancaster County GIS 2024 + original OSM downtown",
+  "municipalBuildings": 137708,
+  "buildingTiles": 88,
+  "mappedBarsAndClubs": 88,
+  "cafeMatches": 80
 }
