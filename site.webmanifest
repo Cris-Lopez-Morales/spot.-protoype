@@ -1,0 +1,18 @@
+{
+  "name": "Atmosphere",
+  "short_name": "Atmosphere",
+  "description": "Find your kind of place. Lincoln-region demo with clearly simulated activity.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f6fb",
+  "theme_color": "#7460c9",
+  "icons": [
+    {
+      "src": "./atmosphere-logo-24.png",
+      "sizes": "200x160",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
