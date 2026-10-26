@@ -1,0 +1,95 @@
+/* Stable hit regions. Motion belongs to inner artwork, not clickable boxes. */
+:root{--at-mobile-nav-height:calc(76px + env(safe-area-inset-bottom,0px))}
+.at-nav-motion{transform-box:view-box;transform-origin:12px 12px}
+.nav-item,.map-controls button,.map-top-tools button,.filter-chip,.friend-tab{transform:none!important}
+:where(.topbar,.map-discovery,.map-controls,.sd-card-actions,.sd-form,#spot-demo-disclosure,.sp-dialog) button:is(:hover,:active){transform:none!important}
+.nav-item{transition:color .16s ease,background-color .16s ease,border-color .16s ease}
+.sp-profile-nav[aria-expanded="true"]{background:var(--accent-soft);color:var(--accent)}
+@keyframes at-ui-surface{from{opacity:.86}to{opacity:1}}
+:where(dialog[open],.modal-card,.sp-dialog,.search-results,.spot-friends-panel,.appearance-menu,.atlas-layer-panel){animation:at-ui-surface .16s cubic-bezier(.22,.65,.3,1) both!important}
+.spot-select-panel:popover-open{animation:at-ui-surface .14s ease-out!important}
+.map-discovery,.map-canvas,.sd-place,.search-place-row,.group-place-card{animation:none!important}
+/* Only real buttons intercept input; transparent spaces between controls do not. */
+:root .map-first .map-panel .map-controls{pointer-events:none;--at-control-gap:8px;gap:var(--at-control-gap)}
+.map-controls button{pointer-events:auto}
+.map-controls .zoom-group,.map-controls .atlas-zoom{pointer-events:none}
+:root .map-first .map-panel .map-controls .icon-button{width:44px;height:44px;min-width:44px;min-height:44px}
+.sp-close,.modal-close,.sd-close,.spot-friends-panel>header>.icon-button,.atlas-layer-panel header button{width:44px!important;height:44px!important;min-width:44px;min-height:44px;flex-shrink:0}
+.sp-top{gap:16px}.sp-top>div{min-width:0}.sp-top h2{overflow-wrap:anywhere}
+.friend-card>.icon-button,.friend-card .icon-button{width:40px;min-width:40px;height:40px;min-height:40px}
+.sp-name-link{display:inline-flex;align-items:center;min-height:32px;min-width:40px}.friend-location{min-height:36px}
+.atlas-layer-panel{overflow-y:auto;overscroll-behavior:contain;scroll-padding:68px 0 12px;padding:12px}
+.atlas-layer-panel>header{position:sticky;top:-12px;z-index:2;background:var(--map-chrome);margin:0 -1px 8px;padding:0 1px;min-height:44px}
+.atlas-layer-row{min-height:40px;margin-top:8px}.atlas-mode{min-height:44px}
+.at-demo-controls{min-height:40px}.sd-form .sd-checks label{min-height:36px;align-items:center}
+#placeActions.at-docked-actions{position:static!important;left:auto!important;top:auto!important;width:auto!important;flex:none;margin:0;padding:6px 8px;border-bottom:1px solid var(--line)}
+.at-docked-actions .map-action-buttons{width:100%;display:flex;flex-wrap:wrap;gap:3px;justify-content:flex-start;box-shadow:none;border:0;padding:0;background:transparent}
+.at-docked-actions .entry-tool{min-width:40px;min-height:40px;width:40px;height:40px}
+.at-venue-details{padding:10px 16px;color:var(--muted);font-size:10px;line-height:1.6;border-bottom:1px solid var(--line)}.at-venue-details p+p{margin-top:6px}
+/* Same geometry as the original privacy switch, with a 44px button hit area. */
+.privacy-settings-grid .toggle{height:44px;width:47px;min-height:44px;min-width:47px;background:transparent!important;position:relative}
+.privacy-settings-grid .toggle::after{content:"";position:absolute;inset:8px 0;border-radius:20px;background:var(--toggle-bg);z-index:0}
+.privacy-settings-grid .toggle[aria-checked="true"]::after{background:var(--accent)}
+.privacy-settings-grid .toggle::before{top:11px;z-index:1;background:var(--thumb)}
+@media(min-width:761px) and (max-width:1080px){
+ :root .map-first .map-panel .map-top-tools{top:auto;bottom:calc(51px + var(--at-controls-height,190px) + 12px)}
+ .has-spot-friends .map-first .map-discovery{width:min(344px,calc(100% - 404px))}
+ .has-spot-friends .map-discovery .filters{flex-wrap:wrap;overflow:visible}
+}
+@media(max-width:1080px){
+ .has-spot-friends .map-top-tools,.has-spot-friends .heat-legend{display:none!important}
+ .spot-friends-panel>header{position:sticky;top:0;z-index:3;background:var(--surface);align-items:flex-start}
+ .spot-friends-panel{scroll-padding-top:calc(var(--at-sheet-header-height,100px) + 8px)}
+ .spot-friends-panel :is(button,a,input){scroll-margin-top:calc(var(--at-sheet-header-height,100px) + 8px)}
+}
+@media(min-width:761px) and (max-height:560px){
+ :root .map-first .map-panel .map-controls{flex-direction:row;align-items:center}
+ .map-controls .zoom-group{display:flex;flex-direction:row}.map-controls .atlas-zoom{display:none}
+ .heat-legend{padding:9px 11px;width:186px}.heat-legend-note{font-size:8px}
+}
+@media(max-width:760px){
+ html,body{height:100%;overflow:hidden}
+ .app-shell{height:100dvh;min-height:0;display:flex;flex-direction:column}
+ .workspace{flex:1 1 0%;min-height:0;height:auto;display:flex;flex-direction:column;overflow:hidden}
+ .workspace>.topbar{flex:0 0 58px;height:58px;position:relative}
+ .workspace>#main{flex:1 1 0%;min-height:0;height:auto;overflow-x:hidden;overflow-y:auto;padding-bottom:0;scroll-padding:16px 0}
+ body[data-screen="explore"] .workspace>#main{overflow:hidden}
+ .mobile-nav{position:relative;left:auto;right:auto;bottom:auto;flex:0 0 var(--at-mobile-nav-height);height:var(--at-mobile-nav-height);padding:3px 8px calc(4px + env(safe-area-inset-bottom,0px));gap:4px;box-sizing:border-box}
+ .mobile-nav .nav-item{flex:1;min-width:0;min-height:60px}
+ .explore-layout.map-first{height:100%;min-height:0}
+ .topbar .wordmark{min-height:40px}.topbar-actions{gap:6px}
+ .appearance-toggle,.topbar .privacy-status,.topbar .sp-top-profile{width:40px!important;height:40px!important;min-width:40px;min-height:40px;display:flex;align-items:center;justify-content:center;padding:0!important}
+ .sp-name-link{min-height:40px}.friend-location{min-height:40px}
+ :root .map-first .map-panel .map-controls{flex-direction:row;align-items:center;bottom:39px;gap:8px}
+ .map-controls .zoom-group{display:flex;flex-direction:row}.map-controls .atlas-zoom{display:none}
+ :root .map-first .map-panel .map-top-tools{top:auto;bottom:calc(39px + var(--at-controls-height,46px) + 12px);gap:5px}
+ .map-first .map-view-tabs button{min-height:40px}
+ .map-first .map-top-tools .browse-places,.map-first .atlas-layers-button{width:44px!important;height:44px;min-width:44px;min-height:44px}
+ .map-discovery .filter-chip{min-height:40px}
+ .heat-legend{width:min(181px,calc(100% - 190px));padding:10px}
+ .has-spot-friends .map-controls{display:none!important}
+ .has-spot-friends .spot-friends-panel{bottom:12px;max-height:var(--at-sheet-height,245px)}
+ .toast{bottom:calc(var(--at-mobile-nav-height) + 14px)}
+}
+@media(max-width:600px){.topbar .demo-badge{display:none}}
+@media(prefers-reduced-motion:reduce){
+ :where(dialog[open],.modal-card,.sp-dialog,.search-results,.spot-friends-panel,.appearance-menu,.atlas-layer-panel,.spot-select-panel){animation:none!important;transition:none!important}
+ .nav-item,.at-nav-motion{animation:none!important;transition:none!important}
+}
+@media(max-width:1080px){
+ .has-spot-friends .map-controls{display:none!important}
+ .spot-friends-panel:not([hidden]){display:block!important;overflow-y:auto;max-height:var(--at-sheet-height,300px)}
+ .spot-friends-list{max-height:none;overflow:visible}
+}
+@media(max-width:760px){
+ .has-spot-friends .map-discovery .filters,.has-spot-friends .at-discovery-actions{display:none}
+ .has-spot-friends .spot-friends-panel{bottom:38px}
+}
+
+.friend-tab,.map-view-tabs button,.filter-chip{position:relative}.at-tab-ink{position:absolute;left:12px;right:12px;bottom:4px;height:2px;background:currentColor;border-radius:2px;transform-origin:left center;pointer-events:none!important}
+.topbar .demo-badge{min-height:32px}
+
+#compareTray.at-docked-compare{position:static!important;transform:none!important;width:auto!important;max-width:none!important;flex:none;margin:8px;border-radius:12px;box-shadow:none}
+@media(max-width:760px){.has-spot-friends .map-discovery .search-results,.has-spot-friends .map-discovery .location-suggestions{display:none!important}}
+
+.spot-friends-panel[hidden]{display:none!important}
