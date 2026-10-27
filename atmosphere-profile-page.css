@@ -1,0 +1,30 @@
+/* Own Profile is a normal route. All accent rules are scoped to this surface. */
+body[data-screen="profile"] #main {overflow-y:auto;overflow-x:hidden;min-height:0;}
+#spotOwnProfileHost {width:100%;min-width:0;}
+.profile-page {max-width:960px;margin:0 auto;padding:38px 40px 56px;color:var(--ink);--profile-tint:color-mix(in srgb,var(--profile-color) 16%,var(--paper));--profile-ink:color-mix(in srgb,var(--profile-color) 36%,var(--ink));}
+.profile-page .sp-top h1 {font-size:32px;}
+.profile-page .sp-kicker,.profile-page .sp-section h4,.profile-page .sp-details strong,.profile-page .sp-website,.profile-page .sp-text {color:var(--profile-ink);}
+.profile-page .sp-cover {background:var(--profile-tint);border-color:color-mix(in srgb,var(--profile-color) 50%,var(--line));height:150px;}
+.profile-page .sp-avatar.sp-large,.profile-page .sp-avatar.sp-photo {outline:3px solid var(--profile-color);outline-offset:2px;background:var(--profile-tint);color:var(--profile-ink);}
+.profile-page .primary-button {background:var(--profile-color);color:#242131;border-color:var(--profile-color);box-shadow:none;}
+.profile-page .primary-button:hover {filter:brightness(.95);}
+.profile-page .sp-tags>span {background:var(--profile-tint);border-color:color-mix(in srgb,var(--profile-color) 60%,var(--line));color:var(--profile-ink);}
+.profile-page .sp-section {border-top-color:color-mix(in srgb,var(--profile-color) 30%,var(--line));}
+.profile-page .sp-saved {background:var(--profile-tint);color:var(--profile-ink);}
+.profile-page .sp-color-picker {gap:12px;width:100%;padding-top:18px;}
+.profile-page .sp-color-picker label,.profile-page .sp-color-picker label>span {width:32px;height:32px;}
+.profile-page .sp-color-picker label>span {display:grid;place-items:center;color:transparent;font-weight:800;font-size:16px;}
+.profile-page .sp-color-picker input:checked+span {color:#242131;box-shadow:0 0 0 2px var(--profile-ink);}
+.profile-page .sp-color-picker input:focus-visible+span {outline:3px solid var(--ink);outline-offset:4px;}
+.profile-page .sp-accent-help,.profile-page .sp-accent-selection {font-size:10px;line-height:1.7;margin:12px 0 0;color:var(--muted);}
+.profile-page .sp-accent-selection {font-weight:600;color:var(--profile-ink);}
+.profile-page .sp-discard {position:relative;bottom:auto;margin:22px 0 0;padding:20px;border:1px solid var(--line);border-radius:14px;box-shadow:none;}
+.profile-page .sp-editor-grid {grid-template-columns:210px minmax(0,1fr);}
+.profile-page .sp-form-fields {min-width:0;}
+.profile-page :is(button,a,input,textarea):focus-visible {outline:2px solid var(--profile-ink);outline-offset:3px;}
+@media(max-width:760px){.profile-page{padding:24px 20px 36px;}.profile-page .sp-top h1{font-size:27px;}.profile-page .sp-cover{height:120px;}.profile-page .sp-editor-grid{grid-template-columns:minmax(0,1fr);}.profile-page .sp-color-picker{max-width:300px;}.profile-page .sp-accent-help{max-width:320px;}.profile-page .sp-photo-editor{padding:0 0 24px;}.profile-page .sp-discard>div{flex-wrap:wrap;}.profile-page .sp-name-row{flex-wrap:wrap;}}
+
+.profile-page .sp-top h1{font-weight:650;letter-spacing:-1px;line-height:1.2;margin-top:7px;}
+@media(max-width:380px){body[data-screen="profile"] .mobile-nav .nav-item{min-width:0;width:25%;}}
+
+.profile-page .sp-color-picker{gap:8px}.profile-page .sp-color-picker label{width:44px;height:44px;display:grid;place-items:center}.profile-page .sp-color-picker label>span{width:32px;height:32px}.profile-page .sp-accent-help,.profile-page .sp-accent-selection{font-size:12px}
